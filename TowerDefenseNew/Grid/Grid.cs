@@ -9,17 +9,21 @@ namespace TowerDefenseNew.Grid
 	[Serializable]
 	public class Grid : IGrid
     {
-		private CellType[,] grid = new CellType[40, 20];
+		private CellType[,] grid = new CellType[54, 30];
 
 		public Grid()
         {
-			
         }
 
 		public CellType this[int x, int y]
         {
 			get { return grid[x, y]; }
 			set { grid[x, y] = value; }
+        }
+
+		public CellType GetCelltype(int column, int row)
+        {
+			return this[column, row];
         }
 
 		public int Columns { get { return grid.GetLength(0); } }

@@ -18,6 +18,7 @@ namespace TowerDefenseNew
 		public void Draw()
 		{
 			GL.LoadMatrix(ref cameraMatrix);
+
 		}
 
 		public void Resize(int width, int height)
@@ -29,6 +30,7 @@ namespace TowerDefenseNew
 
 			var viewport = Transformation2d.Combine(Transformation2d.Translate(Vector2.One), Transformation2d.Scale(width / 2f, height / 2f));
 			InvViewportMatrix = viewport.Inverted();
+			GL.Ortho(0, width, height, 0, -1, 1);
 			UpdateMatrix();
 		}
 
@@ -53,7 +55,7 @@ namespace TowerDefenseNew
 		}
 
 		private Matrix4 cameraMatrix = Matrix4.Identity;
-		private float _scale = 1f;
+		private float _scale = 16f;
 		private float _windowAspectRatio = 1f;
 
 		private Vector2 _center;
@@ -64,7 +66,7 @@ namespace TowerDefenseNew
 			//TODO: Implement camera scaling
 			//TODO: Implement panning
 			//TODO: Calculate the resulting camera matrix
-			var translate = Transformation2d.Translate(-Center);
+			var translate = Transformation2d.Translate(-Center - new Vector2(27f, 15f));
 			var scale = Transformation2d.Scale(1f / Scale);
 			var aspect = Transformation2d.Scale(_windowAspectRatio, 1f);
 			cameraMatrix = Transformation2d.Combine(translate, scale, aspect);

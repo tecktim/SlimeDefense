@@ -18,19 +18,7 @@ namespace TowerDefenseNew
 
 		internal void Update(float deltaTime, KeyboardState keyboard)
 		{
-			var axisX = keyboard.IsKeyDown(Keys.PageDown) ? -1f : keyboard.IsKeyDown(Keys.PageUp) ? 1f : 0f;
-			var camera = _view.Camera;
-			// zoom
-			var zoom = camera.Scale * (1 + deltaTime * axisX);
-			zoom = MathHelper.Clamp(zoom, 10f, 20f);
-			camera.Scale = zoom;
-			
-			// translate
-			float axisLeftRight = keyboard.IsKeyDown(Keys.Left) ? -1.0f : keyboard.IsKeyDown(Keys.Right) ? 1.0f : 0.0f;
-			float axisUpDown = keyboard.IsKeyDown(Keys.Down) ? -1.0f : keyboard.IsKeyDown(Keys.Up) ? 1.0f : 0.0f;
-			var movement = deltaTime * new Vector2(axisLeftRight, axisUpDown);
-			// convert movement from camera space into world space
-			camera.Center += movement.TransformDirection(camera.CameraMatrix.Inverted());
+
 		}
 
 		internal void Click(float x, float y)
@@ -45,7 +33,6 @@ namespace TowerDefenseNew
 			var column = (int)Math.Truncate(world.X);
 			var row = (int)Math.Truncate(world.Y);
 			Console.WriteLine($"{column}, {row}");
-			
 			_model.ClearCell(column, row);
 		}
 	}

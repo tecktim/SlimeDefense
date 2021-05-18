@@ -65,6 +65,12 @@ namespace TowerDefenseNew
 			GL.End();
 		}
 
+		/*private void DrawRect(Vector2 center, float size)
+        {
+			GL.Begin(PrimitiveType.Quads);
+			foreach (var)
+        }*/
+
 		private static void DrawGridLines(int columns, int rows)
 		{
 			GL.Color4(Color4.White);

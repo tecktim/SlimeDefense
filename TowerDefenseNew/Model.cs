@@ -40,10 +40,6 @@ namespace TowerDefenseNew
 			_grid[column, row] = CellType.Path;
 		}
 
-		internal void GetCelltype(int column, int row)
-		{
-			
-        }
 
         private readonly IGrid _grid;
     }

@@ -17,6 +17,8 @@ namespace TowerDefenseNew.Structure
 			fpsCounter = new FPScounter();
             window.RenderFrame += Window_RenderFrame;
 			window.VSync = VSyncMode.Off;
+			window.Size = new Vector2i(1280, 720);
+			window.CenterWindow();
 			// set window to halve monitor size
 			if (Monitors.TryGetMonitorInfo(0, out var info))
 			{
@@ -33,6 +35,8 @@ namespace TowerDefenseNew.Structure
 					window.Close();
 				}
 			};
+			window.WindowBorder = WindowBorder.Hidden;
+			window.WindowState = WindowState.Maximized;
 			return window;
 		}
 
