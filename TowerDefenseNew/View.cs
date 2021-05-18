@@ -19,16 +19,6 @@ namespace TowerDefenseNew
 
 		internal List<Vector2> circlePoints = CreateCirclePoints(20);
 
-		private static void DrawRectangle(Vector2 min, Vector2 size)
-		{
-			var max = min + size;
-			GL.Begin(PrimitiveType.Quads);
-			GL.Vertex2(min);
-			GL.Vertex2(max.X, min.Y);
-			GL.Vertex2(max);
-			GL.Vertex2(min.X, max.Y);
-			GL.End();
-		}
 
 		internal void Draw(Model model)
 		{
@@ -50,26 +40,40 @@ namespace TowerDefenseNew
 				{
 					if (CellType.Sniper == grid[column, row])
 					{
-						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f);
+						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, Color4.RosyBrown);
 					}
+					if (CellType.Rifle == grid[column, row])
+                    {
+						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, Color4.Blue);
+					}
+					if (CellType.Path == grid[column, row])
+                    {
+						DrawRectangle(new Vector2(column, row), new Vector2(1, 1), Color4.Transparent);
+                    }
 				}
 			}
 		}
-		private void DrawCircle(Vector2 center, float radius)
+		private void DrawCircle(Vector2 center, float radius, Color4 color)
 		{
 			GL.Begin(PrimitiveType.Polygon);
+			GL.Color4(color);
 			foreach (var point in circlePoints)
 			{
 				GL.Vertex2(center + radius * point);
 			}
 			GL.End();
 		}
-
-		/*private void DrawRect(Vector2 center, float size)
-        {
+		private void DrawRectangle(Vector2 min, Vector2 size, Color4 color)
+		{
+			var max = min + size;
 			GL.Begin(PrimitiveType.Quads);
-			foreach (var)
-        }*/
+			GL.Color4(color);
+			GL.Vertex2(min);
+			GL.Vertex2(max.X, min.Y);
+			GL.Vertex2(max);
+			GL.Vertex2(min.X, max.Y);
+			GL.End();
+		}
 
 		private static void DrawGridLines(int columns, int rows)
 		{

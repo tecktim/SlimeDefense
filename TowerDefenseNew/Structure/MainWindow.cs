@@ -19,15 +19,12 @@ namespace TowerDefenseNew.Structure
 			window.VSync = VSyncMode.Off;
 			window.Size = new Vector2i(1280, 720);
 			window.CenterWindow();
+
 			// set window to halve monitor size
 			if (Monitors.TryGetMonitorInfo(0, out var info))
 			{
 				window.Size = new Vector2i(info.HorizontalResolution, info.VerticalResolution) / 2;
 			}
-			//for easy screen capture
-			//window.WindowState = WindowState.Normal;
-			//window.WindowBorder = WindowBorder.Hidden;
-			//window.Bounds = new Rectangle(200, 20, 1024, 1024);
 			window.KeyDown += args =>
 			{
 				if (Keys.Escape == args.Key)

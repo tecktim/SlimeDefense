@@ -21,13 +21,7 @@ namespace TowerDefenseNew.Grid
 			set { grid[x, y] = value; }
         }
 
-		public CellType GetCelltype(int column, int row)
-        {
-			return this[column, row];
-        }
-
-		public int Columns { get { return grid.GetLength(0); } }
+        public int Columns { get { return grid.GetLength(0); } }
 		public int Rows { get { return grid.GetLength(1); } }
-
 	}
 }

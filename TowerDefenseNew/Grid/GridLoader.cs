@@ -13,8 +13,7 @@ namespace TowerDefenseNew.Grid
 			{
 				for (int y = 0; y < grid.Rows; ++y)
 				{
-					grid[x, y] = CellType.Sniper;
-					
+					grid[x, y] = CellType.Empty;
 				}
 			}
 			return grid;

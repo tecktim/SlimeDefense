@@ -12,6 +12,7 @@ namespace TowerDefenseNew
 		public Model(IGrid grid)
 		{
 			_grid = grid;
+			pathway = new List<CellType>();
 		}
 
 		internal IReadOnlyGrid Grid => _grid;
@@ -35,12 +36,26 @@ namespace TowerDefenseNew
 			_grid[column, row] = CellType.Rifle;
 		}
 
-		internal void PlacePath(int column, int row)
+		internal bool PlacePath(int column, int row)
 		{
-			_grid[column, row] = CellType.Path;
+			bool placed = false;
+			for(int i = 0; i < 54; i++)
+            {
+				_grid[i, row] = CellType.Path;
+				pathway.Add(_grid[i, row]);
+			}
+			placed = true;
+			Console.WriteLine(pathway.Count);
+			return placed;
 		}
 
+		internal CellType CheckCell(int column, int row)
+        {
+			return _grid[column, row];
+        }
 
         private readonly IGrid _grid;
+
+		private List<CellType> pathway;
     }
 }

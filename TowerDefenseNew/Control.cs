@@ -21,7 +21,7 @@ namespace TowerDefenseNew
 
 		}
 
-		internal void Click(float x, float y)
+		internal void Click(float x, float y, KeyboardState keyboard)
 		{
 			var cam = _view.Camera;
 			var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
@@ -33,7 +33,43 @@ namespace TowerDefenseNew
 			var column = (int)Math.Truncate(world.X);
 			var row = (int)Math.Truncate(world.Y);
 			Console.WriteLine($"{column}, {row}");
-			_model.ClearCell(column, row);
+			if(_model.CheckCell(column, row) == Grid.CellType.Sniper)
+            {
+				//Sell Sniper
+				_model.ClearCell(column, row);
+				Console.WriteLine("removed sniper");
+			}
+			if (_model.CheckCell(column, row) == Grid.CellType.Rifle)
+			{
+				//Sell Rifle
+				_model.ClearCell(column, row);
+				Console.WriteLine("removed rifle");
+			}
+			if(_model.CheckCell(column, row) == Grid.CellType.Empty)
+            {
+                if (keyboard.IsKeyDown(Keys.D1)) {
+					_model.PlaceSniper(column, row);
+					Console.WriteLine("placed sniper");
+                }
+				if (keyboard.IsKeyDown(Keys.D2))
+				{
+					_model.PlaceRifle(column, row);
+					Console.WriteLine("placed rifle");
+				}
+				if (keyboard.IsKeyDown(Keys.D3))
+				{
+					if (_model.PlacePath(column, row)) {
+						Console.WriteLine("placed path");
+					}
+                    else
+                    {
+						Console.WriteLine("did not place path");
+					}
+					Console.WriteLine("");
+
+				}
+			}
+
 		}
 	}
 }
