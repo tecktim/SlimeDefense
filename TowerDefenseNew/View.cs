@@ -3,6 +3,7 @@ using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using TowerDefenseNew;
+using TowerDefenseNew.GameObjects;
 using TowerDefenseNew.Grid;
 
 namespace TowerDefenseNew
@@ -27,6 +28,11 @@ namespace TowerDefenseNew
 			Camera.Draw();
 
 			DrawGrid(model.Grid);
+
+			foreach (Enemy enemy in model.enemies)
+			{
+				DrawEnemy(enemy);
+			}
 
 		}
 
@@ -53,6 +59,12 @@ namespace TowerDefenseNew
 				}
 			}
 		}
+
+		private void DrawEnemy(IReadOnlyCircle enemy)
+        {
+			DrawCircle(enemy.Center, enemy.Radius, Color4.Red);
+        }
+
 		private void DrawCircle(Vector2 center, float radius, Color4 color)
 		{
 			GL.Begin(PrimitiveType.Polygon);

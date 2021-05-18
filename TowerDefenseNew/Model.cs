@@ -3,23 +3,45 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TowerDefenseNew.GameObjects;
 using TowerDefenseNew.Grid;
 
 namespace TowerDefenseNew
 {
 	internal class Model
 	{
+
 		public Model(IGrid grid)
 		{
 			_grid = grid;
 			pathway = new List<CellType>();
+			enemies = new List<Enemy>();
+			towers = new List<Tower>();
 		}
 
 		internal IReadOnlyGrid Grid => _grid;
 
 		internal void Update(float deltaTime)
 		{
+			UpdateEnemies(deltaTime);
+			UpdateTowers();
 		}
+
+		private void UpdateEnemies(float frameTime)
+        {
+			foreach(Enemy enemy in enemies)
+            {
+				enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
+			}
+		}
+
+		private void UpdateTowers()
+        {
+			foreach(Tower tower in towers)
+            {
+
+            }
+        }
 
 		internal void ClearCell(int column, int row)
         {
@@ -46,6 +68,7 @@ namespace TowerDefenseNew
 			}
 			placed = true;
 			Console.WriteLine(pathway.Count);
+			enemies.Add(new Enemy(new Vector2(0 + 0.5f, row + 0.5f), .25f, 100));
 			return placed;
 		}
 
@@ -57,5 +80,7 @@ namespace TowerDefenseNew
         private readonly IGrid _grid;
 
 		private List<CellType> pathway;
+        internal List<Enemy> enemies;
+		internal List<Tower> towers;
     }
 }
