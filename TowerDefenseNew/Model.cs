@@ -17,23 +17,39 @@ namespace TowerDefenseNew
 			pathway = new List<CellType>();
 			enemies = new List<Enemy>();
 			towers = new List<Tower>();
+			bullets = new List<Bullet>();
 		}
 
 		internal IReadOnlyGrid Grid => _grid;
 
 		internal void Update(float deltaTime)
 		{
+			UpdateBullets(deltaTime);
 			UpdateEnemies(deltaTime);
 			UpdateTowers();
 		}
 
 		private void UpdateEnemies(float frameTime)
         {
-			foreach(Enemy enemy in enemies)
-            {
-				enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
+			if (enemies.Count != 0)
+			{
+				foreach (Enemy enemy in enemies.ToList())
+				{
+					enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
+				}
 			}
 		}
+
+		private void UpdateBullets(float frameTime)
+        {
+			if (bullets.Count != 0)
+			{
+				foreach (Bullet bullet in bullets.ToList())
+				{
+                    bullet.Center += new Vector2(frameTime * bullet.Velocity.X, frameTime * bullet.Velocity.Y);
+				}
+			}
+        }
 
 		private void UpdateTowers()
         {
@@ -82,5 +98,6 @@ namespace TowerDefenseNew
 		private List<CellType> pathway;
         internal List<Enemy> enemies;
 		internal List<Tower> towers;
+		internal List<Bullet> bullets;
     }
 }

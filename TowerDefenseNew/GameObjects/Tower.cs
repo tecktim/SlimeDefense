@@ -10,24 +10,27 @@ namespace TowerDefenseNew.GameObjects
 {
     internal class Tower : GameObject
     {
-        private int attackSpeed;
-        private List<Enemy> Enemies { get; set; }
 
 
-        internal Tower(Vector2 center, float attackRadius, int damage, int attackSpeed, List<Enemy> enemies) : base(center, attackRadius)
+        internal Tower(Vector2 center, float attackRadius, int damage, int attackSpeed, List<Enemy> enemies, List<Bullet> bullets) : base(center, attackRadius)
         {
+            this.Center = center;
             this.Enemies = enemies;
+            this.attackSpeed = attackSpeed;
+            this.damage = damage;
+            this.Radius = attackRadius;
+            this.Bullets = bullets;
             asTimer();
         }
 
         private void asTimer()
         {
             // Creating timer with attackSpeed (millis) as interval
-            System.Timers.Timer asTimer = new System.Timers.Timer(attackSpeed);
+            System.Timers.Timer Timer = new System.Timers.Timer(attackSpeed);
             // Hook up elapsed event for the timer
-            asTimer.Elapsed += OnTimedEvent;
-            asTimer.AutoReset = true;
-            asTimer.Enabled = true;
+            Timer.Elapsed += OnTimedEvent;
+            Timer.AutoReset = true;
+            Timer.Enabled = true;
         }
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
@@ -37,14 +40,24 @@ namespace TowerDefenseNew.GameObjects
 
         private void checkRange()
         {
-             
-            foreach(Enemy enemy in Enemies)
+            if (Enemies.Count != 0)
             {
-                if (this.Intersects(enemy))
+                foreach (Enemy enemy in Enemies.ToList())
                 {
-                    //shoot;
+                    if (this.Intersects(enemy))
+                    {
+                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius/100, Bullets, Enemies);
+                        bullet.Velocity = new Vector2(this.Center.X-enemy.Center.X, this.Center.Y+enemy.Center.Y);
+                        Bullets.Add(bullet);
+                        break;
+                    }
+                    else continue;
                 }
             }
         }
+        private int attackSpeed { get; set; }
+        internal int damage { get; set; }
+        private List<Enemy> Enemies { get; set; }222
+        private List<Bullet> Bullets { get; set; }
     }
 }

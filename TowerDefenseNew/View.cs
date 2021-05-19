@@ -2,6 +2,7 @@
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TowerDefenseNew;
 using TowerDefenseNew.GameObjects;
 using TowerDefenseNew.Grid;
@@ -29,10 +30,15 @@ namespace TowerDefenseNew
 
 			DrawGrid(model.Grid);
 
-			foreach (Enemy enemy in model.enemies)
+			foreach (Enemy enemy in model.enemies.ToList())
 			{
 				DrawEnemy(enemy);
 			}
+
+			foreach (Bullet bullet in model.bullets.ToList())
+            {
+				DrawBullet(bullet);
+            }
 
 		}
 
@@ -65,6 +71,11 @@ namespace TowerDefenseNew
 			DrawCircle(enemy.Center, enemy.Radius, Color4.Red);
         }
 
+		private void DrawBullet(IReadOnlyCircle bullet)
+        {
+			DrawCircle(bullet.Center, bullet.Radius, Color4.Black);
+        }
+
 		private void DrawCircle(Vector2 center, float radius, Color4 color)
 		{
 			GL.Begin(PrimitiveType.Polygon);
@@ -75,6 +86,7 @@ namespace TowerDefenseNew
 			}
 			GL.End();
 		}
+
 		private void DrawRectangle(Vector2 min, Vector2 size, Color4 color)
 		{
 			var max = min + size;
