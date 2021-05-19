@@ -46,7 +46,8 @@ namespace TowerDefenseNew
 			{
 				foreach (Bullet bullet in bullets.ToList())
 				{
-                    bullet.Center += new Vector2(frameTime * bullet.Velocity.X, frameTime * bullet.Velocity.Y);
+					bullet.checkHit();
+                    bullet.Center += new Vector2(frameTime * bullet.speedX, frameTime * bullet.speedY);
 				}
 			}
         }

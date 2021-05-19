@@ -46,8 +46,7 @@ namespace TowerDefenseNew.GameObjects
                 {
                     if (this.Intersects(enemy))
                     {
-                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius/100, Bullets, Enemies);
-                        bullet.Velocity = new Vector2(this.Center.X-enemy.Center.X, this.Center.Y+enemy.Center.Y);
+                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius/50, this, Bullets, Enemies);
                         Bullets.Add(bullet);
                         break;
                     }
@@ -57,7 +56,7 @@ namespace TowerDefenseNew.GameObjects
         }
         private int attackSpeed { get; set; }
         internal int damage { get; set; }
-        private List<Enemy> Enemies { get; set; }222
+        private List<Enemy> Enemies { get; set; }
         private List<Bullet> Bullets { get; set; }
     }
 }

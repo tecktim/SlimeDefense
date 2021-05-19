@@ -17,20 +17,17 @@ namespace TowerDefenseNew.GameObjects
             this.alive = true;
         }
 
-        internal bool isShot(Tower tower)
+        internal bool isShot(int damage)
         {
-            health = health - tower.damage;
-            if(health < tower.damage)
+            health = health - damage;
+            if(health <= 0)
             {
                 this.alive = false;
             }
-            Console.WriteLine("enemy hit for " + tower.damage + " , enemy life: " + this.health);
-            return true;
+            Console.WriteLine("enemy hit for " + damage + " , enemy life: " + this.health);
+            return alive;
         }
 
-
         public Vector2 Velocity = new Vector2(1f, 0f);
-
-        
     }
 }
