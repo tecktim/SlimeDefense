@@ -64,7 +64,7 @@ namespace TowerDefenseNew
 
 		internal void PlaceSniper(int column, int row)
 		{
-			if (this.cash > this.sniperCost)
+			if (this.cash >= this.sniperCost)
 			{
 				_grid[column, row] = CellType.Sniper;
 				this.towers.Add(new Tower(new Vector2(column, row), 9f, 10, 1000, this.enemies, this.bullets));
@@ -72,18 +72,20 @@ namespace TowerDefenseNew
 				Math.Floor(this.cash);
 				Console.WriteLine("Sniper bought for: " + this.sniperCost + " || New balance: " + this.cash);
 			}
+			else return;
 		}
 
 		internal void PlaceRifle(int column, int row)
 		{
-			if (this.cash > this.rifleCost)
+			if (this.cash >= this.rifleCost)
 			{
 				_grid[column, row] = CellType.Rifle;
 				this.towers.Add(new Tower(new Vector2(column, row), 3f, 5, 100, this.enemies, this.bullets));
 				this.cash -= this.rifleCost;
 				Math.Floor(this.cash);
-				Console.WriteLine("Rifle bought for: " + this.rifleCost +" || New balance: " + this.cash);
+				Console.WriteLine("Rifle bought for: " + this.rifleCost + " || New balance: " + this.cash);
 			}
+			else return;
 		}
 
 		internal bool PlacePath(int column, int row)
@@ -96,7 +98,7 @@ namespace TowerDefenseNew
 			}
 			placed = true;
 			Console.WriteLine(pathway.Count);
-
+			Console.WriteLine("placed path");
 			enemies.Add(new Enemy(new Vector2(0 + 0.5f, row + 0.5f), .25f, 100));
 			return placed;
 		}

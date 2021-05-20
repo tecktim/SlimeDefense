@@ -37,7 +37,6 @@ namespace TowerDefenseNew
 			if (_model.CheckCell(column, row) == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
             {
 				//Sell Sniper hi dev brach
-				//give 80% of cost back
 				_model.ClearCell(column, row, _model.sniperCost);
 				Console.WriteLine("sold sniper, new balance: " + _model.cash);
 				return;
@@ -46,7 +45,6 @@ namespace TowerDefenseNew
 			if (_model.CheckCell(column, row) == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.D4))
 			{
 				//Sell Rifle
-				//give 80% of cost back
 				_model.ClearCell(column, row, _model.rifleCost);
 				Console.WriteLine("sold rifle, new balance: " + _model.cash);
 				return;
@@ -57,18 +55,15 @@ namespace TowerDefenseNew
 				//Sniper kaufen
                 if (keyboard.IsKeyDown(Keys.D1)) {
 						_model.PlaceSniper(column, row);
-						Console.WriteLine("placed sniper");
 					}
                 }
 				if (keyboard.IsKeyDown(Keys.D2))
 				{
 						_model.PlaceRifle(column, row);
-						Console.WriteLine("placed rifle");
 				}
 				if (keyboard.IsKeyDown(Keys.D3))
 				{
 					if (_model.PlacePath(column, row)) {
-						Console.WriteLine("placed path");
 					}
                     else
                     {
