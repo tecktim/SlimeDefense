@@ -32,20 +32,31 @@ namespace TowerDefenseNew.GameObjects
             speedY = bulletSpeed * dy;
         }
 
-        internal void checkHit()
+        internal bool checkHit()
         {
-            foreach (Enemy enemy in Enemies.ToList())
+            if (Enemies.Count != 0)
             {
-                if (this.Intersects(enemy))
+                foreach (Enemy enemy in Enemies.ToList())
                 {
-                    if (enemy.isShot(Tower.damage))
+                    if (this.Intersects(enemy))
                     {
-                        //normal hit if true
+                        if (enemy.isShot(Tower.damage))
+                        {
+                            //normal hit if true
+                            return false; //enemyNotKilled
+                        }
+                        else Enemies.Remove(enemy); //he dead if false
+                        Bullets.Remove(this);
+                        return true; //enemyKilled
                     }
-                    else Enemies.Remove(enemy); //he dead if false
-                    Bullets.Remove(this);
                 }
+                return false;
             }
+            else
+            {
+                return false;
+            }
+            
          }
 
         internal float bulletSpeed;
