@@ -45,7 +45,7 @@ namespace TowerDefenseNew
 		private void UpdateEnemies(float frameTime)
 		{
 			try {
-				foreach (Enemy enemy in enemies)
+				foreach (Enemy enemy in enemies.ToList())
 				{
 					if (enemy != null)
 					{
@@ -157,10 +157,25 @@ namespace TowerDefenseNew
 
 		private void spawnEnemy(int row)
         {
-			enemies.Add(new Enemy(new Vector2(0 + 0.5f, row + 0.5f), .25f, enemyHealth));
+			var rnd = new Random();
+			int spot = rnd.Next(0, 3);
+			switch (spot)
+			{
+				case 0:
+					enemies.Add(new Enemy(new Vector2(0 + 0.35f, row + 0.35f), .25f, enemyHealth));
+					break;
+				case 1:
+					enemies.Add(new Enemy(new Vector2(0 + 0.5f, row + 0.5f), .25f, enemyHealth));
+					break;
+				case 2:
+					enemies.Add(new Enemy(new Vector2(0 + 0.65f, row + 0.65f), .25f, enemyHealth));
+					break;
+				default:
+					return;
+			}
 			if (enemySpawnRate >= 500)
             {
-				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.95); // 0.9964);
+				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.8); // 0.9964);
 			}
 		}
 
