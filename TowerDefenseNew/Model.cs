@@ -20,6 +20,8 @@ namespace TowerDefenseNew
 			this.bullets = new List<Bullet>();
 			this.cash = 50;
 			this.life = 1;
+			this.sniperCost = 20;
+			this.rifleCost = 5;
 		}
 
 		internal IReadOnlyGrid Grid => _grid;
@@ -65,9 +67,10 @@ namespace TowerDefenseNew
 			if (this.cash > this.sniperCost)
 			{
 				_grid[column, row] = CellType.Sniper;
+				this.towers.Add(new Tower(new Vector2(column, row), 9f, 10, 1000, this.enemies, this.bullets));
 				this.cash -= this.sniperCost;
 				Math.Floor(this.cash);
-				Console.WriteLine("Sniper bought for: " + sniperCost + " || New balance: " + this.cash);
+				Console.WriteLine("Sniper bought for: " + this.sniperCost + " || New balance: " + this.cash);
 			}
 		}
 
@@ -76,9 +79,10 @@ namespace TowerDefenseNew
 			if (this.cash > this.rifleCost)
 			{
 				_grid[column, row] = CellType.Rifle;
+				this.towers.Add(new Tower(new Vector2(column, row), 3f, 5, 100, this.enemies, this.bullets));
 				this.cash -= this.rifleCost;
 				Math.Floor(this.cash);
-				Console.WriteLine("Rifle bought for: " + rifleCost +" || New balance: " + this.cash);
+				Console.WriteLine("Rifle bought for: " + this.rifleCost +" || New balance: " + this.cash);
 			}
 		}
 

@@ -57,14 +57,12 @@ namespace TowerDefenseNew
 				//Sniper kaufen
                 if (keyboard.IsKeyDown(Keys.D1)) {
 						_model.PlaceSniper(column, row);
-						_model.towers.Add(new Tower(new Vector2(column, row), 9f, 10, 1000, 20, _model.enemies, _model.bullets));
 						Console.WriteLine("placed sniper");
 					}
                 }
 				if (keyboard.IsKeyDown(Keys.D2))
 				{
 						_model.PlaceRifle(column, row);
-						_model.towers.Add(new Tower(new Vector2(column, row), 3f, 5, 100, 5, _model.enemies, _model.bullets));
 						Console.WriteLine("placed rifle");
 				}
 				if (keyboard.IsKeyDown(Keys.D3))
