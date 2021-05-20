@@ -12,7 +12,7 @@ namespace TowerDefenseNew.GameObjects
     {
 
 
-        internal Tower(Vector2 center, float attackRadius, int damage, int attackSpeed, List<Enemy> enemies, List<Bullet> bullets) : base(center, attackRadius)
+        internal Tower(Vector2 center, float attackRadius, int damage, int attackSpeed, int cost, List<Enemy> enemies, List<Bullet> bullets) : base(center, attackRadius)
         {
             this.Center = center;
             this.Enemies = enemies;
@@ -20,6 +20,7 @@ namespace TowerDefenseNew.GameObjects
             this.damage = damage;
             this.Radius = attackRadius;
             this.Bullets = bullets;
+            this.cost = cost;
             asTimer();
         }
 
@@ -54,6 +55,8 @@ namespace TowerDefenseNew.GameObjects
                 }
             }
         }
+
+        private int cost { get; set; }
         private int attackSpeed { get; set; }
         internal int damage { get; set; }
         private List<Enemy> Enemies { get; set; }

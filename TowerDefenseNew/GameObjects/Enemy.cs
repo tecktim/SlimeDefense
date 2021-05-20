@@ -11,6 +11,7 @@ namespace TowerDefenseNew.GameObjects
     {
         internal int health;
         internal bool alive;
+        internal int bounty;
         internal Enemy(Vector2 center, float radius, int health) : base(center, radius)
         {
             this.health = health;

@@ -26,7 +26,6 @@ namespace TowerDefenseNew
 		{
 			UpdateBullets(deltaTime);
 			UpdateEnemies(deltaTime);
-			UpdateTowers();
 		}
 
 		private void UpdateEnemies(float frameTime)
@@ -50,14 +49,6 @@ namespace TowerDefenseNew
                     bullet.Center += new Vector2(frameTime * bullet.speedX, frameTime * bullet.speedY);
 				}
 			}
-        }
-
-		private void UpdateTowers()
-        {
-			foreach(Tower tower in towers)
-            {
-
-            }
         }
 
 		internal void ClearCell(int column, int row)
@@ -85,6 +76,7 @@ namespace TowerDefenseNew
 			}
 			placed = true;
 			Console.WriteLine(pathway.Count);
+
 			enemies.Add(new Enemy(new Vector2(0 + 0.5f, row + 0.5f), .25f, 100));
 			return placed;
 		}
@@ -95,7 +87,10 @@ namespace TowerDefenseNew
         }
 
         private readonly IGrid _grid;
-
+		internal double sniperCost;
+		internal double rifleCost;
+		private int life;
+		internal double cash;
 		private List<CellType> pathway;
         internal List<Enemy> enemies;
 		internal List<Tower> towers;
