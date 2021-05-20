@@ -17,24 +17,14 @@ namespace TowerDefenseNew.GameObjects
             this.Bullets = bullets;
             this.Enemies = enemies;
             this.Tower = tower;
-            this.Enemy = Enemies[0];
+            this.Bullets.Add(this);
 
-            //Distance tower to enemy
-            float dx = this.Enemy.Center.X - this.Center.X;
-            float dy = this.Enemy.Center.Y - this.Center.Y;
-            //normalize sodass man bulletspeed miteinbeziehen kann
-            float length = (float)Math.Sqrt(dx * dx + dy * dy);
-            if(length == 0) { length = 1; dx = 1; dy = 0; }
-            this.bulletSpeed = 10;
-            dx /= length;
-            dy /= length;
-            speedX = bulletSpeed * dx;
-            speedY = bulletSpeed * dy;
         }
 
         internal bool checkHit()
         {
-            if (Enemies.Count != 0)
+            bool isDead = false;
+            try
             {
                 foreach (Enemy enemy in Enemies.ToList())
                 {
@@ -43,29 +33,47 @@ namespace TowerDefenseNew.GameObjects
                         if (enemy.isShot(Tower.damage))
                         {
                             //normal hit if true
-                            return false; //enemyNotKilled
+                            isDead = false;
                         }
-                        else Enemies.Remove(enemy); //he dead if false
+                        else
+                        {
+                            //he dead if false
+                            isDead = true;
+                            Enemies.Remove(enemy);
+                        }
                         Bullets.Remove(this);
-                        return true; //enemyKilled
+                        continue;
                     }
                 }
-                return false;
             }
-            else
+            catch (System.ArgumentException)
             {
-                return false;
+                Console.WriteLine("checkHit exception");
             }
-            
-         }
+            return isDead;
+        }
+        
+        internal void bulletVelocity(Enemy enemy)
+        {
+            //Distance tower to enemy
+            float dx = enemy.Center.X - this.Center.X;
+            float dy = enemy.Center.Y - this.Center.Y;
+
+            //normalize sodass man bulletspeed miteinbeziehen kann
+            float length = (float)Math.Sqrt(dx * dx + dy * dy);
+            if (length == 0) { length = 1; dx = 1; dy = 0; }
+            this.bulletSpeed = 10;
+            dx /= length;
+            dy /= length;
+            this.speedX = bulletSpeed * dx;
+            this.speedY = bulletSpeed * dy;
+        }
+   
 
         internal float bulletSpeed;
         internal List<Bullet> Bullets;
         internal List<Enemy> Enemies;
         internal Tower Tower;
-
-        private Enemy Enemy;
-
         internal float speedX;
         internal float speedY;
     }

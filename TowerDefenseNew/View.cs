@@ -29,17 +29,25 @@ namespace TowerDefenseNew
 			Camera.Draw();
 
 			DrawGrid(model.Grid);
-
-			foreach (Enemy enemy in model.enemies.ToList())
+			try
 			{
-				DrawEnemy(enemy);
+				foreach (Enemy enemy in model.enemies.ToList())
+				{
+					if (enemy != null)
+					{
+						DrawEnemy(enemy, model.enemyHealth);
+					}
+				}
+
+				foreach (Bullet bullet in model.bullets.ToList())
+				{
+					DrawBullet(bullet);
+				}
 			}
-
-			foreach (Bullet bullet in model.bullets.ToList())
+			catch (System.ArgumentException)
             {
-				DrawBullet(bullet);
+				Console.WriteLine("View.Draw exception");
             }
-
 		}
 
 		private void DrawGrid(IReadOnlyGrid grid)
@@ -66,9 +74,17 @@ namespace TowerDefenseNew
 			}
 		}
 
-		private void DrawEnemy(IReadOnlyCircle enemy)
+		private void DrawEnemy(Enemy enemy, int maxHealth)
         {
-			DrawCircle(enemy.Center, enemy.Radius, Color4.Red);
+			try
+			{
+				if (enemy.health > maxHealth / 2) DrawCircle(enemy.Center, enemy.Radius, Color4.Green);
+				if (enemy.health <= maxHealth / 2) DrawCircle(enemy.Center, enemy.Radius, Color4.Red);
+			}
+			catch (System.NullReferenceException)
+            {
+				Console.WriteLine("DrawEnemy NullReferenceException");
+            }
         }
 
 		private void DrawBullet(IReadOnlyCircle bullet)

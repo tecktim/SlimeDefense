@@ -14,20 +14,27 @@ namespace TowerDefenseNew
 
 		public Model(IGrid grid)
 		{
-			_grid = grid;
+			this._grid = grid;
 			this.pathway = new List<CellType>();
 			this.enemies = new List<Enemy>();
 			this.towers = new List<Tower>();
 			this.bullets = new List<Bullet>();
 			this.cash = 50;
-			this.life = 1;
+			//this.life = 1;
 			this.sniperCost = 20;
 			this.rifleCost = 5;
 			this.enemySpawnRate = 1000;
+			this.enemyHealth = 100;
 			this.timer = new System.Timers.Timer(this.enemySpawnRate);
 		}
 
-		internal IReadOnlyGrid Grid => _grid;
+        internal void giveCash()
+        {
+			this.cash += 1000;
+			Console.Write("New balance: " + this.cash);
+        }
+
+        internal IReadOnlyGrid Grid => _grid;
 
 		internal void Update(float deltaTime)
 		{
@@ -36,35 +43,41 @@ namespace TowerDefenseNew
 		}
 
 		private void UpdateEnemies(float frameTime)
-        {
-			if (enemies.Count != 0)
-			{
-				foreach (Enemy enemy in enemies.ToList())
+		{
+			try {
+				foreach (Enemy enemy in enemies)
 				{
 					if (enemy != null)
-                    {
+					{
 						enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
 					}
 				}
-			}
+			} 
+			catch (System.ArgumentException)
+            {
+				Console.WriteLine("UpdateEnemies ArgumentException");
+            }
 		}
 
 		private void UpdateBullets(float frameTime)
-        {
-			if (bullets.Count != 0)
-			{
+		{
+			try {
 				foreach (Bullet bullet in bullets.ToList())
 				{
+					bullet.Center += new Vector2(frameTime * bullet.speedX, frameTime * bullet.speedY);
 					if (bullet.checkHit())
 					{
 						//onEnemyKill
-						this.cash = cash + 1;
+						this.cash = this.cash + 1;
 						Console.WriteLine("Enemy killed. Cash: " + this.cash);
 					}
-                    bullet.Center += new Vector2(frameTime * bullet.speedX, frameTime * bullet.speedY);
 				}
 			}
-        }
+			catch (System.ArgumentException)
+            {
+				Console.WriteLine("UpdateBullet exception");
+			}
+		}
 
 		internal void ClearCell(int column, int row, double towerCost)
         {
@@ -101,18 +114,30 @@ namespace TowerDefenseNew
 		internal bool PlacePath(int column, int row)
 		{
 			bool placed = false;
-			for(int i = 0; i < 54; i++)
-            {
-				_grid[i, row] = CellType.Path;
-				pathway.Add(_grid[i, row]);
+			for (int i = 0; i < 10; i++)
+			{
+				_grid[i, 0] = CellType.Path;
+				pathway.Add(_grid[i, 0]);
+			}
+			for (int i = 0; i < 22; i++)
+			{
+				_grid[9, i] = CellType.Path;
+				pathway.Add(_grid[9, i]);
+			}
+			for (int i = 9; i < 54; i++)
+			{
+				_grid[i, 21] = CellType.Path;
+				pathway.Add(_grid[i, 21]);
 			}
 			placed = true;
 			Console.WriteLine(pathway.Count);
 			Console.WriteLine("placed path");
-			enemySpawnTimer(row);
+			enemySpawnTimer(0);
 			return placed;
 		}
 		
+
+
 		private void enemySpawnTimer(int row)
 		{
 			// Creating timer with attackSpeed (millis) as interval
@@ -132,8 +157,8 @@ namespace TowerDefenseNew
 
 		private void spawnEnemy(int row)
         {
-			enemies.Add(new Enemy(new Vector2(0 + 0.5f, row + 0.5f), .25f, 100));
-			if (enemySpawnRate >= 50)
+			enemies.Add(new Enemy(new Vector2(0 + 0.5f, row + 0.5f), .25f, enemyHealth));
+			if (enemySpawnRate >= 500)
             {
 				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.95); // 0.9964);
 			}
@@ -144,11 +169,12 @@ namespace TowerDefenseNew
 			return _grid[column, row];
         }
 
+		internal int enemyHealth;
         private readonly IGrid _grid;
 		internal double sniperCost;
 		internal double rifleCost;
         private Timer timer;
-        private int life;
+        //private int life;
 		internal double cash;
 		private List<CellType> pathway;
         internal List<Enemy> enemies;

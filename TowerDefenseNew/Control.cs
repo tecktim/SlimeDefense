@@ -9,6 +9,7 @@ namespace TowerDefenseNew
 	{
 		private readonly Model _model;
 		private readonly View _view;
+		private bool placePath = true;
 
 		public Control(Model model, View view)
 		{
@@ -18,7 +19,10 @@ namespace TowerDefenseNew
 
 		internal void Update(float deltaTime, KeyboardState keyboard)
 		{
-
+			if (keyboard.IsKeyReleased(Keys.D5))
+			{
+				_model.giveCash();
+			}
 		}
 
 		internal void Click(float x, float y, KeyboardState keyboard)
@@ -33,45 +37,64 @@ namespace TowerDefenseNew
 			var column = (int)Math.Truncate(world.X);
 			var row = (int)Math.Truncate(world.Y);
 			Console.WriteLine($"{column}, {row}");
+			var cell = _model.CheckCell(column, row);
+
 			//Sniper verkaufen
-			if (_model.CheckCell(column, row) == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
-            {
+			if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
+			{
 				//Sell Sniper hi dev brach
 				_model.ClearCell(column, row, _model.sniperCost);
 				Console.WriteLine("sold sniper, new balance: " + _model.cash);
 				return;
 			}
+
 			//Rifle verkaufen
-			if (_model.CheckCell(column, row) == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.D4))
+			if (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.D4))
 			{
 				//Sell Rifle
 				_model.ClearCell(column, row, _model.rifleCost);
 				Console.WriteLine("sold rifle, new balance: " + _model.cash);
 				return;
 			}
+
 			//Schauen ob Cell leer ist
-			if(_model.CheckCell(column, row) == Grid.CellType.Empty)
-            {
+			if (cell == Grid.CellType.Empty)
+			{
+
 				//Sniper kaufen
-                if (keyboard.IsKeyDown(Keys.D1)) {
-						_model.PlaceSniper(column, row);
-					}
-                }
+				if (keyboard.IsKeyDown(Keys.D1))
+				{
+					if (cell != Grid.CellType.Empty) { return; }
+					else{ _model.PlaceSniper(column, row); }
+					return;
+				}
+				//Rifle kaufen
 				if (keyboard.IsKeyDown(Keys.D2))
 				{
-						_model.PlaceRifle(column, row);
+					if (cell != Grid.CellType.Empty) { return; }
+					else { _model.PlaceRifle(column, row); }
+					return;
 				}
-				if (keyboard.IsKeyDown(Keys.D3))
+				//Path setzen
+				if (keyboard.IsKeyDown(Keys.D3) && placePath == true)
 				{
-					if (_model.PlacePath(column, row)) {
+					for (int i = 0; i < 54; i++)
+					{
+						if (_model.CheckCell(i, row) == Grid.CellType.Sniper || _model.CheckCell(i, row) == Grid.CellType.Rifle)
+						{
+							placePath = false;
+							break;
+                        }
 					}
-                    else
-                    {
-						Console.WriteLine("did not place path");
+					if (placePath)
+					{
+						_model.PlacePath(column, row);
+						placePath = false;
+						return;
 					}
 					Console.WriteLine("");
-
 				}
 			}
 		}
 	}
+}

@@ -40,18 +40,22 @@ namespace TowerDefenseNew.GameObjects
 
         private void checkRange()
         {
-            if (Enemies.Count != 0)
+            try
             {
                 foreach (Enemy enemy in Enemies.ToList())
                 {
                     if (this.Intersects(enemy))
                     {
-                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius/50, this, Bullets, Enemies);
-                        Bullets.Add(bullet);
-                        break;
+                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius / 50, this, this.Bullets, this.Enemies);
+                        bullet.bulletVelocity(enemy);
+                        return;
                     }
-                    else continue;
                 }
+            }
+            catch (System.ArgumentException)
+            {
+                Console.WriteLine("checkRange exception");
+                return;
             }
         }
 
