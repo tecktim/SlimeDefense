@@ -35,7 +35,7 @@ namespace TowerDefenseNew
 			Console.WriteLine($"{column}, {row}");
 			if (_model.CheckCell(column, row) == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
             {
-				//Sell Sniper
+				//Sell Sniper hi dev brach
 				//give 80% of cost back
 				_model.ClearCell(column, row);
 				_model.cash += Math.Floor(_model.sniperCost) * 0.8;
