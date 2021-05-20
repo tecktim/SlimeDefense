@@ -33,48 +33,39 @@ namespace TowerDefenseNew
 			var column = (int)Math.Truncate(world.X);
 			var row = (int)Math.Truncate(world.Y);
 			Console.WriteLine($"{column}, {row}");
+			//Sniper verkaufen
 			if (_model.CheckCell(column, row) == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
             {
 				//Sell Sniper hi dev brach
 				//give 80% of cost back
-				_model.ClearCell(column, row);
-				_model.cash += Math.Floor(_model.sniperCost) * 0.8;
-				Math.Floor(_model.cash);
-				Console.WriteLine("removed sniper");
+				_model.ClearCell(column, row, _model.sniperCost);
+				Console.WriteLine("sold sniper, new balance: " + _model.cash);
 				return;
 			}
+			//Rifle verkaufen
 			if (_model.CheckCell(column, row) == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.D4))
 			{
 				//Sell Rifle
 				//give 80% of cost back
-				_model.ClearCell(column, row);
-				Console.WriteLine("removed rifle");
+				_model.ClearCell(column, row, _model.rifleCost);
+				Console.WriteLine("sold rifle, new balance: " + _model.cash);
 				return;
 			}
+			//Schauen ob Cell leer ist
 			if(_model.CheckCell(column, row) == Grid.CellType.Empty)
             {
+				//Sniper kaufen
                 if (keyboard.IsKeyDown(Keys.D1)) {
-					//if cash > sniper.cost
-					if (_model.cash > _model.sniperCost)
-					{
 						_model.PlaceSniper(column, row);
 						_model.towers.Add(new Tower(new Vector2(column, row), 9f, 10, 1000, 20, _model.enemies, _model.bullets));
-						//remove cash
-						_model.cash -= _model.sniperCost;
 						Console.WriteLine("placed sniper");
 					}
                 }
 				if (keyboard.IsKeyDown(Keys.D2))
 				{
-					//if cash > rifle.cost
-					if (_model.cash > _model.rifleCost)
-					{
 						_model.PlaceRifle(column, row);
 						_model.towers.Add(new Tower(new Vector2(column, row), 3f, 5, 100, 5, _model.enemies, _model.bullets));
-						//remove cash
-						_model.cash -= _model.rifleCost;
 						Console.WriteLine("placed rifle");
-					}
 				}
 				if (keyboard.IsKeyDown(Keys.D3))
 				{
@@ -89,7 +80,5 @@ namespace TowerDefenseNew
 
 				}
 			}
-
 		}
 	}
-}

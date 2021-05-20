@@ -14,10 +14,12 @@ namespace TowerDefenseNew
 		public Model(IGrid grid)
 		{
 			_grid = grid;
-			pathway = new List<CellType>();
-			enemies = new List<Enemy>();
-			towers = new List<Tower>();
-			bullets = new List<Bullet>();
+			this.pathway = new List<CellType>();
+			this.enemies = new List<Enemy>();
+			this.towers = new List<Tower>();
+			this.bullets = new List<Bullet>();
+			this.cash = 50;
+			this.life = 1;
 		}
 
 		internal IReadOnlyGrid Grid => _grid;
@@ -51,19 +53,33 @@ namespace TowerDefenseNew
 			}
         }
 
-		internal void ClearCell(int column, int row)
+		internal void ClearCell(int column, int row, double towerCost)
         {
 			_grid[column, row] = CellType.Empty;
-        }
+			this.cash += Math.Floor(towerCost) * 0.8;
+			Math.Floor(this.cash);
+		}
 
 		internal void PlaceSniper(int column, int row)
 		{
-			_grid[column, row] = CellType.Sniper;
+			if (this.cash > this.sniperCost)
+			{
+				_grid[column, row] = CellType.Sniper;
+				this.cash -= this.sniperCost;
+				Math.Floor(this.cash);
+				Console.WriteLine("Sniper bought for: " + sniperCost + " || New balance: " + this.cash);
+			}
 		}
 
 		internal void PlaceRifle(int column, int row)
 		{
-			_grid[column, row] = CellType.Rifle;
+			if (this.cash > this.rifleCost)
+			{
+				_grid[column, row] = CellType.Rifle;
+				this.cash -= this.rifleCost;
+				Math.Floor(this.cash);
+				Console.WriteLine("Rifle bought for: " + rifleCost +" || New balance: " + this.cash);
+			}
 		}
 
 		internal bool PlacePath(int column, int row)
