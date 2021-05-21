@@ -20,17 +20,27 @@ namespace TowerDefenseNew.GameObjects
             this.damage = damage;
             this.Radius = attackRadius;
             this.Bullets = bullets;
-            asTimer();
+            asTimer(true);
         }
 
-        private void asTimer()
+        public void asTimer(bool active)
         {
             // Creating timer with attackSpeed (millis) as interval
             System.Timers.Timer Timer = new System.Timers.Timer(attackSpeed);
-            // Hook up elapsed event for the timer
-            Timer.Elapsed += OnTimedEvent;
-            Timer.AutoReset = true;
-            Timer.Enabled = true;
+            if (active)
+            {
+                // Hook up elapsed event for the timer
+                Timer.Elapsed += OnTimedEvent;
+                Timer.AutoReset = true;
+                Timer.Enabled = true;
+            }
+            else
+            {
+                Timer.Enabled = false;
+                Timer.Stop();
+                Timer.Close();
+                Timer.Dispose();
+            }
         }
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)

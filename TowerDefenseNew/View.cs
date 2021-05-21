@@ -14,7 +14,7 @@ namespace TowerDefenseNew
 		public View()
 		{
 			//TODO: Change the clear color of the screen.
-			GL.ClearColor(Color4.DarkGreen);
+			GL.ClearColor(new Color4(220, 150, 30, 255));
 		}
 		internal Camera Camera { get; } = new Camera();
 

@@ -45,44 +45,62 @@ namespace TowerDefenseNew
 
 		private void UpdateEnemies(float frameTime)
 		{
-			try
+			if (enemies.Count != 0)
 			{
-				foreach (Enemy enemy in enemies.ToList())
+				try
 				{
-					enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
-
-					if (enemy != null)
+					foreach (Enemy enemy in enemies.ToList())
 					{
-						Console.WriteLine("X: " + enemies[0].Center.X + "Y: " + enemies[0].Center.Y + "dir: " + enemies[0].dir);
-						if (CheckRightPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
-						{
-							enemy.changeDirection(direction.right);
+						enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
 
-						}
-						else if (CheckRightPath(enemy.Center + new Vector2(-0.5f, -0.5f)) && enemy.dir == direction.up)
+						if (enemy != null)
 						{
-							enemy.changeDirection(direction.right);
-							continue;
+							//Check if moving up or down or right, then move right
+							if (CheckRightPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
+							{
+								enemy.changeDirection(direction.right);
+								continue;
+							}
+							else if (CheckRightPath(enemy.Center + new Vector2(-0.5f, -0.5f)) && enemy.dir == direction.up)
+							{
+								enemy.changeDirection(direction.right);
+								continue;
+							}
+							else if (CheckRightPath(enemy.Center + new Vector2(0.5f, 0.5f)) && enemy.dir == direction.down)
+							{
+								enemy.changeDirection(direction.right);
+								continue;
+							}
+							//Check if moving right or up, then move up
+							else if (CheckUpperPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
+							{
+								enemy.changeDirection(direction.up);
+								continue;
+							}
+							else if (CheckUpperPath(enemy.Center + new Vector2(-0.5f, -0.5f)) && enemy.dir == direction.up)
+							{
+								enemy.changeDirection(direction.up);
+								continue;
+							}
+							//Check if moving right or down, then move down
+							else if (CheckLowerPath(enemy.Center + new Vector2(-0.5f, 0f)) && enemy.dir == direction.right)
+							{
+								enemy.changeDirection(direction.down);
+								continue;
+							}
+							else if (CheckLowerPath(enemy.Center + new Vector2(0f, 0.5f)) && enemy.dir == direction.down)
+							{
+								enemy.changeDirection(direction.down);
+								continue;
+							}
+							else return;
 						}
-						else if (CheckUpperPath(enemy.Center + new Vector2(-0.5f, -0.5f)))
-						{
-							enemy.changeDirection(direction.up);
-							continue;
-						}
-						else if (CheckLowerPath(enemy.Center + new Vector2(0.5f, 0.5f)) )
-						{
-							enemy.changeDirection(direction.down);
-							continue;
-						}
-						else return;
 					}
 				}
-			
-			}
-			
-			catch (System.ArgumentException)
-			{
-				Console.WriteLine("UpdateEnemies ArgumentException");
+				catch (System.ArgumentException)
+				{
+					Console.WriteLine("UpdateEnemies ArgumentException");
+				}
 			}
 		}
 
@@ -102,7 +120,11 @@ namespace TowerDefenseNew
 			}
 			catch (System.ArgumentException)
             {
-				Console.WriteLine("UpdateBullet exception");
+				Console.WriteLine("UpdateBullet exception, ArgumentException");
+			}
+			catch (System.NullReferenceException)
+            {
+				Console.WriteLine("UpdateBullet exception, NullReferenceException");
 			}
 		}
 
@@ -117,8 +139,9 @@ namespace TowerDefenseNew
 		{
 			if (this.cash >= this.sniperCost)
 			{
+				Tower tower = new Tower(new Vector2(column, row), 9f, 10, 1000, this.enemies, this.bullets);
 				_grid[column, row] = CellType.Sniper;
-				this.towers.Add(new Tower(new Vector2(column, row), 9f, 10, 1000, this.enemies, this.bullets));
+				this.towers.Add(tower);
 				this.cash -= this.sniperCost;
 				Math.Floor(this.cash);
 				Console.WriteLine("Sniper bought for: " + this.sniperCost + " || New balance: " + this.cash);
@@ -130,8 +153,9 @@ namespace TowerDefenseNew
 		{
 			if (this.cash >= this.rifleCost)
 			{
+				Tower tower = new Tower(new Vector2(column, row), 3f, 5, 100, this.enemies, this.bullets);
 				_grid[column, row] = CellType.Rifle;
-				this.towers.Add(new Tower(new Vector2(column, row), 3f, 5, 100, this.enemies, this.bullets));
+				this.towers.Add(tower);
 				this.cash -= this.rifleCost;
 				Math.Floor(this.cash);
 				Console.WriteLine("Rifle bought for: " + this.rifleCost + " || New balance: " + this.cash);
@@ -146,15 +170,25 @@ namespace TowerDefenseNew
 				_grid[i, 0] = CellType.Path;
 				pathway.Add(_grid[i, 0]);
 			}
-			for (int i = 0; i < 22; i++)
+			for (int i = 0; i < 9; i++)
 			{
 				_grid[9, i] = CellType.Path;
 				pathway.Add(_grid[9, i]);
 			}
-			for (int i = 9; i < 54; i++)
+			for (int i = 9; i < 19; i++)
 			{
-				_grid[i, 21] = CellType.Path;
-				pathway.Add(_grid[i, 21]);
+				_grid[i, 9] = CellType.Path;
+				pathway.Add(_grid[i, 9]);
+			}
+			for (int i = 9; i > 3; i--)
+			{
+				_grid[19, i] = CellType.Path;
+				pathway.Add(_grid[19, i]);
+			}
+			for (int i = 19; i < 54; i++)
+			{
+				_grid[i, 3] = CellType.Path;
+				pathway.Add(_grid[i, 3]);
 			}
 			placed = true;
 			Console.WriteLine(pathway.Count);
@@ -245,8 +279,26 @@ namespace TowerDefenseNew
 			{
 				return false;
 			}
-}
+		}
 
+		internal bool checkCellTower(Vector2 vec)
+		{
+			try
+			{
+				if (_grid[(int)vec.X, (int)vec.Y] == CellType.Rifle || _grid[(int)vec.X, (int)vec.Y] == CellType.Sniper) return true;
+				else return false;
+			}
+			catch (System.IndexOutOfRangeException)
+			{
+				return false;
+			}
+		}
+
+		internal void RemoveTower(Tower tower)
+        {
+			this.towers.RemoveAt(this.towers.IndexOf(tower));
+			tower.asTimer(false);
+        }
 
 		internal int enemyHealth;
         private readonly IGrid _grid;
