@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
+
 namespace TowerDefenseNew.GameObjects
 {
     internal class Tower : GameObject
@@ -20,13 +21,13 @@ namespace TowerDefenseNew.GameObjects
             this.damage = damage;
             this.Radius = attackRadius;
             this.Bullets = bullets;
+            this.Timer = new Timer(attackSpeed);
             asTimer(true);
         }
 
         public void asTimer(bool active)
         {
             // Creating timer with attackSpeed (millis) as interval
-            System.Timers.Timer Timer = new System.Timers.Timer(attackSpeed);
             if (active)
             {
                 // Hook up elapsed event for the timer
@@ -56,7 +57,7 @@ namespace TowerDefenseNew.GameObjects
                 {
                     if (this.Intersects(enemy))
                     {
-                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius / 35, this, this.Bullets, this.Enemies);
+                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius / 35, this.damage, this.Bullets, this.Enemies);
                         bullet.bulletVelocity(enemy);
                         return;
                     }
@@ -73,5 +74,6 @@ namespace TowerDefenseNew.GameObjects
         internal int damage { get; set; }
         private List<Enemy> Enemies { get; set; }
         private List<Bullet> Bullets { get; set; }
+        public Timer Timer { get; }
     }
 }

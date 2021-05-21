@@ -10,13 +10,13 @@ namespace TowerDefenseNew.GameObjects
     internal class Bullet : GameObject
     {
 
-        internal Bullet(Vector2 center, float radius, Tower tower, List<Bullet> bullets, List<Enemy> enemies) : base(center, radius)
+        internal Bullet(Vector2 center, float radius, int damage, List<Bullet> bullets, List<Enemy> enemies) : base(center, radius)
         {
             this.Center = center;
             this.Radius = radius;
             this.Bullets = bullets;
             this.Enemies = enemies;
-            this.Tower = tower;
+            this.Damage = damage;
             this.Bullets.Add(this);
 
         }
@@ -30,7 +30,7 @@ namespace TowerDefenseNew.GameObjects
                 {
                     if (this.Intersects(enemy))
                     {
-                        if (enemy.isShot(Tower.damage))
+                        if (enemy.isShot(this.Damage))
                         {
                             //normal hit if true
                             isDead = false;
@@ -73,7 +73,9 @@ namespace TowerDefenseNew.GameObjects
         internal float bulletSpeed;
         internal List<Bullet> Bullets;
         internal List<Enemy> Enemies;
-        internal Tower Tower;
+
+        public int Damage { get; }
+
         internal float speedX;
         internal float speedY;
     }

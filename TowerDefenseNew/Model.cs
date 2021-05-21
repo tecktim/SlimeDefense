@@ -26,8 +26,19 @@ namespace TowerDefenseNew
 			this.rifleCost = 5;
 			this.enemySpawnRate = 1000;
 			this.enemyHealth = 100;
+			this.gameOver = false;
 			this.timer = new System.Timers.Timer(this.enemySpawnRate);
 		}
+
+		internal bool switchGameOver()
+        {
+			if (cash > 2000)
+			{
+				gameOver = true;
+			}
+			else gameOver = false;
+			return gameOver;
+        }
 
         internal void giveCash()
         {
@@ -41,6 +52,7 @@ namespace TowerDefenseNew
 		{
 			UpdateBullets(deltaTime);
 			UpdateEnemies(deltaTime);
+			switchGameOver();
 		}
 
 		private void UpdateEnemies(float frameTime)
@@ -128,11 +140,37 @@ namespace TowerDefenseNew
 			}
 		}
 
-		internal void ClearCell(int column, int row, double towerCost)
+		internal void ClearCell(int column, int row, Tower tower)
         {
-			_grid[column, row] = CellType.Empty;
-			this.cash += Math.Floor(towerCost) * 0.8;
-			Math.Floor(this.cash);
+			if(CheckCell(column, row) == CellType.Rifle)
+            {
+				this.cash += Math.Floor(rifleCost) * 0.8;
+				if (tower.Center.X == column && tower.Center.Y == row)
+				{
+					_grid[column, row] = CellType.Empty;
+					towers.Remove(tower);
+					tower.asTimer(false);
+					Math.Floor(this.cash);
+				}
+				else return;
+			}
+			else if (CheckCell(column, row) == CellType.Sniper)
+            {
+				this.cash += Math.Floor(sniperCost) * 0.8;
+				if (tower.Center.X == column && tower.Center.Y == row)
+				{
+					_grid[column, row] = CellType.Empty;
+					towers.Remove(tower);
+					tower.asTimer(false);
+					Math.Floor(this.cash);
+				}
+				else return;
+			}
+			else
+            {
+				return;
+            }
+			
 		}
 
 		internal void PlaceSniper(int column, int row)
@@ -281,11 +319,11 @@ namespace TowerDefenseNew
 			}
 		}
 
-		internal bool checkCellTower(Vector2 vec)
-		{
+		internal bool CheckCellPosition(Vector2 vec)
+        {
 			try
 			{
-				if (_grid[(int)vec.X, (int)vec.Y] == CellType.Rifle || _grid[(int)vec.X, (int)vec.Y] == CellType.Sniper) return true;
+				if (_grid[(int)vec.X, (int)vec.Y] != CellType.Empty) return true;
 				else return false;
 			}
 			catch (System.IndexOutOfRangeException)
@@ -296,7 +334,8 @@ namespace TowerDefenseNew
 
 		internal void RemoveTower(Tower tower)
         {
-			this.towers.RemoveAt(this.towers.IndexOf(tower));
+			Console.WriteLine("Removing tower at " + $"{tower.Center}");
+			this.towers.Remove(tower);
 			tower.asTimer(false);
         }
 
@@ -305,7 +344,7 @@ namespace TowerDefenseNew
 		internal double sniperCost;
 		internal double rifleCost;
         private Timer timer;
-
+		internal bool gameOver;
         //private int life;
         internal double cash;
 		private List<CellType> pathway;

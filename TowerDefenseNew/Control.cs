@@ -45,17 +45,10 @@ namespace TowerDefenseNew
 			if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
 			{
 				//Sell Sniper hi dev brach
-				foreach (Tower tower in _model.towers)
+				foreach (Tower tower in _model.towers.ToList())
 				{
-					if (_model.checkCellTower(tower.Center))
-					{
-
-						Console.WriteLine("tower X pos: " + tower.Center.X + " ----- tower Y pos: " + tower.Center.Y);
-						_model.RemoveTower(tower);
-						_model.ClearCell(column, row, _model.sniperCost);
+						_model.ClearCell(column, row, tower);
 						Console.WriteLine("sold sniper, new balance: " + _model.cash);
-					}
-					else continue;
 				}
 			}
 
@@ -63,19 +56,11 @@ namespace TowerDefenseNew
 			if (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.D4))
 			{
 				//Sell Rifle
-				foreach (Tower tower in _model.towers) 
+				foreach (Tower tower in _model.towers.ToList()) 
 				{
-					if (_model.checkCellTower(tower.Center))
-					{
-						Console.WriteLine("tower X pos: " + tower.Center.X + " ----- tower Y pos: " + tower.Center.Y);
-						_model.RemoveTower(tower);
-						_model.ClearCell(column, row, _model.rifleCost);
+						_model.ClearCell(column, row, tower);
 						Console.WriteLine("sold rifle, new balance: " + _model.cash);
-						return;
-					}
-					else continue;
 				}
-				Console.WriteLine("sold rifle, new balance: " + _model.cash);
 				return;
 			}
 

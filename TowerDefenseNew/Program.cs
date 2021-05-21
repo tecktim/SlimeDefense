@@ -13,7 +13,7 @@ namespace TowerDefenseNew.Structure
 		private static void Main(string[] _)
 		{
 			var window = MainWindow.Create();
-			var view = new View();
+			var view = new View(window);
 			var model = new Model(GridLoader.CreateGrid());
 			var control = new Control(model, view);
 			var keyboard = window.KeyboardState;

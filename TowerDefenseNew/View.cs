@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
+using OpenTK.Windowing.Desktop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,16 @@ namespace TowerDefenseNew
 {
 	internal class View
 	{
-		public View()
+		public View(GameWindow window)
 		{
 			//TODO: Change the clear color of the screen.
 			GL.ClearColor(new Color4(220, 150, 30, 255));
+			this.Window = window;
 		}
 		internal Camera Camera { get; } = new Camera();
+        public GameWindow Window { get; }
 
-		internal List<Vector2> circlePoints = CreateCirclePoints(20);
+        internal List<Vector2> circlePoints = CreateCirclePoints(20);
 
 
 		internal void Draw(Model model)
@@ -26,6 +29,10 @@ namespace TowerDefenseNew
 			GL.Clear(ClearBufferMask.ColorBufferBit); // clear the screen
 
 			Camera.Draw();
+			if (model.gameOver)
+			{
+				this.Window.Close();
+			}
 
 			DrawGrid(model.Grid);
 			try
@@ -59,15 +66,15 @@ namespace TowerDefenseNew
 				{
 					if (CellType.Sniper == grid[column, row])
 					{
-						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, Color4.RosyBrown);
+						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, new Color4(32, 44 ,89, 255));
 					}
 					if (CellType.Rifle == grid[column, row])
                     {
-						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, Color4.Blue);
+						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, new Color4(115, 147, 126, 255));
 					}
 					if (CellType.Path == grid[column, row])
                     {
-						DrawRectangle(new Vector2(column, row), new Vector2(1, 1), Color4.Transparent);
+						DrawRectangle(new Vector2(column, row), new Vector2(1, 1), new Color4(206, 185, 146, 255));
                     }
 				}
 			}
@@ -77,8 +84,8 @@ namespace TowerDefenseNew
         {
 			try
 			{
-				if (enemy.health > maxHealth / 2) DrawCircle(enemy.Center, enemy.Radius, Color4.Green);
-				if (enemy.health <= maxHealth / 2) DrawCircle(enemy.Center, enemy.Radius, Color4.Red);
+				if (enemy.health > maxHealth / 2) DrawCircle(enemy.Center, enemy.Radius, new Color4(88, 106, 24, 255));
+				if (enemy.health <= maxHealth / 2) DrawCircle(enemy.Center, enemy.Radius, new Color4(88, 31, 24, 255));
 			}
 			catch (System.NullReferenceException)
             {
@@ -88,8 +95,15 @@ namespace TowerDefenseNew
 
 		private void DrawBullet(IReadOnlyCircle bullet)
         {
-			DrawCircle(bullet.Center, bullet.Radius, Color4.Black);
-        }
+			try
+			{
+				DrawCircle(bullet.Center, bullet.Radius, Color4.Black);
+			}
+			catch (System.NullReferenceException)
+			{
+				Console.WriteLine("DrawEnemy NullReferenceException");
+			}
+		}
 
 		private void DrawCircle(Vector2 center, float radius, Color4 color)
 		{
