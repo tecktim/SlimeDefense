@@ -46,7 +46,7 @@ namespace TowerDefenseNew.GameObjects
                 {
                     if (this.Intersects(enemy))
                     {
-                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius / 50, this, this.Bullets, this.Enemies);
+                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius / 35, this, this.Bullets, this.Enemies);
                         bullet.bulletVelocity(enemy);
                         return;
                     }

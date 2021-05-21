@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TowerDefenseNew.Grid;
 
 namespace TowerDefenseNew.GameObjects
 {
-    internal enum direction { up, down, left, right};
+    public enum direction { up, down, left, right, none };
+
+   
     internal class Enemy : GameObject
     {
         internal int health;
@@ -29,7 +32,7 @@ namespace TowerDefenseNew.GameObjects
             return alive;
         }
 
-        internal void changeSpeed(float factor)
+    internal void changeSpeed(float factor)
         {
             this.Velocity = new Vector2(Velocity.X * factor, Velocity.Y * factor);
         }
@@ -38,23 +41,33 @@ namespace TowerDefenseNew.GameObjects
         {
             if (dir == direction.up)
             {
-                return this.Velocity = new Vector2(0f, 5f);
+                this.dir = direction.up;
+                return this.Velocity = new Vector2(0f, 7f);
             }
             else if (dir == direction.down)
             {
-                return this.Velocity = new Vector2(0f, -5f);
+                this.dir = direction.down;
+                return this.Velocity = new Vector2(0f, -7f);
             }
             else if (dir == direction.left)
             {
-                return this.Velocity = new Vector2(-5f, 0f);
+                this.dir = direction.left;
+                return this.Velocity = new Vector2(-7f, 0f);
             }
             else if (dir == direction.right)
             {
-                return this.Velocity = new Vector2(5f, 0f);
+                this.dir = direction.right;
+                return this.Velocity = new Vector2(7f, 0f);
             }
-            else return this.Velocity;
+            else
+            {
+                this.dir = direction.none;
+                return this.Velocity;
+            }
         }
 
-        internal Vector2 Velocity;
+        internal direction dir { get; set; }
+
+        internal Vector2 Velocity { get; set; }
     }
 }

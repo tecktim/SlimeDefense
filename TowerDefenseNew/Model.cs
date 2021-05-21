@@ -6,6 +6,7 @@ using System.Linq;
 using System.Timers;
 using TowerDefenseNew.GameObjects;
 using TowerDefenseNew.Grid;
+using Zenseless.OpenTK;
 
 namespace TowerDefenseNew
 {
@@ -44,19 +45,45 @@ namespace TowerDefenseNew
 
 		private void UpdateEnemies(float frameTime)
 		{
-			try {
+			try
+			{
 				foreach (Enemy enemy in enemies.ToList())
 				{
+					enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
+
 					if (enemy != null)
 					{
-						enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
+						Console.WriteLine("X: " + enemies[0].Center.X + "Y: " + enemies[0].Center.Y + "dir: " + enemies[0].dir);
+						if (CheckRightPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
+						{
+							enemy.changeDirection(direction.right);
+
+						}
+						else if (CheckRightPath(enemy.Center + new Vector2(-0.5f, -0.5f)) && enemy.dir == direction.up)
+						{
+							enemy.changeDirection(direction.right);
+							continue;
+						}
+						else if (CheckUpperPath(enemy.Center + new Vector2(-0.5f, -0.5f)))
+						{
+							enemy.changeDirection(direction.up);
+							continue;
+						}
+						else if (CheckLowerPath(enemy.Center + new Vector2(0.5f, 0.5f)) )
+						{
+							enemy.changeDirection(direction.down);
+							continue;
+						}
+						else return;
 					}
 				}
-			} 
+			
+			}
+			
 			catch (System.ArgumentException)
-            {
+			{
 				Console.WriteLine("UpdateEnemies ArgumentException");
-            }
+			}
 		}
 
 		private void UpdateBullets(float frameTime)
@@ -184,13 +211,51 @@ namespace TowerDefenseNew
 			return _grid[column, row];
         }
 
+		internal bool CheckRightPath(Vector2 vec)
+		{
+			try {
+				if (_grid[(int)vec.X + 1, (int)vec.Y] == CellType.Path) return true;
+				else return false;
+			}
+			catch (System.IndexOutOfRangeException)
+			{
+				return false;
+			}
+		}
+		internal bool CheckUpperPath(Vector2 vec)
+		{
+			try
+			{
+				if (_grid[(int)vec.X, (int)vec.Y + 1] == CellType.Path) return true;
+				else return false;
+			}
+			catch (System.IndexOutOfRangeException)
+			{
+				return false;
+			}
+}
+		internal bool CheckLowerPath(Vector2 vec)
+		{
+			try
+			{
+				if (_grid[(int)vec.X, (int)vec.Y - 1] == CellType.Path) return true;
+				else return false;
+			}
+			catch (System.IndexOutOfRangeException)
+			{
+				return false;
+			}
+}
+
+
 		internal int enemyHealth;
         private readonly IGrid _grid;
 		internal double sniperCost;
 		internal double rifleCost;
         private Timer timer;
+
         //private int life;
-		internal double cash;
+        internal double cash;
 		private List<CellType> pathway;
         internal List<Enemy> enemies;
 		internal List<Tower> towers;

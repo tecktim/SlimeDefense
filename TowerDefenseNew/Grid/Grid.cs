@@ -1,5 +1,6 @@
 ﻿using System;
 using TowerDefenseNew.Grid;
+using OpenTK.Mathematics;
 
 namespace TowerDefenseNew.Grid
 {
@@ -21,7 +22,7 @@ namespace TowerDefenseNew.Grid
 			set { grid[x, y] = value; }
         }
 
-        public int Columns { get { return grid.GetLength(0); } }
+		public int Columns { get { return grid.GetLength(0); } }
 		public int Rows { get { return grid.GetLength(1); } }
 	}
 }

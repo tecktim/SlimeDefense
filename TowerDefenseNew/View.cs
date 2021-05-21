@@ -14,8 +14,7 @@ namespace TowerDefenseNew
 		public View()
 		{
 			//TODO: Change the clear color of the screen.
-			GL.ClearColor(Color4.CornflowerBlue); // set the clear color of the screen
-			GL.ClearColor(Color4.Bisque);
+			GL.ClearColor(Color4.DarkGreen);
 		}
 		internal Camera Camera { get; } = new Camera();
 
@@ -53,7 +52,7 @@ namespace TowerDefenseNew
 		private void DrawGrid(IReadOnlyGrid grid)
 		{
 			DrawGridLines(grid.Columns, grid.Rows);
-			GL.Color4(Color4.Gray);
+			GL.Color4(Color4.White);
 			for (int column = 0; column < grid.Columns; ++column)
 			{
 				for (int row = 0; row < grid.Rows; ++row)
