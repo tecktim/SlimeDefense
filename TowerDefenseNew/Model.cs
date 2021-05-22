@@ -25,18 +25,18 @@ namespace TowerDefenseNew
 			this.sniperCost = 20;
 			this.rifleCost = 5;
 			this.enemySpawnRate = 1000;
-			this.enemyHealth = 100;
+			this.enemyHealth = 150;
 			this.gameOver = false;
 			this.timer = new System.Timers.Timer(this.enemySpawnRate);
 		}
 
-		internal bool switchGameOver()
+		internal bool switchGameOver(bool lose)
         {
-			if (cash > 2000)
-			{
-				gameOver = true;
-			}
-			else gameOver = false;
+			if (lose)
+            {
+				this.gameOver = true;
+            }
+			else this.gameOver = false;
 			return gameOver;
         }
 
@@ -52,7 +52,6 @@ namespace TowerDefenseNew
 		{
 			UpdateBullets(deltaTime);
 			UpdateEnemies(deltaTime);
-			switchGameOver();
 		}
 
 		private void UpdateEnemies(float frameTime)
@@ -67,7 +66,7 @@ namespace TowerDefenseNew
 
 						if (enemy != null)
 						{
-							//Check if moving up or down or right, then move right
+							//Check if moving up or down or right or finish, then move right
 							if (CheckRightPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
 							{
 								enemy.changeDirection(direction.right);
@@ -82,9 +81,17 @@ namespace TowerDefenseNew
 							{
 								enemy.changeDirection(direction.right);
 								continue;
-							}
+							}//Check if end of lane is reached
+							else if (CheckRightFinish(enemy.Center + new Vector2(-0.5f, 0)))
+                            {
+								enemies.Remove(enemy);
+								switchGameOver(true);
+								return;
+                            }
+
+
 							//Check if moving right or up, then move up
-							else if (CheckUpperPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
+									else if (CheckUpperPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
 							{
 								enemy.changeDirection(direction.up);
 								continue;
@@ -177,7 +184,7 @@ namespace TowerDefenseNew
 		{
 			if (this.cash >= this.sniperCost)
 			{
-				Tower tower = new Tower(new Vector2(column, row), 9f, 10, 1000, this.enemies, this.bullets);
+				Tower tower = new Tower(new Vector2(column, row), 12f, 20, 1000, this.enemies, this.bullets);
 				_grid[column, row] = CellType.Sniper;
 				this.towers.Add(tower);
 				this.cash -= this.sniperCost;
@@ -191,7 +198,7 @@ namespace TowerDefenseNew
 		{
 			if (this.cash >= this.rifleCost)
 			{
-				Tower tower = new Tower(new Vector2(column, row), 3f, 5, 100, this.enemies, this.bullets);
+				Tower tower = new Tower(new Vector2(column, row), 3f, 10, 100, this.enemies, this.bullets);
 				_grid[column, row] = CellType.Rifle;
 				this.towers.Add(tower);
 				this.cash -= this.rifleCost;
@@ -205,28 +212,28 @@ namespace TowerDefenseNew
 			bool placed = false;
 			for (int i = 0; i < 10; i++)
 			{
-				_grid[i, 0] = CellType.Path;
-				pathway.Add(_grid[i, 0]);
+				_grid[i, 0 + 10] = CellType.Path;
+				pathway.Add(_grid[i, 0 + 10]);
 			}
 			for (int i = 0; i < 9; i++)
 			{
-				_grid[9, i] = CellType.Path;
-				pathway.Add(_grid[9, i]);
+				_grid[9, i + 10] = CellType.Path;
+				pathway.Add(_grid[9, i + 10]);
 			}
 			for (int i = 9; i < 19; i++)
 			{
-				_grid[i, 9] = CellType.Path;
-				pathway.Add(_grid[i, 9]);
+				_grid[i, 9 + 10] = CellType.Path;
+				pathway.Add(_grid[i, 9 + 10]);
 			}
 			for (int i = 9; i > 3; i--)
 			{
-				_grid[19, i] = CellType.Path;
-				pathway.Add(_grid[19, i]);
+				_grid[19, i + 10] = CellType.Path;
+				pathway.Add(_grid[19, i + 10]);
 			}
 			for (int i = 19; i < 54; i++)
 			{
-				_grid[i, 3] = CellType.Path;
-				pathway.Add(_grid[i, 3]);
+				_grid[i, 3 + 10] = CellType.Path;
+				pathway.Add(_grid[i, 3 + 10]);
 			}
 			placed = true;
 			Console.WriteLine(pathway.Count);
@@ -256,25 +263,34 @@ namespace TowerDefenseNew
 
 		private void spawnEnemy(int row)
         {
+			row = row + 10;
 			var rnd = new Random();
 			int spot = rnd.Next(0, 3);
+			float offset;
+			float size;
 			switch (spot)
 			{
 				case 0:
-					enemies.Add(new Enemy(new Vector2(0 + 0.35f, row + 0.35f), .25f, enemyHealth));
+					size = 0.3f;
+					offset = 0.35f;
+					enemies.Add(new Enemy(new Vector2(offset, row + offset), size, enemyHealth));
 					break;
 				case 1:
-					enemies.Add(new Enemy(new Vector2(0 + 0.5f, row + 0.5f), .25f, enemyHealth));
+					size = 0.4f;
+					offset = 0.5f;
+					enemies.Add(new Enemy(new Vector2(offset, row + offset), size, enemyHealth * 2));
 					break;
 				case 2:
-					enemies.Add(new Enemy(new Vector2(0 + 0.65f, row + 0.65f), .25f, enemyHealth));
+					size = 0.3f;
+					offset = 0.65f;
+					enemies.Add(new Enemy(new Vector2(offset, row + offset), size, enemyHealth));
 					break;
 				default:
 					return;
 			}
-			if (enemySpawnRate >= 500)
+			if (enemySpawnRate >= 350)
             {
-				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.8); // 0.9964);
+				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.9); // 0.9964);
 			}
 		}
 
@@ -294,6 +310,20 @@ namespace TowerDefenseNew
 				return false;
 			}
 		}
+
+		internal bool CheckRightFinish(Vector2 vec)
+        {
+			try
+			{
+				if (_grid[(int)vec.X, (int)vec.Y + 1] == CellType.Finish && _grid[(int)vec.X, (int)vec.Y - 1] == CellType.Finish) return true;
+				else return false;
+			}
+			catch (System.IndexOutOfRangeException)
+			{
+				return false;
+			}
+		}
+
 		internal bool CheckUpperPath(Vector2 vec)
 		{
 			try

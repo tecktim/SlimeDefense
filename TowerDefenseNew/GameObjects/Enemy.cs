@@ -67,7 +67,6 @@ namespace TowerDefenseNew.GameObjects
         }
 
         internal direction dir { get; set; }
-
         internal Vector2 Velocity { get; set; }
     }
 }

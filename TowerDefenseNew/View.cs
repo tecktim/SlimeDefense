@@ -33,8 +33,7 @@ namespace TowerDefenseNew
 			{
 				this.Window.Close();
 			}
-
-			DrawGrid(model.Grid);
+			DrawGrid(model.Grid, Color4.White);
 			try
 			{
 				foreach (Enemy enemy in model.enemies.ToList())
@@ -56,10 +55,10 @@ namespace TowerDefenseNew
             }
 		}
 
-		private void DrawGrid(IReadOnlyGrid grid)
+		private void DrawGrid(IReadOnlyGrid grid, Color4 color)
 		{
 			DrawGridLines(grid.Columns, grid.Rows);
-			GL.Color4(Color4.White);
+			GL.Color4(color);
 			for (int column = 0; column < grid.Columns; ++column)
 			{
 				for (int row = 0; row < grid.Rows; ++row)

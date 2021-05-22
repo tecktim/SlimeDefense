@@ -40,6 +40,7 @@ namespace TowerDefenseNew
 			var row = (int)Math.Truncate(world.Y);
 			Console.WriteLine($"{column}, {row}");
 			var cell = _model.CheckCell(column, row);
+			Console.WriteLine(cell);
 
 			//Sniper verkaufen
 			if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
