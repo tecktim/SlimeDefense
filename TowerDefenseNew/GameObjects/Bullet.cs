@@ -39,6 +39,7 @@ namespace TowerDefenseNew.GameObjects
                         {
                             //he dead if false
                             isDead = true;
+
                             Enemies.Remove(enemy);
                         }
                         Bullets.Remove(this);
@@ -62,7 +63,7 @@ namespace TowerDefenseNew.GameObjects
             //normalize sodass man bulletspeed miteinbeziehen kann
             float length = (float)Math.Sqrt(dx * dx + dy * dy);
             if (length == 0) { length = 1; dx = 1; dy = 0; }
-            this.bulletSpeed = 60;
+            this.bulletSpeed = 10;
             dx /= length;
             dy /= length;
             this.speedX = bulletSpeed * dx;

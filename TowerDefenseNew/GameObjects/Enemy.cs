@@ -14,11 +14,9 @@ namespace TowerDefenseNew.GameObjects
     internal class Enemy : GameObject
     {
         internal int health;
-        internal bool alive;
         internal Enemy(Vector2 center, float radius, int health) : base(center, radius)
         {
             this.health = health;
-            this.alive = true;
             this.Velocity = changeDirection(direction.right);
         }
 
@@ -27,9 +25,9 @@ namespace TowerDefenseNew.GameObjects
             this.health = this.health - damage;
             if (health <= 0)
             {
-                this.alive = false;
+                IsAlive = false;
             }
-            return alive;
+            return IsAlive;
         }
 
     internal void changeSpeed(float factor)
@@ -42,22 +40,22 @@ namespace TowerDefenseNew.GameObjects
             if (dir == direction.up)
             {
                 this.dir = direction.up;
-                return this.Velocity = new Vector2(0f, 7f);
+                return this.Velocity = new Vector2(0f, 1.1f);
             }
             else if (dir == direction.down)
             {
                 this.dir = direction.down;
-                return this.Velocity = new Vector2(0f, -7f);
+                return this.Velocity = new Vector2(0f, -1.1f);
             }
             else if (dir == direction.left)
             {
                 this.dir = direction.left;
-                return this.Velocity = new Vector2(-7f, 0f);
+                return this.Velocity = new Vector2(-1.1f, 0f);
             }
             else if (dir == direction.right)
             {
                 this.dir = direction.right;
-                return this.Velocity = new Vector2(7f, 0f);
+                return this.Velocity = new Vector2(1.1f, 0f);
             }
             else
             {

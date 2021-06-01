@@ -20,12 +20,13 @@ namespace TowerDefenseNew
 			this.enemies = new List<Enemy>();
 			this.towers = new List<Tower>();
 			this.bullets = new List<Bullet>();
+			this.explosions = new List<Explosion>();
 			this.cash = 50;
 			//this.life = 1;
 			this.sniperCost = 20;
 			this.rifleCost = 5;
-			this.enemySpawnRate = 1000;
-			this.enemyHealth = 150;
+			this.enemySpawnRate = 3000;
+			this.enemyHealth = 500;
 			this.gameOver = false;
 			this.timer = new System.Timers.Timer(this.enemySpawnRate);
 		}
@@ -50,6 +51,8 @@ namespace TowerDefenseNew
 
 		internal void Update(float deltaTime)
 		{
+			Time += deltaTime;
+			UpdateExplosions(deltaTime);
 			UpdateBullets(deltaTime);
 			UpdateEnemies(deltaTime);
 		}
@@ -123,17 +126,45 @@ namespace TowerDefenseNew
 			}
 		}
 
+		private void UpdateExplosions(float frameTime)
+        {
+            try
+            {
+				foreach (Explosion exp in explosions.ToList())
+                {
+					exp.Update(frameTime);
+                    if (!exp.IsAlive)
+                    {
+						explosions.Remove(exp);
+                    }
+                }
+            }
+			catch (System.ArgumentException)
+			{
+				Console.WriteLine("UpdateExplosions exception, ArgumentException");
+			}
+			catch (System.NullReferenceException)
+			{
+				Console.WriteLine("UpdateExplosions exception, NullReferenceException");
+			}
+		}
+
 		private void UpdateBullets(float frameTime)
 		{
 			try {
 				foreach (Bullet bullet in bullets.ToList())
 				{
-					bullet.Center += new Vector2(frameTime * bullet.speedX, frameTime * bullet.speedY);
-					if (bullet.checkHit())
+					if (bullet != null)
 					{
-						//onEnemyKill
-						this.cash = this.cash + 1;
-						Console.WriteLine("Enemy killed. Cash: " + this.cash);
+						bullet.Center += new Vector2(frameTime * bullet.speedX, frameTime * bullet.speedY);
+						if (bullet.checkHit())
+						{
+							//onEnemyKill
+							this.cash = this.cash + 1;
+							Explosion exp = new Explosion(bullet.Center, 1.5f, .4f);
+							explosions.Add(exp);
+							Console.WriteLine("Enemy killed. Cash: " + this.cash);
+                        }
 					}
 				}
 			}
@@ -288,9 +319,9 @@ namespace TowerDefenseNew
 				default:
 					return;
 			}
-			if (enemySpawnRate >= 350)
+			if (enemySpawnRate >= 2000)
             {
-				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.9); // 0.9964);
+				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.9964); // 0.9964);
 			}
 		}
 
@@ -381,6 +412,8 @@ namespace TowerDefenseNew
         internal List<Enemy> enemies;
 		internal List<Tower> towers;
 		internal List<Bullet> bullets;
+		internal List<Explosion> explosions;
 		internal int enemySpawnRate;
+		internal float Time { get; private set; } = 0;
 	}
 }

@@ -6,13 +6,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.6.3" />
-    <PackageReference Include="Zenseless.OpenTK" Version="0.1.8" />
-    <PackageReference Include="Zenseless.Patterns" Version="0.6.7" />
+    <None Remove="Content\explosion.png" />
+    <None Remove="Content\fuckedUpEmoji.png" />
+    <None Remove="Content\laughEmoji.png" />
+    <None Remove="Content\nullptr_hq4x.copyright.txt" />
+    <None Remove="Content\nullptr_hq4x.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Content\" />
+    <EmbeddedResource Include="Content\explosion.png" />
+    <EmbeddedResource Include="Content\fuckedUpEmoji.png" />
+    <EmbeddedResource Include="Content\laughEmoji.png" />
+    <EmbeddedResource Include="Content\nullptr_hq4x.copyright.txt" />
+    <EmbeddedResource Include="Content\nullptr_hq4x.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.24.1" />
+    <PackageReference Include="OpenTK" Version="4.6.4" />
+    <PackageReference Include="Zenseless.OpenTK" Version="0.1.8" />
+    <PackageReference Include="Zenseless.Patterns" Version="0.6.8" />
   </ItemGroup>
 
 </Project>

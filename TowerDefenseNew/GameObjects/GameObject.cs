@@ -13,8 +13,10 @@ namespace TowerDefenseNew.GameObjects
         {
             Center = center;
             Radius = radius;
+            IsAlive = true;
         }
 
+        public bool IsAlive { get; protected set; }
         public Vector2 Center { get; set; }
         public float Radius { get; set; }
 
