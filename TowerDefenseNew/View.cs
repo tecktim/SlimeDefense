@@ -88,16 +88,12 @@ namespace TowerDefenseNew
 
 
 			GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
-			DrawText($"123456789", 1f, 1f, 1f);
+			DrawText($"{model.cash}", -.99f, -0.99f, 4f);
 		}
 
 
 		private void DrawText(string text, float x, float y, float size)
 		{
-			GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
-			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-			GL.Enable(EnableCap.Blend);
-			GL.Color4(Color4.White);
 			const uint firstCharacter = 32; // the ASCII code of the first character stored in the bitmap font
 			const uint charactersPerColumn = 12; // how many characters are in each column
 			const uint charactersPerRow = 8; // how many characters are in each row
@@ -110,9 +106,6 @@ namespace TowerDefenseNew
 				DrawRectangleTexture(rect, texCoords);
 				rect.MinX += rect.SizeX;
 			}
-
-			GL.Disable(EnableCap.Texture2D);
-			GL.Disable(EnableCap.Blend);
 		}
 
 		private void DrawGrid(IReadOnlyGrid grid, Color4 color)
@@ -216,6 +209,7 @@ namespace TowerDefenseNew
 
 		private static void DrawRectangleTexture(IReadOnlyRectangle rectangle, IReadOnlyRectangle texCoords)
 		{
+			GL.Enable(EnableCap.Texture2D);
 			GL.Begin(PrimitiveType.Quads);
 			GL.TexCoord2(texCoords.MinX, texCoords.MinY);
 			GL.Vertex2(rectangle.MinX, rectangle.MinY);
@@ -226,6 +220,7 @@ namespace TowerDefenseNew
 			GL.TexCoord2(texCoords.MinX, texCoords.MaxY);
 			GL.Vertex2(rectangle.MinX, rectangle.MaxY);
 			GL.End();
+			GL.Disable(EnableCap.Texture2D);
 		}
 
 		private static void DrawGridLines(int columns, int rows)
@@ -246,10 +241,6 @@ namespace TowerDefenseNew
 			GL.End();
 		}
 
-		/// <summary>
-		/// Calculates points on a circle.
-		/// </summary>
-		/// <returns></returns>
 		private static List<Vector2> CreateCirclePoints(int corners)
 		{
 			float delta = 2f * MathF.PI / corners;
