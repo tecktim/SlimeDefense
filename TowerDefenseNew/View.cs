@@ -18,6 +18,7 @@ namespace TowerDefenseNew
 		private readonly Texture texEnemy1;
 		private readonly Texture texEnemy2;
 		private readonly Texture texFont;
+		private readonly Texture tileSet;
 		//private readonly Texture texSniper;
 
 		public View(GameWindow window)
@@ -33,7 +34,8 @@ namespace TowerDefenseNew
 			texEnemy2 = TextureLoader.LoadFromResource(content + "fuckedUpEmoji.png");
 			//texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
 			texExplosion = TextureLoader.LoadFromResource(content + "explosion.png");
-			texFont = TextureLoader.LoadFromResource(content + "null_terminator.png");
+			texFont = TextureLoader.LoadFromResource(content + "nullptr_hq4x.png");
+			tileSet = TextureLoader.LoadFromResource(content + "TileSet.png");
 
 		}
 
@@ -104,15 +106,30 @@ namespace TowerDefenseNew
 				//TODO: Calculate the texture coordinates of the characters letter from the bitmap font texture
 				//TODO: Draw a rectangle at the characters relative position
 				var texCoords = SpriteSheetTools.CalcTexCoords(spriteId, charactersPerRow, charactersPerColumn);
+
+
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+				GL.Enable(EnableCap.Blend);
 				DrawRectangleTexture(rect, texCoords);
+				GL.Disable(EnableCap.Blend);
 				rect.MinX += rect.SizeX;
 			}
 		}
 
+		private void DrawTile(float x, float y, uint tileNumber, CellType cellType)
+        {
+			GL.Color4(Color4.White);
+			GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
+			const uint tilesPerColumn = 20;
+			const uint tilesPerRow = 8;
+			var rect = new Rect(x, y, 1f, 1f);
+			var tileCoords = SpriteSheetTools.CalcTexCoords(tileNumber, tilesPerRow, tilesPerColumn);
+			DrawRectangleTexture(rect, tileCoords);
+        }
+
 		private void DrawGrid(IReadOnlyGrid grid, Color4 color)
 		{
 			DrawGridLines(grid.Columns, grid.Rows);
-			GL.Color4(color);
 			for (int column = 0; column < grid.Columns; ++column)
 			{
 				for (int row = 0; row < grid.Rows; ++row)
@@ -123,11 +140,21 @@ namespace TowerDefenseNew
 					}
 					if (CellType.Rifle == grid[column, row])
                     {
-						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, new Color4(115, 147, 126, 255));
+
+						GL.BindTexture(TextureTarget.Texture2D, texEnemy1.Handle);
+						DrawCircleTexture(new Circle(new Vector2(column + 0.5f, row + 0.5f), 0.5f), new Rect(0f, 0f, 1f, 1f));
+						//DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, new Color4(115, 147, 126, 255));
 					}
 					if (CellType.Path == grid[column, row])
                     {
-						DrawRectangle(new Vector2(column, row), new Vector2(1, 1), new Color4(206, 185, 146, 255));
+						DrawTile(column, row, (5*8+7), CellType.Path);
+						//DrawRectangle(new Vector2(column, row), new Vector2(1, 1), new Color4(206, 185, 146, 255));
+
+
+					}
+					if (CellType.Empty == grid[column, row] || CellType.Finish == grid[column, row])
+                    {
+						DrawTile(column, row, (6*8+2), CellType.Empty);
                     }
 				}
 			}
@@ -170,13 +197,16 @@ namespace TowerDefenseNew
 
 		private void DrawCircle(Vector2 center, float radius, Color4 color)
 		{
+			GL.Enable(EnableCap.Blend);
 			GL.Begin(PrimitiveType.Polygon);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			GL.Color4(color);
 			foreach (var point in circlePoints)
 			{
 				GL.Vertex2(center + radius * point);
 			}
 			GL.End();
+			GL.Disable(EnableCap.Blend);
 		}
 
 		private void DrawRectangle(Vector2 min, Vector2 size, Color4 color)
@@ -193,10 +223,11 @@ namespace TowerDefenseNew
 
 		private static void DrawCircleTexture(IReadOnlyCircle circle, IReadOnlyRectangle texCoords)
         {
-
-			GL.Enable(EnableCap.Texture2D);
-			GL.Begin(PrimitiveType.Quads);
 			
+			GL.Enable(EnableCap.Texture2D);
+			GL.Enable(EnableCap.Blend);
+			GL.Begin(PrimitiveType.Quads);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			GL.TexCoord2(texCoords.MinX, texCoords.MinY);
 			GL.Vertex2(circle.Center.X - circle.Radius, circle.Center.Y - circle.Radius);
 			GL.TexCoord2(texCoords.MaxX, texCoords.MinY);
@@ -206,14 +237,14 @@ namespace TowerDefenseNew
 			GL.TexCoord2(texCoords.MinX, texCoords.MaxY);
 			GL.Vertex2(circle.Center.X - circle.Radius, circle.Center.Y + circle.Radius);
 			GL.End();
+			GL.Disable(EnableCap.Blend);
 			GL.Disable(EnableCap.Texture2D);
+			
 		}
 
 		private static void DrawRectangleTexture(IReadOnlyRectangle rectangle, IReadOnlyRectangle texCoords)
 		{
 			GL.Enable(EnableCap.Texture2D);
-			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-			GL.Enable(EnableCap.Blend);
 			GL.Begin(PrimitiveType.Quads);
 			GL.TexCoord2(texCoords.MinX, texCoords.MinY);
 			GL.Vertex2(rectangle.MinX, rectangle.MinY);
@@ -224,7 +255,6 @@ namespace TowerDefenseNew
 			GL.TexCoord2(texCoords.MinX, texCoords.MaxY);
 			GL.Vertex2(rectangle.MinX, rectangle.MaxY);
 			GL.End();
-			GL.Disable(EnableCap.Blend);
 			GL.Disable(EnableCap.Texture2D);
 		}
 

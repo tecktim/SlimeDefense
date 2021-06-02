@@ -12,6 +12,7 @@
     <None Remove="Content\nullptr_hq4x.copyright.txt" />
     <None Remove="Content\nullptr_hq4x.png" />
     <None Remove="Content\null_terminator.png" />
+    <None Remove="Content\TileSet.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +22,7 @@
     <EmbeddedResource Include="Content\nullptr_hq4x.copyright.txt" />
     <EmbeddedResource Include="Content\nullptr_hq4x.png" />
     <EmbeddedResource Include="Content\null_terminator.png" />
+    <EmbeddedResource Include="Content\TileSet.png" />
   </ItemGroup>
 
   <ItemGroup>
