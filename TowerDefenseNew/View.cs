@@ -33,7 +33,7 @@ namespace TowerDefenseNew
 			texEnemy2 = TextureLoader.LoadFromResource(content + "fuckedUpEmoji.png");
 			//texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
 			texExplosion = TextureLoader.LoadFromResource(content + "explosion.png");
-			texFont = TextureLoader.LoadFromResource(content + "nullptr_hq4x.png");
+			texFont = TextureLoader.LoadFromResource(content + "null_terminator.png");
 
 		}
 
@@ -88,12 +88,13 @@ namespace TowerDefenseNew
 
 
 			GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
-			DrawText($"{model.cash}", -.99f, -0.99f, 4f);
+			DrawText($"{model.cash}$", -.99f, -0.99f, 3f);
 		}
 
 
 		private void DrawText(string text, float x, float y, float size)
 		{
+			GL.Color4(Color4.White);
 			const uint firstCharacter = 32; // the ASCII code of the first character stored in the bitmap font
 			const uint charactersPerColumn = 12; // how many characters are in each column
 			const uint charactersPerRow = 8; // how many characters are in each row
@@ -195,6 +196,7 @@ namespace TowerDefenseNew
 
 			GL.Enable(EnableCap.Texture2D);
 			GL.Begin(PrimitiveType.Quads);
+			
 			GL.TexCoord2(texCoords.MinX, texCoords.MinY);
 			GL.Vertex2(circle.Center.X - circle.Radius, circle.Center.Y - circle.Radius);
 			GL.TexCoord2(texCoords.MaxX, texCoords.MinY);
@@ -210,6 +212,8 @@ namespace TowerDefenseNew
 		private static void DrawRectangleTexture(IReadOnlyRectangle rectangle, IReadOnlyRectangle texCoords)
 		{
 			GL.Enable(EnableCap.Texture2D);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			GL.Enable(EnableCap.Blend);
 			GL.Begin(PrimitiveType.Quads);
 			GL.TexCoord2(texCoords.MinX, texCoords.MinY);
 			GL.Vertex2(rectangle.MinX, rectangle.MinY);
@@ -220,6 +224,7 @@ namespace TowerDefenseNew
 			GL.TexCoord2(texCoords.MinX, texCoords.MaxY);
 			GL.Vertex2(rectangle.MinX, rectangle.MaxY);
 			GL.End();
+			GL.Disable(EnableCap.Blend);
 			GL.Disable(EnableCap.Texture2D);
 		}
 
