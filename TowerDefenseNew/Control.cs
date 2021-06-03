@@ -42,6 +42,11 @@ namespace TowerDefenseNew
 			var cell = _model.CheckCell(column, row);
 			Console.WriteLine(cell);
 
+			if (keyboard.IsKeyDown(Keys.D0))
+			{
+				_model.switchGameOver(true);
+			}
+			if(_model.gameOver == false) { 
 			//Sniper verkaufen
 			if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
 			{
@@ -65,42 +70,44 @@ namespace TowerDefenseNew
 				return;
 			}
 
-			//Schauen ob Cell leer ist
-			if (cell == Grid.CellType.Empty)
-			{
+				//Schauen ob Cell leer ist
+				if (cell == Grid.CellType.Empty)
+				{
 
-				//Sniper kaufen
-				if (keyboard.IsKeyDown(Keys.D1))
-				{
-					if (cell != Grid.CellType.Empty) { return; }
-					else{ _model.PlaceSniper(column, row); }
-					return;
-				}
-				//Rifle kaufen
-				if (keyboard.IsKeyDown(Keys.D2))
-				{
-					if (cell != Grid.CellType.Empty) { return; }
-					else { _model.PlaceRifle(column, row); }
-					return;
-				}
-				//Path setzen
-				if (keyboard.IsKeyDown(Keys.D3) && placePath == true)
-				{
-					for (int i = 0; i < 54; i++)
+					//Sniper kaufen
+					if (keyboard.IsKeyDown(Keys.D1))
 					{
-						if (_model.CheckCell(i, row) == Grid.CellType.Sniper || _model.CheckCell(i, row) == Grid.CellType.Rifle)
-						{
-							placePath = false;
-							break;
-                        }
-					}
-					if (placePath)
-					{
-						_model.PlacePath(column, row);
-						placePath = false;
+						if (cell != Grid.CellType.Empty) { return; }
+						else { _model.PlaceSniper(column, row); }
 						return;
 					}
-					Console.WriteLine("");
+					//Rifle kaufen
+					if (keyboard.IsKeyDown(Keys.D2))
+					{
+						if (cell != Grid.CellType.Empty) { return; }
+						else { _model.PlaceRifle(column, row); }
+						return;
+					}
+					//Path setzen
+					if (keyboard.IsKeyDown(Keys.D3) && placePath == true)
+					{
+						for (int i = 0; i < 54; i++)
+						{
+							if (_model.CheckCell(i, row) == Grid.CellType.Sniper || _model.CheckCell(i, row) == Grid.CellType.Rifle)
+							{
+								placePath = false;
+								break;
+							}
+						}
+						if (placePath)
+						{
+							_model.PlacePath(column, row);
+							placePath = false;
+							return;
+						}
+						Console.WriteLine("");
+					}
+
 				}
 			}
 		}

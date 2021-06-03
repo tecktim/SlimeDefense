@@ -9,9 +9,8 @@
     <None Remove="Content\explosion.png" />
     <None Remove="Content\fuckedUpEmoji.png" />
     <None Remove="Content\laughEmoji.png" />
-    <None Remove="Content\nullptr_hq4x.copyright.txt" />
-    <None Remove="Content\nullptr_hq4x.png" />
     <None Remove="Content\null_terminator.png" />
+    <None Remove="Content\sonic_asalga.png" />
     <None Remove="Content\TileSet.png" />
   </ItemGroup>
 
@@ -19,9 +18,8 @@
     <EmbeddedResource Include="Content\explosion.png" />
     <EmbeddedResource Include="Content\fuckedUpEmoji.png" />
     <EmbeddedResource Include="Content\laughEmoji.png" />
-    <EmbeddedResource Include="Content\nullptr_hq4x.copyright.txt" />
-    <EmbeddedResource Include="Content\nullptr_hq4x.png" />
     <EmbeddedResource Include="Content\null_terminator.png" />
+    <EmbeddedResource Include="Content\sonic_asalga.png" />
     <EmbeddedResource Include="Content\TileSet.png" />
   </ItemGroup>
 

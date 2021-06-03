@@ -24,7 +24,7 @@ namespace TowerDefenseNew
 		public View(GameWindow window)
 		{
 			//TODO: Change the clear color of the screen.
-			GL.ClearColor(new Color4(220, 150, 30, 255));
+			GL.ClearColor(Color4.Black);
 			this.Window = window;
 
 
@@ -34,7 +34,7 @@ namespace TowerDefenseNew
 			texEnemy2 = TextureLoader.LoadFromResource(content + "fuckedUpEmoji.png");
 			//texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
 			texExplosion = TextureLoader.LoadFromResource(content + "explosion.png");
-			texFont = TextureLoader.LoadFromResource(content + "nullptr_hq4x.png");
+			texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
 			tileSet = TextureLoader.LoadFromResource(content + "TileSet.png");
 
 		}
@@ -44,57 +44,62 @@ namespace TowerDefenseNew
         internal List<Vector2> circlePoints = CreateCirclePoints(20);
 
 		internal void Draw(Model model)
-		{
-			GL.Clear(ClearBufferMask.ColorBufferBit); // clear the screen
-
-			Camera.Draw();
-
-
-			DrawGrid(model.Grid, Color4.White);
-
+        {
+            GL.Clear(ClearBufferMask.ColorBufferBit); // clear the screen
 			if (model.gameOver)
 			{
-				this.Window.Close();
+				GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
+				DrawText("GAME OVER", 24f, 15f, 1f);
+				DrawText("Press ESC to close the game", 22f, 14f, 0.5f);
+				this.Window.UpdateFrequency = 0;
+				this.Window.RenderFrequency = 0;
 			}
-
-			try
+			else
 			{
-				foreach (Enemy enemy in model.enemies.ToList())
+				Camera.Draw();
+				DrawGrid(model.Grid, Color4.White);
+				try
 				{
-					if (enemy != null)
+					foreach (Enemy enemy in model.enemies.ToList())
 					{
-						//draw enemy
-						if (enemy.health >= model.enemyHealth / 2)
+						if (enemy != null)
 						{
-							GL.BindTexture(TextureTarget.Texture2D, texEnemy1.Handle);
-							DrawCircleTexture(enemy, new Rect(0f, 0f, 1f, 1f));
-						}else
-                        {
-							GL.BindTexture(TextureTarget.Texture2D, texEnemy2.Handle);
-							DrawCircleTexture(enemy, new Rect(0f, 0f, 1f, 1f));
-                        }
+							//draw enemy
+							if (enemy.health >= model.enemyHealth / 2)
+							{
+								GL.BindTexture(TextureTarget.Texture2D, texEnemy1.Handle);
+								DrawCircleTexture(enemy, new Rect(0f, 0f, 1f, 1f));
+							}
+							else
+							{
+								GL.BindTexture(TextureTarget.Texture2D, texEnemy2.Handle);
+								DrawCircleTexture(enemy, new Rect(0f, 0f, 1f, 1f));
+							}
+						}
 					}
-				}
 
-				foreach (Bullet bullet in model.bullets.ToList())
+					foreach (Bullet bullet in model.bullets.ToList())
+					{
+						DrawBullet(bullet);
+					}
+
+					DrawExplosion(model.explosions);
+				}
+				catch (System.ArgumentException)
 				{
-					DrawBullet(bullet);
+					Console.WriteLine("View.Draw exception");
 				}
 
-				DrawExplosion(model.explosions);
+				DrawHelpText(model);
 			}
-			catch (System.ArgumentException)
-            {
-				Console.WriteLine("View.Draw exception");
-            }
+        }
 
+        private void Window_RenderFrame(OpenTK.Windowing.Common.FrameEventArgs obj)
+        {
+            throw new NotImplementedException();
+        }
 
-			GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
-			DrawText($"{model.cash}$", -.99f, -0.99f, 3f);
-		}
-
-
-		private void DrawText(string text, float x, float y, float size)
+        private void DrawText(string text, float x, float y, float size)
 		{
 			GL.Color4(Color4.White);
 			const uint firstCharacter = 32; // the ASCII code of the first character stored in the bitmap font
@@ -116,7 +121,7 @@ namespace TowerDefenseNew
 			}
 		}
 
-		private void DrawTile(float x, float y, uint tileNumber, CellType cellType)
+		private void DrawTile(float x, float y, uint tileNumber)
         {
 			GL.Color4(Color4.White);
 			GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
@@ -147,14 +152,14 @@ namespace TowerDefenseNew
 					}
 					if (CellType.Path == grid[column, row])
                     {
-						DrawTile(column, row, (5*8+7), CellType.Path);
+						DrawTile(column, row, (5*8+7));
 						//DrawRectangle(new Vector2(column, row), new Vector2(1, 1), new Color4(206, 185, 146, 255));
 
 
 					}
 					if (CellType.Empty == grid[column, row] || CellType.Finish == grid[column, row])
                     {
-						DrawTile(column, row, (6*8+2), CellType.Empty);
+						DrawTile(column, row, (6*8+2));
                     }
 				}
 			}
@@ -221,6 +226,47 @@ namespace TowerDefenseNew
 			GL.End();
 		}
 
+        private void DrawHelpText(Model model)
+        {
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			GL.Enable(EnableCap.Blend);
+			//text to help the player
+			GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); 
+                                                                     
+            DrawText($"Cash:", 54.5f, 29f, 0.7f);
+            DrawText($"{model.cash}$", 54.5f, 28f, 0.5f);
+            
+            DrawText($"Kills:", 54.5f, 26f, 0.6f);
+            DrawText($"{model.killCount}", 54.5f, 25f, 0.5f);
+
+            DrawText("____________", 54.2f, 14.8f, 0.35f);
+            DrawText("How to play:", 54.25f, 15f, 0.35f);
+
+            DrawText("1+Click to", 54.25f, 14f, 0.4f);
+            DrawText("buy Sniper", 54.25f, 13.5f, 0.4f);
+
+            DrawText("2+Click to", 54.25f, 12.5f, 0.4f);
+            DrawText("buy Rifle", 54.25f, 12f, 0.4f);
+
+            DrawText("3+Click to", 54.25f, 11f, 0.4f);
+            DrawText("place Path", 54.25f, 10.5f, 0.4f);
+
+            DrawText("4+Click to", 54.25f, 9.5f, 0.4f);
+            DrawText("sell Tower", 54.25f, 9f, 0.4f);
+
+            DrawText("To start the", 54.15f, 8f, 0.3f);
+            DrawText("game,first you", 54.15f, 7.6f, 0.3f);
+            DrawText("place a path", 54.15f, 7.2f, 0.3f);
+            DrawText("from left to", 54.15f, 6.8f, 0.3f);
+            DrawText("right.When the", 54.15f, 6.4f, 0.3f);
+            DrawText("path reaches", 54.15f, 6f, 0.3f);
+            DrawText("the right side,", 54.15f, 5.6f, 0.3f);
+            DrawText("enemies will", 54.15f, 5.2f, 0.3f);
+            DrawText("spawn.Dont let", 54.15f, 4.8f, 0.3f);
+            DrawText("them reach the", 54.15f, 4.4f, 0.3f);
+            DrawText("end!", 54.15f, 4f, 0.3f);
+			GL.Disable(EnableCap.Blend);
+		}
 		private static void DrawCircleTexture(IReadOnlyCircle circle, IReadOnlyRectangle texCoords)
         {
 			

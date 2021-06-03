@@ -29,6 +29,7 @@ namespace TowerDefenseNew
 			this.enemyHealth = 500;
 			this.gameOver = false;
 			this.timer = new System.Timers.Timer(this.enemySpawnRate);
+			this.killCount = 0;
 		}
 
 		internal bool switchGameOver(bool lose)
@@ -160,7 +161,8 @@ namespace TowerDefenseNew
 						if (bullet.checkHit())
 						{
 							//onEnemyKill
-							this.cash = this.cash + 1;
+							this.killCount++;
+							this.cash++;
 							Explosion exp = new Explosion(bullet.Center, 1.5f, .4f);
 							explosions.Add(exp);
 							Console.WriteLine("Enemy killed. Cash: " + this.cash);
@@ -414,6 +416,7 @@ namespace TowerDefenseNew
 		internal List<Bullet> bullets;
 		internal List<Explosion> explosions;
 		internal int enemySpawnRate;
-		internal float Time { get; private set; } = 0;
+        internal int killCount;
+        internal float Time { get; private set; } = 0;
 	}
 }
