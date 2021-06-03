@@ -10,8 +10,10 @@
     <None Remove="Content\fuckedUpEmoji.png" />
     <None Remove="Content\laughEmoji.png" />
     <None Remove="Content\null_terminator.png" />
+    <None Remove="Content\smokin.png" />
     <None Remove="Content\sonic_asalga.png" />
     <None Remove="Content\TileSet.png" />
+    <None Remove="Content\TileSet_CG.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,8 +21,10 @@
     <EmbeddedResource Include="Content\fuckedUpEmoji.png" />
     <EmbeddedResource Include="Content\laughEmoji.png" />
     <EmbeddedResource Include="Content\null_terminator.png" />
+    <EmbeddedResource Include="Content\smokin.png" />
     <EmbeddedResource Include="Content\sonic_asalga.png" />
     <EmbeddedResource Include="Content\TileSet.png" />
+    <EmbeddedResource Include="Content\TileSet_CG.png" />
   </ItemGroup>
 
   <ItemGroup>

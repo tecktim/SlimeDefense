@@ -33,9 +33,9 @@ namespace TowerDefenseNew
 			texEnemy1 = TextureLoader.LoadFromResource(content + "laughEmoji.png");
 			texEnemy2 = TextureLoader.LoadFromResource(content + "fuckedUpEmoji.png");
 			//texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
-			texExplosion = TextureLoader.LoadFromResource(content + "explosion.png");
+			texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
 			texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
-			tileSet = TextureLoader.LoadFromResource(content + "TileSet.png");
+			tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG.png");
 
 		}
 
@@ -64,23 +64,35 @@ namespace TowerDefenseNew
 					{
 						if (enemy != null)
 						{
-							//draw enemy
-							if (enemy.health >= model.enemyHealth / 2)
-							{
-								GL.BindTexture(TextureTarget.Texture2D, texEnemy1.Handle);
-								DrawCircleTexture(enemy, new Rect(0f, 0f, 1f, 1f));
+							GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+							GL.Enable(EnableCap.Blend);
+							if(enemy.health >= model.enemyHealth * 0.8)
+                            {
+								DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 4);
 							}
-							else
-							{
-								GL.BindTexture(TextureTarget.Texture2D, texEnemy2.Handle);
-								DrawCircleTexture(enemy, new Rect(0f, 0f, 1f, 1f));
+							else if (enemy.health >= model.enemyHealth * 0.6)
+                            {
+								DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 3);
 							}
+							else if (enemy.health >= model.enemyHealth * 0.4)
+							{
+								DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 2);
+							}
+							else if (enemy.health >= model.enemyHealth * 0.2)
+                            {
+								DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 1);
+							}
+							else if (enemy.health > 0)
+                            {
+								DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5);
+							}
+							GL.Disable(EnableCap.Blend);
 						}
 					}
 
 					foreach (Bullet bullet in model.bullets.ToList())
 					{
-						DrawBullet(bullet);
+						DrawBullet(bullet, bullet.TowerType);
 					}
 
 					DrawExplosion(model.explosions);
@@ -125,53 +137,61 @@ namespace TowerDefenseNew
         {
 			GL.Color4(Color4.White);
 			GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
-			const uint tilesPerColumn = 20;
-			const uint tilesPerRow = 8;
+			const uint tilesPerColumn = 10;
+			const uint tilesPerRow = 5;
 			var rect = new Rect(x, y, 1f, 1f);
 			var tileCoords = SpriteSheetTools.CalcTexCoords(tileNumber, tilesPerRow, tilesPerColumn);
 			DrawRectangleTexture(rect, tileCoords);
         }
 
+		bool portalPlaced = false;
 		private void DrawGrid(IReadOnlyGrid grid, Color4 color)
 		{
+			
 			DrawGridLines(grid.Columns, grid.Rows);
 			for (int column = 0; column < grid.Columns; ++column)
 			{
 				for (int row = 0; row < grid.Rows; ++row)
 				{
+					if(CellType.Path == grid[column, row] && portalPlaced == false)
+                    {
+						DrawTile(column, row, 2); //Portal, nur 1x
+						portalPlaced = true;
+                    }
+
 					if (CellType.Sniper == grid[column, row])
 					{
-						DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, new Color4(32, 44 ,89, 255));
+						DrawTile(column, row, 1 * 5); //Snake
 					}
 					if (CellType.Rifle == grid[column, row])
                     {
-
-						GL.BindTexture(TextureTarget.Texture2D, texEnemy1.Handle);
-						DrawCircleTexture(new Circle(new Vector2(column + 0.5f, row + 0.5f), 0.5f), new Rect(0f, 0f, 1f, 1f));
-						//DrawCircle(new Vector2(column + 0.5f, row + 0.5f), 0.4f, new Color4(115, 147, 126, 255));
+						DrawTile(column, row, 2 * 5); //Ghost
 					}
 					if (CellType.Path == grid[column, row])
                     {
-						DrawTile(column, row, (5*8+7));
-						//DrawRectangle(new Vector2(column, row), new Vector2(1, 1), new Color4(206, 185, 146, 255));
-
-
+						DrawTile(column, row, 1); //Path
 					}
 					if (CellType.Empty == grid[column, row] || CellType.Finish == grid[column, row])
                     {
-						DrawTile(column, row, (6*8+2));
+						DrawTile(column, row, 0); //Wiese
                     }
 				}
 			}
 		}
 
-		private void DrawBullet(IReadOnlyCircle bullet)
+		private void DrawBullet(IReadOnlyCircle bullet, uint type)
         {
 			try
 			{
 				//DrawCircle(bullet.Center, bullet.Radius, Color4.Black);
-				GL.BindTexture(TextureTarget.Texture2D, texEnemy1.Handle);
-				DrawCircleTexture(bullet, new Rect(0f, 0f, 1f, 1f));
+				GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+				GL.Enable(EnableCap.Blend);
+				
+					DrawTile(bullet.Center.X, bullet.Center.Y, (1 + type) * 5 + 2);
+				
+				GL.Disable(EnableCap.Blend);
+				//DrawCircleTexture(bullet, new Rect(0f, 0f, 1f, 1f));
 			}
 			catch (System.NullReferenceException)
 			{
@@ -186,8 +206,8 @@ namespace TowerDefenseNew
 			GL.Enable(EnableCap.Blend);
 			GL.Color4(Color4.White);
 			// how many sprites are in each column and row
-			const uint spritesPerColumn = 5;
-			const uint spritesPerRow = 5;
+			const uint spritesPerColumn = 8;
+			const uint spritesPerRow = 8;
 			foreach (var explosion in explosions)
 			{
 				GL.BindTexture(TextureTarget.Texture2D, texExplosion.Handle);
