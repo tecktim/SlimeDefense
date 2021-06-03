@@ -33,14 +33,14 @@ namespace TowerDefenseNew
 			var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
 			var pixelCoordinates = new Vector2(x, y);
 			var world = pixelCoordinates.Transform(fromViewportToWorld);
-			Console.WriteLine($"{world}");
+			//Console.WriteLine($"{world}");
 			if (world.X < 0 || _model.Grid.Columns < world.X) return;
 			if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
 			var column = (int)Math.Truncate(world.X);
 			var row = (int)Math.Truncate(world.Y);
-			Console.WriteLine($"{column}, {row}");
+			//Console.WriteLine($"{column}, {row}");
 			var cell = _model.CheckCell(column, row);
-			Console.WriteLine(cell);
+			//Console.WriteLine(cell);
 
 			if (keyboard.IsKeyDown(Keys.D0))
 			{
@@ -89,23 +89,16 @@ namespace TowerDefenseNew
 						return;
 					}
 					//Path setzen
-					if (keyboard.IsKeyDown(Keys.D3) && placePath == true)
+					if (keyboard.IsKeyDown(Keys.D3))
 					{
-						for (int i = 0; i < 54; i++)
-						{
-							if (_model.CheckCell(i, row) == Grid.CellType.Sniper || _model.CheckCell(i, row) == Grid.CellType.Rifle)
-							{
-								placePath = false;
-								break;
-							}
+						if(cell != Grid.CellType.Empty) { return; }
+						else { 
+							if(_model.PlacePath(column, row) && keyboard.IsKeyDown(Keys.D3))
+                            {
+								return;
+                            }
 						}
-						if (placePath)
-						{
-							_model.PlacePath(column, row);
-							placePath = false;
-							return;
-						}
-						Console.WriteLine("");
+						return;
 					}
 
 				}

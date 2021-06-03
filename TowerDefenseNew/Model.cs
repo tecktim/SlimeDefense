@@ -30,6 +30,7 @@ namespace TowerDefenseNew
 			this.gameOver = false;
 			this.timer = new System.Timers.Timer(this.enemySpawnRate);
 			this.killCount = 0;
+			this.placed = false;
 		}
 
 		internal bool switchGameOver(bool lose)
@@ -39,7 +40,7 @@ namespace TowerDefenseNew
 				this.gameOver = true;
             }
 			else this.gameOver = false;
-			return gameOver;
+			return this.gameOver;
         }
 
         internal void giveCash()
@@ -242,39 +243,37 @@ namespace TowerDefenseNew
 		}
 		internal bool PlacePath(int column, int row)
 		{
-			bool placed = false;
-			for (int i = 0; i < 10; i++)
+			//First is always placed left
+			if (column == 0 && pathway.Count == 0)
 			{
-				_grid[i, 0 + 10] = CellType.Path;
-				pathway.Add(_grid[i, 0 + 10]);
-			}
-			for (int i = 0; i < 9; i++)
+				_grid[column, row] = CellType.Path;
+				pathway.Add(_grid[column, row]);
+				checkCol++;
+				checkRow = row;
+				spawnRow = row;
+            }
+			else if (column == checkCol && row == checkRow)
 			{
-				_grid[9, i + 10] = CellType.Path;
-				pathway.Add(_grid[9, i + 10]);
+				_grid[column, row] = CellType.Path;
+				pathway.Add(_grid[column, row]);
+				checkCol++;
 			}
-			for (int i = 9; i < 19; i++)
-			{
-				_grid[i, 9 + 10] = CellType.Path;
-				pathway.Add(_grid[i, 9 + 10]);
+			else if(column == checkCol - 1 && (row == checkRow + 1 || row == checkRow - 1) && CheckCell(checkCol, row) != CellType.Finish)
+            {
+				_grid[column, row] = CellType.Path;
+				pathway.Add(_grid[column, row]);
+				checkRow = row;
 			}
-			for (int i = 9; i > 3; i--)
-			{
-				_grid[19, i + 10] = CellType.Path;
-				pathway.Add(_grid[19, i + 10]);
-			}
-			for (int i = 19; i < 54; i++)
-			{
-				_grid[i, 3 + 10] = CellType.Path;
-				pathway.Add(_grid[i, 3 + 10]);
-			}
-			placed = true;
-			Console.WriteLine(pathway.Count);
-			Console.WriteLine("placed path");
-			enemySpawnTimer(0);
+			if(CheckCell(checkCol, row) == CellType.Finish && this.placed == false)
+            {
+				_grid[checkCol, row] = CellType.Path;
+				this.placed = true;
+				enemySpawnTimer(spawnRow);
+            }
+			Console.WriteLine($"SpawnRow: {spawnRow}");
 			return placed;
 		}
-		
+
 
 
 		private void enemySpawnTimer(int row)
@@ -296,31 +295,32 @@ namespace TowerDefenseNew
 
 		private void spawnEnemy(int row)
         {
-			row = row + 10;
+			Console.WriteLine($"Spawning enemy in row: {row}");
 			var rnd = new Random();
 			int spot = rnd.Next(0, 3);
-			float offset;
-			float size;
-			switch (spot)
+			float offset = 0.5f;
+			float size = 0.35f;
+			enemies.Add(new Enemy(new Vector2(offset, row + offset), size, enemyHealth * 2));
+			/*switch (spot)
 			{
 				case 0:
 					size = 0.3f;
 					offset = 0.35f;
-					enemies.Add(new Enemy(new Vector2(offset, row + offset), size, enemyHealth));
+					enemies.Add(new Enemy(new Vector2(offset, row), size, enemyHealth));
 					break;
 				case 1:
 					size = 0.4f;
 					offset = 0.5f;
-					enemies.Add(new Enemy(new Vector2(offset, row + offset), size, enemyHealth * 2));
+					enemies.Add(new Enemy(new Vector2(offset, row), size, enemyHealth * 2));
 					break;
 				case 2:
 					size = 0.3f;
 					offset = 0.65f;
-					enemies.Add(new Enemy(new Vector2(offset, row + offset), size, enemyHealth));
+					enemies.Add(new Enemy(new Vector2(offset, row), size, enemyHealth));
 					break;
 				default:
 					return;
-			}
+			}*/
 			if (enemySpawnRate >= 2000)
             {
 				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.9964); // 0.9964);
@@ -402,6 +402,8 @@ namespace TowerDefenseNew
 			tower.asTimer(false);
         }
 
+		private bool placed;
+		private int checkCol = 0, checkRow = 0, spawnRow; 
 		internal int enemyHealth;
         private readonly IGrid _grid;
 		internal double sniperCost;
