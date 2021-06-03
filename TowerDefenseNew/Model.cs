@@ -164,7 +164,7 @@ namespace TowerDefenseNew
 							//onEnemyKill
 							this.killCount++;
 							this.cash++;
-							Explosion exp = new Explosion(bullet.Center, 1.5f, .4f);
+							Explosion exp = new Explosion(bullet.Center+new Vector2(0.45f,1.5f), 2f, 0.75f);
 							explosions.Add(exp);
 							Console.WriteLine("Enemy killed. Cash: " + this.cash);
                         }
@@ -218,7 +218,7 @@ namespace TowerDefenseNew
 		{
 			if (this.cash >= this.sniperCost)
 			{
-				Tower tower = new Tower(new Vector2(column, row), 12f, 20, 1000, this.enemies, this.bullets);
+				Tower tower = new Tower(new Vector2(column, row), 12f, 20, 1000, this.enemies, this.bullets, 0);
 				_grid[column, row] = CellType.Sniper;
 				this.towers.Add(tower);
 				this.cash -= this.sniperCost;
@@ -232,7 +232,7 @@ namespace TowerDefenseNew
 		{
 			if (this.cash >= this.rifleCost)
 			{
-				Tower tower = new Tower(new Vector2(column, row), 3f, 10, 100, this.enemies, this.bullets);
+				Tower tower = new Tower(new Vector2(column, row), 3f, 10, 100, this.enemies, this.bullets, 1);
 				_grid[column, row] = CellType.Rifle;
 				this.towers.Add(tower);
 				this.cash -= this.rifleCost;
