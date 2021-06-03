@@ -93,7 +93,7 @@ namespace TowerDefenseNew
 					{
 						if(cell != Grid.CellType.Empty) { return; }
 						else { 
-							if(_model.PlacePath(column, row) && keyboard.IsKeyDown(Keys.D3))
+							if(_model.PlacePath(column, row))
                             {
 								return;
                             }

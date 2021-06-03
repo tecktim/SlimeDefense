@@ -71,52 +71,37 @@ namespace TowerDefenseNew
 
 						if (enemy != null)
 						{
-							//Check if moving up or down or right or finish, then move right
-							if (CheckRightPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
+							if(CheckRightPath(enemy.Center + new Vector2(-.5f, 0)) && !CheckUpperPath(enemy.Center + new Vector2(-.5f, 0)) && !CheckLowerPath(enemy.Center + new Vector2(-.5f, 0)) ||
+								(CheckRightPath(enemy.Center + new Vector2(-.5f, .5f)) && CheckUpperPath(enemy.Center + new Vector2(-.5f, .5f)) && !CheckLowerPath(enemy.Center + new Vector2(-.5f, 0.5f))) ||
+								CheckRightPath(enemy.Center + new Vector2(-.5f, -.5f)) && !CheckUpperPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckLowerPath(enemy.Center + new Vector2(-.5f, -.5f)))
 							{
+								if(enemy == enemies[0]) Console.WriteLine("go right");
 								enemy.changeDirection(direction.right);
 								continue;
 							}
-							else if (CheckRightPath(enemy.Center + new Vector2(-0.5f, -0.5f)) && enemy.dir == direction.up)
-							{
-								enemy.changeDirection(direction.right);
+							if(!CheckRightPath(enemy.Center + new Vector2(-.5f, 0)) && !CheckUpperPath(enemy.Center + new Vector2(-.5f, 0)) && CheckLowerPath(enemy.Center + new Vector2(-.5f, 0)) ||
+								(CheckRightPath(enemy.Center + new Vector2(-.5f, -.5f)) && !CheckUpperPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckLowerPath(enemy.Center + new Vector2(-.5f, -.5f))) || 
+								(!CheckRightPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckUpperPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckLowerPath(enemy.Center + new Vector2(-.5f, -.5f))))
+                            {
+								if (enemy == enemies[0]) Console.WriteLine("go down");
+								enemy.changeDirection(direction.down);
 								continue;
 							}
-							else if (CheckRightPath(enemy.Center + new Vector2(0.5f, 0.5f)) && enemy.dir == direction.down)
+							if (CheckRightPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckUpperPath(enemy.Center + new Vector2(-.5f, -.5f)) && !CheckLowerPath(enemy.Center + new Vector2(-.5f, -.5f)) )
 							{
-								enemy.changeDirection(direction.right);
+								if (enemy == enemies[0]) Console.WriteLine("go up");
+								enemy.changeDirection(direction.up);
 								continue;
-							}//Check if end of lane is reached
-							else if (CheckRightFinish(enemy.Center + new Vector2(-0.5f, 0)))
+							}
+							
+
+							//Check if end of lane is reached
+							if (CheckRightFinish(enemy.Center + new Vector2(-0.5f, 0)))
                             {
 								enemies.Remove(enemy);
 								switchGameOver(true);
 								return;
                             }
-
-
-							//Check if moving right or up, then move up
-									else if (CheckUpperPath(enemy.Center + new Vector2(-0.5f, 0)) && enemy.dir == direction.right)
-							{
-								enemy.changeDirection(direction.up);
-								continue;
-							}
-							else if (CheckUpperPath(enemy.Center + new Vector2(-0.5f, -0.5f)) && enemy.dir == direction.up)
-							{
-								enemy.changeDirection(direction.up);
-								continue;
-							}
-							//Check if moving right or down, then move down
-							else if (CheckLowerPath(enemy.Center + new Vector2(-0.5f, 0f)) && enemy.dir == direction.right)
-							{
-								enemy.changeDirection(direction.down);
-								continue;
-							}
-							else if (CheckLowerPath(enemy.Center + new Vector2(0f, 0.5f)) && enemy.dir == direction.down)
-							{
-								enemy.changeDirection(direction.down);
-								continue;
-							}
 							else return;
 						}
 					}
@@ -267,10 +252,10 @@ namespace TowerDefenseNew
 			if(CheckCell(checkCol, row) == CellType.Finish && this.placed == false)
             {
 				_grid[checkCol, row] = CellType.Path;
+				pathway.Add(_grid[checkCol, row]);
 				this.placed = true;
 				enemySpawnTimer(spawnRow);
             }
-			Console.WriteLine($"SpawnRow: {spawnRow}");
 			return placed;
 		}
 
