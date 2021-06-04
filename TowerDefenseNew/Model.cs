@@ -22,7 +22,7 @@ namespace TowerDefenseNew
 			this.bullets = new List<Bullet>();
 			this.explosions = new List<Explosion>();
 
-			this.cash = 50;
+			this.cash = 25;
 			//this.life = 1;
 			this.sniperCost = 20;
 			this.rifleCost = 5;
@@ -202,6 +202,7 @@ namespace TowerDefenseNew
         {
 			if(CheckCell(column, row) == CellType.Rifle)
             {
+				Console.WriteLine("Niggered");
 				this.cash += Math.Floor(rifleCost) * 0.8;
 				if (tower.Center.X == column && tower.Center.Y == row)
 				{
@@ -209,6 +210,7 @@ namespace TowerDefenseNew
 					towers.Remove(tower);
 					tower.asTimer(false);
 					Math.Floor(this.cash);
+					return;
 				}
 				else return;
 			}
@@ -221,6 +223,7 @@ namespace TowerDefenseNew
 					towers.Remove(tower);
 					tower.asTimer(false);
 					Math.Floor(this.cash);
+					return;
 				}
 				else return;
 			}

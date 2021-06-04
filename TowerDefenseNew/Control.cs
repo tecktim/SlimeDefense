@@ -54,7 +54,8 @@ namespace TowerDefenseNew
 				{
 						_model.ClearCell(column, row, tower);
 						Console.WriteLine("sold sniper, new balance: " + _model.cash);
-				}
+						break;		
+					}
 			}
 
 			//Rifle verkaufen
@@ -65,6 +66,7 @@ namespace TowerDefenseNew
 				{
 						_model.ClearCell(column, row, tower);
 						Console.WriteLine("sold rifle, new balance: " + _model.cash);
+						break;
 				}
 				return;
 			}
