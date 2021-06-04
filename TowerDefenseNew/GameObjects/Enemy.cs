@@ -4,31 +4,68 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TowerDefenseNew.Grid;
 
 namespace TowerDefenseNew.GameObjects
 {
+    public enum direction { up, down, left, right, none };
+
+   
     internal class Enemy : GameObject
     {
         internal int health;
-        internal bool alive;
-        internal int bounty;
         internal Enemy(Vector2 center, float radius, int health) : base(center, radius)
         {
             this.health = health;
-            this.alive = true;
         }
 
         internal bool isShot(int damage)
         {
-            health = health - damage;
-            if(health <= 0)
+            this.health = this.health - damage;
+            if (health <= 0)
             {
-                this.alive = false;
+                IsAlive = false;
             }
-            Console.WriteLine("enemy hit for " + damage + " , enemy life: " + this.health);
-            return alive;
+            return IsAlive;
         }
 
-        public Vector2 Velocity = new Vector2(1f, 0f);
+    internal void changeSpeed(float factor)
+        {
+            this.Velocity = new Vector2(Velocity.X * factor, Velocity.Y * factor);
+        }
+
+        internal Vector2 changeDirection(direction dir)
+        {
+            //Originally 1.1
+            if (dir == direction.up)
+            {
+                this.dir = direction.up;
+                return this.Velocity = new Vector2(0f, 1.1f);
+            }
+            else if (dir == direction.down)
+            {
+                this.dir = direction.down;
+                return this.Velocity = new Vector2(0f, -1.1f);
+            }
+            else if (dir == direction.left)
+            {
+                this.dir = direction.left;
+                return this.Velocity = new Vector2(-1.1f, 0f);
+            }
+            else if (dir == direction.right)
+            {
+                this.dir = direction.right;
+                return this.Velocity = new Vector2(1.1f, 0f);
+            }
+            else
+            {
+                this.dir = direction.none;
+                return this.Velocity;
+            }
+        }
+
+        internal int wayPointIterator { get; set; } = 0;
+        internal direction dir { get; set; }
+        internal Vector2 Velocity { get; set; }
     }
 }

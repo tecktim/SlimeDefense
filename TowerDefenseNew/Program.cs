@@ -13,11 +13,13 @@ namespace TowerDefenseNew.Structure
 		private static void Main(string[] _)
 		{
 			var window = MainWindow.Create();
+			var view = new View(window);
 			var model = new Model(GridLoader.CreateGrid());
-			var view = new View();
 			var control = new Control(model, view);
 			var keyboard = window.KeyboardState;
 
+			window.MouseMove += args => control.PlacePath(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard); 
+			window.MouseMove += args => control.ShowTowerSample(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
 			window.MouseDown += args => control.Click(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
 			window.UpdateFrame += args =>
 			{

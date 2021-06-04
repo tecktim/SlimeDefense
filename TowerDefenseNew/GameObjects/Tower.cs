@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using TowerDefenseNew.Grid;
 
 namespace TowerDefenseNew.GameObjects
 {
@@ -12,7 +13,7 @@ namespace TowerDefenseNew.GameObjects
     {
 
 
-        internal Tower(Vector2 center, float attackRadius, int damage, int attackSpeed, int cost, List<Enemy> enemies, List<Bullet> bullets) : base(center, attackRadius)
+        internal Tower(Vector2 center, float attackRadius, int damage, int attackSpeed, List<Enemy> enemies, List<Bullet> bullets, uint type) : base(center, attackRadius)
         {
             this.Center = center;
             this.Enemies = enemies;
@@ -20,18 +21,28 @@ namespace TowerDefenseNew.GameObjects
             this.damage = damage;
             this.Radius = attackRadius;
             this.Bullets = bullets;
-            this.cost = cost;
-            asTimer();
+            this.Timer = new Timer(attackSpeed);
+            asTimer(true);
+            this.Type = type;
         }
 
-        private void asTimer()
+        public void asTimer(bool active)
         {
             // Creating timer with attackSpeed (millis) as interval
-            System.Timers.Timer Timer = new System.Timers.Timer(attackSpeed);
-            // Hook up elapsed event for the timer
-            Timer.Elapsed += OnTimedEvent;
-            Timer.AutoReset = true;
-            Timer.Enabled = true;
+            if (active)
+            {
+                // Hook up elapsed event for the timer
+                Timer.Elapsed += OnTimedEvent;
+                Timer.AutoReset = true;
+                Timer.Enabled = true;
+            }
+            else
+            {
+                Timer.Enabled = false;
+                Timer.Stop();
+                Timer.Close();
+                Timer.Dispose();
+            }
         }
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
@@ -41,25 +52,39 @@ namespace TowerDefenseNew.GameObjects
 
         private void checkRange()
         {
-            if (Enemies.Count != 0)
+            try
             {
                 foreach (Enemy enemy in Enemies.ToList())
                 {
                     if (this.Intersects(enemy))
                     {
-                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius/50, this, Bullets, Enemies);
-                        Bullets.Add(bullet);
-                        break;
+                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius / 35, this.damage, this.Bullets, this.Enemies, this.Type);
+
+                        //Correction of Starting Point of Bullets, damit Schüsse aus dem Mund der Tower kommen
+                        if (bullet.TowerType == 0) {
+                            bullet.Center += new Vector2(-0.8f, -0.5f);
+                        }
+                        if (bullet.TowerType == 1)
+                        {
+                            bullet.Center += new Vector2(-0.5f, -0.15f);
+                        }
+                        bullet.bulletVelocity(enemy);
+                        return;
                     }
-                    else continue;
                 }
+            }
+            catch (System.ArgumentException)
+            {
+                Console.WriteLine("checkRange exception");
+                return;
             }
         }
 
-        private int cost { get; set; }
         private int attackSpeed { get; set; }
         internal int damage { get; set; }
         private List<Enemy> Enemies { get; set; }
         private List<Bullet> Bullets { get; set; }
+        public Timer Timer { get; }
+        public uint Type { get; private set; }
     }
 }

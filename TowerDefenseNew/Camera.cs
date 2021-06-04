@@ -66,7 +66,7 @@ namespace TowerDefenseNew
 			//TODO: Implement camera scaling
 			//TODO: Implement panning
 			//TODO: Calculate the resulting camera matrix
-			var translate = Transformation2d.Translate(-Center - new Vector2(27f, 15f));
+			var translate = Transformation2d.Translate(-Center - new Vector2(29f, 15f));
 			var scale = Transformation2d.Scale(1f / Scale);
 			var aspect = Transformation2d.Scale(_windowAspectRatio, 1f);
 			cameraMatrix = Transformation2d.Combine(translate, scale, aspect);

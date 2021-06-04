@@ -6,9 +6,32 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.6.3" />
+    <None Remove="Content\explosion.png" />
+    <None Remove="Content\fuckedUpEmoji.png" />
+    <None Remove="Content\laughEmoji.png" />
+    <None Remove="Content\null_terminator.png" />
+    <None Remove="Content\smokin.png" />
+    <None Remove="Content\sonic_asalga.png" />
+    <None Remove="Content\TileSet.png" />
+    <None Remove="Content\TileSet_CG.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Content\explosion.png" />
+    <EmbeddedResource Include="Content\fuckedUpEmoji.png" />
+    <EmbeddedResource Include="Content\laughEmoji.png" />
+    <EmbeddedResource Include="Content\null_terminator.png" />
+    <EmbeddedResource Include="Content\smokin.png" />
+    <EmbeddedResource Include="Content\sonic_asalga.png" />
+    <EmbeddedResource Include="Content\TileSet.png" />
+    <EmbeddedResource Include="Content\TileSet_CG.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.24.1" />
+    <PackageReference Include="OpenTK" Version="4.6.4" />
     <PackageReference Include="Zenseless.OpenTK" Version="0.1.8" />
-    <PackageReference Include="Zenseless.Patterns" Version="0.6.7" />
+    <PackageReference Include="Zenseless.Patterns" Version="0.6.8" />
   </ItemGroup>
 
 </Project>

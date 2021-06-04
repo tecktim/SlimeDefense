@@ -13,26 +13,38 @@ namespace TowerDefenseNew.GameObjects
         {
             Center = center;
             Radius = radius;
+            IsAlive = true;
         }
 
+        public bool IsAlive { get; protected set; }
         public Vector2 Center { get; set; }
         public float Radius { get; set; }
 
         public bool Intersects(IReadOnlyCircle obj)
         {
             //circlecollider
-            float radius = this.Radius + obj.Radius;
-            float deltaX = Center.X - obj.Center.X;
-            float deltaY = Center.Y - obj.Center.Y;
-            float distance = (float)Math.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
-            if (distance < radius)
+            if(obj != null)
             {
-                return true;
+                float radius = this.Radius + obj.Radius;
+                float deltaX = Center.X - obj.Center.X;
+                float deltaY = Center.Y - obj.Center.Y;
+                float distance = (float)Math.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
+                if (distance < radius)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
                 return false;
             }
         }
+
+
+
     }
 }
