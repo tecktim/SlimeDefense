@@ -314,15 +314,7 @@ namespace TowerDefenseNew
 				this.placed = true;
 				enemySpawnTimer(spawnRow);
 			}
-			Console.WriteLine($"{checkCol}, {row} is " + CheckCell(checkCol, row));
-
-			if (placed == true)
-			{
-				for (int i = 0; i < waypoints.Count; i++)
-				{
-					Console.WriteLine($"WayPoint at {i}\n X: {waypoints[i].X} Y: {waypoints[i].Y}\n");
-				}
-			}
+			
 			return placed;
 		}
 
