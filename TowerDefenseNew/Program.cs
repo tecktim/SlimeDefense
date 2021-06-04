@@ -18,7 +18,9 @@ namespace TowerDefenseNew.Structure
 			var control = new Control(model, view);
 			var keyboard = window.KeyboardState;
 
-			window.MouseMove += args => control.Click(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
+			window.MouseMove += args => control.PlacePath(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard); 
+			window.MouseMove += args => control.ShowTowerSample(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
+			window.MouseDown += args => control.Click(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
 			window.UpdateFrame += args =>
 			{
 				control.Update((float)args.Time, window.KeyboardState);
