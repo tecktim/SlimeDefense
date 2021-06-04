@@ -17,6 +17,8 @@ namespace TowerDefenseNew.Structure
 			fpsCounter = new FPScounter();
             window.RenderFrame += Window_RenderFrame;
 			window.VSync = VSyncMode.Off;
+			window.RenderFrequency = 60;
+			window.UpdateFrequency = 60;
 			window.Size = new Vector2i(1280, 720);
 			window.CenterWindow();
 

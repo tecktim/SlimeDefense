@@ -32,6 +32,7 @@ namespace TowerDefenseNew
 			this.timer = new System.Timers.Timer(this.enemySpawnRate);
 			this.killCount = 0;
 			this.placed = false;
+			this.applyScaling = true;
 		}
 
 		internal bool switchGameOver(bool lose)
@@ -55,10 +56,25 @@ namespace TowerDefenseNew
 		internal void Update(float deltaTime)
 		{
 			Time += deltaTime;
+			UpdateScaling();
 			UpdateExplosions(deltaTime);
 			UpdateBullets(deltaTime);
 			UpdateEnemies(deltaTime);
 		}
+
+		private void UpdateScaling()
+        {
+			if (killCount % 25 == 0 && applyScaling == true)
+            {
+				this.enemyHealth += this.enemyHealth / 10;
+				Console.WriteLine("enemy health + 10%");
+				applyScaling = false;
+            }
+			if (!(killCount % 25 == 0))
+            {
+				applyScaling = true;
+            }
+        }
 
 		private void UpdateEnemies(float frameTime)
 		{
@@ -238,7 +254,7 @@ namespace TowerDefenseNew
 		{
 			if (this.cash >= this.sniperCost)
 			{
-				Tower tower = new Tower(new Vector2(column, row), 12f, 20, 1000, this.enemies, this.bullets, 0);
+				Tower tower = new Tower(new Vector2(column, row), 12f, 25, 1000, this.enemies, this.bullets, 0);
 				_grid[column, row] = CellType.Sniper;
 				this.towers.Add(tower);
 				this.cash -= this.sniperCost;
@@ -428,7 +444,8 @@ namespace TowerDefenseNew
         }
 
 		private bool placed;
-		private int checkCol = 0, checkRow = 0, spawnRow; 
+        private bool applyScaling;
+        private int checkCol = 0, checkRow = 0, spawnRow; 
 		internal int enemyHealth;
         private readonly IGrid _grid;
         private readonly List<Vector2> waypoints;

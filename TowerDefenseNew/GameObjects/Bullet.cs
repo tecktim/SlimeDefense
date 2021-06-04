@@ -19,11 +19,12 @@ namespace TowerDefenseNew.GameObjects
             this.Damage = damage;
             this.Bullets.Add(this);
             this.TowerType = towerType;
-
+            this.lifeTime = 0;
         }
 
         internal bool checkHit()
         {
+            this.lifeTime++;
             bool isDead = false;
             try
             {
@@ -52,6 +53,10 @@ namespace TowerDefenseNew.GameObjects
             {
                 Console.WriteLine("checkHit exception");
             }
+            if(this.lifeTime >= 120)
+            {
+                Bullets.Remove(this);
+            }
             return isDead;
         }
         
@@ -79,6 +84,7 @@ namespace TowerDefenseNew.GameObjects
         public int Damage { get; }
         public uint TowerType { get; private set; }
 
+        private int lifeTime;
         internal float speedX;
         internal float speedY;
     }
