@@ -289,9 +289,17 @@ namespace TowerDefenseNew
 			}
 			else if (column == checkCol - 2 && row == checkRow && column != 0)
 			{
-				_grid[column, row] = CellType.Path;
-				if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
-				checkCol--;
+				if (CheckCell(column - 1, row) == CellType.Path)
+				{
+					Console.WriteLine("tru");
+					_grid[column, row] = CellType.Path;
+					_grid[column - 2, row] = CellType.Path;
+					checkCol -= 3;
+				} else {
+					_grid[column, row] = CellType.Path;
+					if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+					checkCol--;
+				}
 			}
 			else if (column == checkCol - 1 && (row == checkRow + 1 || row == checkRow - 1) && CheckCell(checkCol, row) != CellType.Finish && column != 0)
 			{
