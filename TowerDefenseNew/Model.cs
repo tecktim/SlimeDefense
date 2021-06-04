@@ -84,7 +84,7 @@ namespace TowerDefenseNew
 									//if (enemy == enemies[0]) Console.WriteLine("up");
 									enemy.changeDirection(direction.up);
 									enemy.wayPointIterator++;
-									break;
+									continue;
 								}
 
 								else if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y < enemy.Center.Y && enemy.dir == direction.right && enemy.dir != direction.up)
@@ -99,7 +99,7 @@ namespace TowerDefenseNew
 									//if (enemy == enemies[0]) Console.WriteLine("up");
 									enemy.changeDirection(direction.down);
 									enemy.wayPointIterator++;
-									break;
+									continue;
 								}
 								//new
 								if (enemy.Center.X > waypoints[enemy.wayPointIterator + 1].X && waypoints[enemy.wayPointIterator].Y > enemy.Center.Y && enemy.dir == direction.down && enemy.dir != direction.left)
@@ -107,7 +107,7 @@ namespace TowerDefenseNew
 									//if (enemy == enemies[0]) Console.WriteLine("up");
 									enemy.changeDirection(direction.left);
 									enemy.wayPointIterator++;
-									break;
+									continue;
 								}
 								//new
 								if (enemy.Center.X > waypoints[enemy.wayPointIterator + 1].X && waypoints[enemy.wayPointIterator].Y <= enemy.Center.Y && enemy.dir == direction.up && enemy.dir != direction.left)
@@ -115,7 +115,7 @@ namespace TowerDefenseNew
 									//if (enemy == enemies[0]) Console.WriteLine("up");
 									enemy.changeDirection(direction.left);
 									enemy.wayPointIterator++;
-									break;
+									continue;
 								}
 								
 								else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y < waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.down && enemy.dir != direction.right)
@@ -132,21 +132,12 @@ namespace TowerDefenseNew
 									continue;
 								}
 							}
-
 							if (enemy.Center.X >= waypoints[waypoints.Count-1].X)
                             {
 								enemies.Remove(enemy);
 								switchGameOver(true);
 								return;
 							}
-
-							//Check if end of lane is reached
-							if (CheckRightFinish(enemy.Center))
-                            {
-								enemies.Remove(enemy);
-								switchGameOver(true);
-								return;
-                            }
 						}
 					}
 				}
@@ -279,58 +270,32 @@ namespace TowerDefenseNew
 				checkRow = row;
 				spawnRow = row;
 			}
-			//right
-			else if (column > checkCol && row == checkRow && column != 0)
+			
+			else if (column == checkCol && row == checkRow && column != 0)
 			{
-				if(_grid[column, row] != CellType.Path)
-                {
-					_grid[column, row] = CellType.Path;
-				}
-				else
-				{
-					checkCol++;
-				}
+				_grid[column, row] = CellType.Path;
 				if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
 				checkCol++;
 			}
-			//left
-			else if (column < checkCol && row == checkRow && column != 0)
+			else if (column == checkCol - 2 && row == checkRow && column != 0)
 			{
-				if (_grid[column, row] != CellType.Path)
-				{
-					_grid[column, row] = CellType.Path;
-                }
-                else
-                {
-					checkCol--;
-				}
+				_grid[column, row] = CellType.Path;
 				if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
 				checkCol--;
 			}
-			else if (column == checkCol && row == checkRow && column != 0) 
+			else if (column == checkCol - 1 && (row == checkRow + 1 || row == checkRow - 1) && CheckCell(checkCol, row) != CellType.Finish && column != 0)
 			{
-				if (_grid[column, row] != CellType.Path)
-				{
-					_grid[column, row] = CellType.Path;
-				}
-			}
-			//up+down
-			else if(column == checkCol  && (row == checkRow + 1 || row == checkRow - 1) && CheckCell(checkCol, row) != CellType.Finish && column != 0)
-            {
-				if (_grid[column, row] != CellType.Path)
-				{
-					_grid[column, row] = CellType.Path;
-				}
+				_grid[column, row] = CellType.Path;
 				if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
 				checkRow = row;
 			}
-			if(CheckCell(checkCol, row) == CellType.Finish && this.placed == false)
-            {
+			if (CheckCell(checkCol, row) == CellType.Finish && this.placed == false)
+			{
 				_grid[checkCol, row] = CellType.Path;
 				waypoints.Add(new Vector2(checkCol, row));
 				this.placed = true;
 				enemySpawnTimer(spawnRow);
-            }
+			}
 			Console.WriteLine($"checkCol = {checkCol}, {row} is " + CheckCell(checkCol, row));
 
 			if (placed == true)
