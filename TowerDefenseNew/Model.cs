@@ -64,46 +64,49 @@ namespace TowerDefenseNew
 		{
 			if (enemies.Count != 0)
 			{
-				try
+				//try
 				{
 					foreach (Enemy enemy in enemies.ToList())
 					{
 						enemy.Center += new Vector2(frameTime * enemy.Velocity.X, frameTime * enemy.Velocity.Y);
-
+						int print = enemy.wayPointIterator;
 						if (enemy != null)
 						{
-							if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y > enemy.Center.Y && enemy.dir == direction.right)
+							if (enemy.wayPointIterator < waypoints.Count-1)
 							{
-								//if (enemy == enemies[0]) Console.WriteLine("up");
-								enemy.changeDirection(direction.up);
-								enemy.wayPointIterator++;
-								break;
-							}
-							else if(enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y < enemy.Center.Y && enemy.dir == direction.right)
-                            {
-								//if (enemy == enemies[0]) Console.WriteLine("down");
-								enemy.changeDirection(direction.down);
-								enemy.wayPointIterator++;
-								break;
-							}
-							else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y >= waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.down)
-							{
-								//if (enemy == enemies[0]) Console.WriteLine("right");
-								enemy.changeDirection(direction.right);
-								enemy.wayPointIterator++;
-								break;
-							}
-							else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y <= waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.up)
-							{
-								//if (enemy == enemies[0]) Console.WriteLine("right");
-								enemy.changeDirection(direction.right);
-								enemy.wayPointIterator++;
-								break;
-							}
-							if (enemy == enemies[0]) Console.WriteLine($"first enemy dir == {enemy.dir}");
-							Console.WriteLine($"waypoint x: {waypoints[enemy.wayPointIterator].X}, waypoint y: {waypoints[enemy.wayPointIterator].Y}");
-							Console.WriteLine($"enemy x: {enemy.Center.X}, enemy y: {enemy.Center.Y}");
+								if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y > enemy.Center.Y && enemy.dir == direction.right && enemy.dir != direction.down)
+								{
+									//if (enemy == enemies[0]) Console.WriteLine("up");
+									enemy.changeDirection(direction.up);
+									enemy.wayPointIterator++;
+									break;
+								}
+								else if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y < enemy.Center.Y && enemy.dir == direction.right && enemy.dir != direction.up)
+								{
+									//if (enemy == enemies[0]) Console.WriteLine("down");
+									enemy.changeDirection(direction.down);
+									enemy.wayPointIterator++;
+									break;
+								}
+								else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y <= waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.down && enemy.dir != direction.right)
+								{
+									//if (enemy == enemies[0]) Console.WriteLine("right");
+									enemy.changeDirection(direction.right);
+									enemy.wayPointIterator++;
+									break;
+								}
+								else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y >= waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.up && enemy.dir != direction.right)
+								{
+									//if (enemy == enemies[0]) Console.WriteLine("right");
+									enemy.changeDirection(direction.right);
+									enemy.wayPointIterator++;
+									break;
+								}
+								if (enemy == enemies[0] && print > enemy.wayPointIterator) Console.WriteLine($"first enemy dir == {enemy.dir}");
+								Console.WriteLine($"waypoint x: {waypoints[enemy.wayPointIterator].X}, waypoint y: {waypoints[enemy.wayPointIterator].Y}");
+								Console.WriteLine($"enemy x: {enemy.Center.X}, enemy y: {enemy.Center.Y}");
 
+							}
 							//Check if end of lane is reached
 							if (CheckRightFinish(enemy.Center))
                             {
@@ -115,10 +118,10 @@ namespace TowerDefenseNew
 						}
 					}
 				}
-				catch (System.ArgumentException)
+				/*catch (System.ArgumentException)
 				{
 					Console.WriteLine("UpdateEnemies ArgumentException");
-				}
+				}*/
 			}
 		}
 
