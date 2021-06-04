@@ -140,14 +140,13 @@ namespace TowerDefenseNew
 								return;
 							}
 
-							/*//Check if end of lane is reached
+							//Check if end of lane is reached
 							if (CheckRightFinish(enemy.Center))
                             {
 								enemies.Remove(enemy);
 								switchGameOver(true);
 								return;
                             }
-							else return;
 						}
 					}
 				}
