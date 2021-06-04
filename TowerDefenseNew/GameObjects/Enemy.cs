@@ -40,22 +40,22 @@ namespace TowerDefenseNew.GameObjects
             if (dir == direction.up)
             {
                 this.dir = direction.up;
-                return this.Velocity = new Vector2(0f, 5f);
+                return this.Velocity = new Vector2(0f, 1.1f);
             }
             else if (dir == direction.down)
             {
                 this.dir = direction.down;
-                return this.Velocity = new Vector2(0f, -5f);
+                return this.Velocity = new Vector2(0f, -1.1f);
             }
             else if (dir == direction.left)
             {
                 this.dir = direction.left;
-                return this.Velocity = new Vector2(-5f, 0f);
+                return this.Velocity = new Vector2(-1.1f, 0f);
             }
             else if (dir == direction.right)
             {
                 this.dir = direction.right;
-                return this.Velocity = new Vector2(5f, 0f);
+                return this.Velocity = new Vector2(1.1f, 0f);
             }
             else
             {
