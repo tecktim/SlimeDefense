@@ -41,7 +41,7 @@ namespace TowerDefenseNew
 
 		internal Camera Camera { get; } = new Camera();
         public GameWindow Window { get; }
-        internal List<Vector2> circlePoints = CreateCirclePoints(20);
+        internal List<Vector2> circlePoints = CreateCirclePoints(360);
 
 		internal void Draw(Model model)
         {
@@ -58,6 +58,10 @@ namespace TowerDefenseNew
 			{
 				Camera.Draw();
 				DrawGrid(model.Grid, Color4.White);
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+				GL.Enable(EnableCap.Blend);
+				DrawSamples(sampleSniper, sampleRifle, sampleColRow.X, sampleColRow.Y);
+				GL.Disable(EnableCap.Blend);
 				try
 				{
 					foreach (Enemy enemy in model.enemies.ToList())
@@ -101,15 +105,26 @@ namespace TowerDefenseNew
 				{
 					Console.WriteLine("View.Draw exception");
 				}
-
 				DrawHelpText(model);
 			}
         }
 
-        private void Window_RenderFrame(OpenTK.Windowing.Common.FrameEventArgs obj)
+        private void DrawSamples(bool sampleSniper, bool sampleRifle, float column, float row)
         {
-            throw new NotImplementedException();
-        }
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			if (sampleSniper)
+            {
+				DrawCircle(new Vector2(column + .5f, row + .5f), 12f, Color4.White);
+				DrawTile(column, row, 1 * 5);
+			}
+			else if (sampleRifle)
+            {
+				DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
+				DrawTile(column, row, 2 * 5);
+			}
+			GL.Disable(EnableCap.Blend);
+		}
 
         private void DrawText(string text, float x, float y, float size)
 		{
@@ -133,7 +148,7 @@ namespace TowerDefenseNew
 			}
 		}
 
-		private void DrawTile(float x, float y, uint tileNumber)
+		public void DrawTile(float x, float y, uint tileNumber)
         {
 			GL.Color4(Color4.White);
 			GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
@@ -173,7 +188,7 @@ namespace TowerDefenseNew
 					}
 					if (CellType.Empty == grid[column, row] || CellType.Finish == grid[column, row])
                     {
-						DrawTile(column, row, 0); //Wiese
+						DrawTile(column, row, 0); //Weed :)
                     }
 				}
 			}
@@ -220,18 +235,15 @@ namespace TowerDefenseNew
 			GL.Disable(EnableCap.Blend);
 		}
 
-		private void DrawCircle(Vector2 center, float radius, Color4 color)
+		public void DrawCircle(Vector2 center, float radius, Color4 color)
 		{
-			GL.Enable(EnableCap.Blend);
-			GL.Begin(PrimitiveType.Polygon);
-			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			GL.Begin(PrimitiveType.LineLoop);
 			GL.Color4(color);
 			foreach (var point in circlePoints)
 			{
 				GL.Vertex2(center + radius * point);
 			}
 			GL.End();
-			GL.Disable(EnableCap.Blend);
 		}
 
 		private void DrawRectangle(Vector2 min, Vector2 size, Color4 color)
@@ -268,7 +280,7 @@ namespace TowerDefenseNew
             DrawText("2+Click to", 54.25f, 12.5f, 0.4f);
             DrawText("buy Rifle", 54.25f, 12f, 0.4f);
 
-            DrawText("3+Click to", 54.25f, 11f, 0.4f);
+            DrawText("3+Drag to", 54.25f, 11f, 0.4f);
             DrawText("place Path", 54.25f, 10.5f, 0.4f);
 
             DrawText("4+Click to", 54.25f, 9.5f, 0.4f);
@@ -364,6 +376,10 @@ namespace TowerDefenseNew
 		{
 			Camera.Resize(width, height);
 		}
+
+		internal bool sampleSniper { get; set; } = false;
+		internal bool sampleRifle { get; set; } = false;
+		internal Vector2 sampleColRow { get; set; }
 
 	}
 }
