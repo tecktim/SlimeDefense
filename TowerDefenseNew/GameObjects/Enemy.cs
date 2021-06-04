@@ -17,7 +17,6 @@ namespace TowerDefenseNew.GameObjects
         internal Enemy(Vector2 center, float radius, int health) : base(center, radius)
         {
             this.health = health;
-            this.Velocity = changeDirection(direction.right);
         }
 
         internal bool isShot(int damage)
@@ -65,6 +64,7 @@ namespace TowerDefenseNew.GameObjects
             }
         }
 
+        internal int wayPointIterator { get; set; } = 0;
         internal direction dir { get; set; }
         internal Vector2 Velocity { get; set; }
     }

@@ -16,11 +16,12 @@ namespace TowerDefenseNew
 		public Model(IGrid grid)
 		{
 			this._grid = grid;
-			this.pathway = new List<CellType>();
+			this.waypoints = new List<Vector2>();
 			this.enemies = new List<Enemy>();
 			this.towers = new List<Tower>();
 			this.bullets = new List<Bullet>();
 			this.explosions = new List<Explosion>();
+
 			this.cash = 50;
 			//this.life = 1;
 			this.sniperCost = 20;
@@ -71,32 +72,40 @@ namespace TowerDefenseNew
 
 						if (enemy != null)
 						{
-							if(CheckRightPath(enemy.Center + new Vector2(-.5f, 0)) && !CheckUpperPath(enemy.Center + new Vector2(-.5f, 0)) && !CheckLowerPath(enemy.Center + new Vector2(-.5f, 0)) ||
-								(CheckRightPath(enemy.Center + new Vector2(-.5f, .5f)) && CheckUpperPath(enemy.Center + new Vector2(-.5f, .5f)) && !CheckLowerPath(enemy.Center + new Vector2(-.5f, 0.5f))) ||
-								CheckRightPath(enemy.Center + new Vector2(-.5f, -.5f)) && !CheckUpperPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckLowerPath(enemy.Center + new Vector2(-.5f, -.5f)))
+							if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y > enemy.Center.Y && enemy.dir == direction.right)
 							{
-								if(enemy == enemies[0]) Console.WriteLine("go right");
-								enemy.changeDirection(direction.right);
-								continue;
-							}
-							if(!CheckRightPath(enemy.Center + new Vector2(-.5f, 0)) && !CheckUpperPath(enemy.Center + new Vector2(-.5f, 0)) && CheckLowerPath(enemy.Center + new Vector2(-.5f, 0)) ||
-								(CheckRightPath(enemy.Center + new Vector2(-.5f, -.5f)) && !CheckUpperPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckLowerPath(enemy.Center + new Vector2(-.5f, -.5f))) || 
-								(!CheckRightPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckUpperPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckLowerPath(enemy.Center + new Vector2(-.5f, -.5f))))
-                            {
-								if (enemy == enemies[0]) Console.WriteLine("go down");
-								enemy.changeDirection(direction.down);
-								continue;
-							}
-							if (CheckRightPath(enemy.Center + new Vector2(-.5f, -.5f)) && CheckUpperPath(enemy.Center + new Vector2(-.5f, -.5f)) && !CheckLowerPath(enemy.Center + new Vector2(-.5f, -.5f)) )
-							{
-								if (enemy == enemies[0]) Console.WriteLine("go up");
+								//if (enemy == enemies[0]) Console.WriteLine("up");
 								enemy.changeDirection(direction.up);
-								continue;
+								enemy.wayPointIterator++;
+								break;
 							}
-							
+							else if(enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y < enemy.Center.Y && enemy.dir == direction.right)
+                            {
+								//if (enemy == enemies[0]) Console.WriteLine("down");
+								enemy.changeDirection(direction.down);
+								enemy.wayPointIterator++;
+								break;
+							}
+							else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y >= waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.down)
+							{
+								//if (enemy == enemies[0]) Console.WriteLine("right");
+								enemy.changeDirection(direction.right);
+								enemy.wayPointIterator++;
+								break;
+							}
+							else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y <= waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.up)
+							{
+								//if (enemy == enemies[0]) Console.WriteLine("right");
+								enemy.changeDirection(direction.right);
+								enemy.wayPointIterator++;
+								break;
+							}
+							if (enemy == enemies[0]) Console.WriteLine($"first enemy dir == {enemy.dir}");
+							Console.WriteLine($"waypoint x: {waypoints[enemy.wayPointIterator].X}, waypoint y: {waypoints[enemy.wayPointIterator].Y}");
+							Console.WriteLine($"enemy x: {enemy.Center.X}, enemy y: {enemy.Center.Y}");
 
 							//Check if end of lane is reached
-							if (CheckRightFinish(enemy.Center + new Vector2(-0.5f, 0)))
+							if (CheckRightFinish(enemy.Center))
                             {
 								enemies.Remove(enemy);
 								switchGameOver(true);
@@ -226,36 +235,45 @@ namespace TowerDefenseNew
 			}
 			else return;
 		}
+		bool placePoint = true;
 		internal bool PlacePath(int column, int row)
 		{
 			//First is always placed left
-			if (column == 0 && pathway.Count == 0)
+			if (column == 0 && waypoints.Count == 0)
 			{
 				_grid[column, row] = CellType.Path;
-				pathway.Add(_grid[column, row]);
+				waypoints.Add(new Vector2(column, row));
 				checkCol++;
 				checkRow = row;
 				spawnRow = row;
-            }
-			else if (column == checkCol && row == checkRow)
+			}
+			else if (column == checkCol && row == checkRow && column != 0)
 			{
 				_grid[column, row] = CellType.Path;
-				pathway.Add(_grid[column, row]);
+				if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
 				checkCol++;
 			}
-			else if(column == checkCol - 1 && (row == checkRow + 1 || row == checkRow - 1) && CheckCell(checkCol, row) != CellType.Finish)
+			else if(column == checkCol - 1 && (row == checkRow + 1 || row == checkRow - 1) && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
 				_grid[column, row] = CellType.Path;
-				pathway.Add(_grid[column, row]);
+				if(placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
 				checkRow = row;
 			}
 			if(CheckCell(checkCol, row) == CellType.Finish && this.placed == false)
             {
 				_grid[checkCol, row] = CellType.Path;
-				pathway.Add(_grid[checkCol, row]);
+				waypoints.Add(new Vector2(checkCol, row));
 				this.placed = true;
 				enemySpawnTimer(spawnRow);
             }
+
+			if (placed == true)
+			{
+				for (int i = 0; i < waypoints.Count; i++)
+				{
+					Console.WriteLine($"WayPoint at {i}\n X: {waypoints[i].X} Y: {waypoints[i].Y}\n");
+				}
+			}
 			return placed;
 		}
 
@@ -280,12 +298,11 @@ namespace TowerDefenseNew
 
 		private void spawnEnemy(int row)
         {
-			Console.WriteLine($"Spawning enemy in row: {row}");
 			var rnd = new Random();
 			int spot = rnd.Next(0, 3);
 			float offset = 0.5f;
 			float size = 0.35f;
-			enemies.Add(new Enemy(new Vector2(offset, row + offset), size, enemyHealth * 2));
+			enemies.Add(new Enemy(new Vector2(0, row), size, enemyHealth * 2));
 			/*switch (spot)
 			{
 				case 0:
@@ -391,7 +408,8 @@ namespace TowerDefenseNew
 		private int checkCol = 0, checkRow = 0, spawnRow; 
 		internal int enemyHealth;
         private readonly IGrid _grid;
-		internal double sniperCost;
+        private readonly List<Vector2> waypoints;
+        internal double sniperCost;
 		internal double rifleCost;
         private Timer timer;
 		internal bool gameOver;

@@ -310,6 +310,8 @@ namespace TowerDefenseNew
 
 		private static void DrawRectangleTexture(IReadOnlyRectangle rectangle, IReadOnlyRectangle texCoords)
 		{
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			GL.Enable(EnableCap.Texture2D);
 			GL.Begin(PrimitiveType.Quads);
 			GL.TexCoord2(texCoords.MinX, texCoords.MinY);
@@ -322,6 +324,7 @@ namespace TowerDefenseNew
 			GL.Vertex2(rectangle.MinX, rectangle.MaxY);
 			GL.End();
 			GL.Disable(EnableCap.Texture2D);
+			GL.Disable(EnableCap.Blend);
 		}
 
 		private static void DrawGridLines(int columns, int rows)
