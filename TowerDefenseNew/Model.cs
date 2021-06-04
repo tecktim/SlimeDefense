@@ -273,9 +273,19 @@ namespace TowerDefenseNew
 			
 			else if (column == checkCol && row == checkRow && column != 0)
 			{
-				_grid[column, row] = CellType.Path;
-				if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
-				checkCol++;
+				if (CheckCell(column + 1, row) == CellType.Path)
+				{
+					Console.WriteLine("tru");
+					_grid[column, row] = CellType.Path;
+					_grid[column + 2, row] = CellType.Path;
+					checkCol += 3;
+				}
+				else
+				{
+					_grid[column, row] = CellType.Path;
+					if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+					checkCol++;
+				}
 			}
 			else if (column == checkCol - 2 && row == checkRow && column != 0)
 			{
@@ -296,7 +306,7 @@ namespace TowerDefenseNew
 				this.placed = true;
 				enemySpawnTimer(spawnRow);
 			}
-			Console.WriteLine($"checkCol = {checkCol}, {row} is " + CheckCell(checkCol, row));
+			Console.WriteLine($"{checkCol}, {row} is " + CheckCell(checkCol, row));
 
 			if (placed == true)
 			{
@@ -333,26 +343,6 @@ namespace TowerDefenseNew
 			int spot = rnd.Next(0, 3);
 			float size = 0.35f;
 			enemies.Add(new Enemy(new Vector2(0, row), size, enemyHealth * 2));
-			/*switch (spot)
-			{
-				case 0:
-					size = 0.3f;
-					offset = 0.35f;
-					enemies.Add(new Enemy(new Vector2(offset, row), size, enemyHealth));
-					break;
-				case 1:
-					size = 0.4f;
-					offset = 0.5f;
-					enemies.Add(new Enemy(new Vector2(offset, row), size, enemyHealth * 2));
-					break;
-				case 2:
-					size = 0.3f;
-					offset = 0.65f;
-					enemies.Add(new Enemy(new Vector2(offset, row), size, enemyHealth));
-					break;
-				default:
-					return;
-			}*/
 			if (enemySpawnRate >= 2000)
             {
 				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.9964); // 0.9964);
