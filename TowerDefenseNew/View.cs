@@ -51,6 +51,9 @@ namespace TowerDefenseNew
 				GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
 				DrawText("GAME OVER", 24f, 15f, 1f);
 				DrawText("Press ESC to close the game", 22f, 14f, 0.5f);
+				DrawText($"Total kills:{model.killCount}", 25f, 11f, 0.5f);
+				DrawText($"Stage {model.stage} was conquered", 23f, 10f, 0.5f);
+
 				this.Window.UpdateFrequency = 0;
 				this.Window.RenderFrequency = 0;
 			}
@@ -60,6 +63,7 @@ namespace TowerDefenseNew
 				DrawGrid(model.Grid, Color4.White);
 				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 				GL.Enable(EnableCap.Blend);
+				GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
 				DrawSamples(sampleSniper, sampleRifle, sampleColRow.X, sampleColRow.Y);
 				GL.Disable(EnableCap.Blend);
 				try
@@ -68,6 +72,12 @@ namespace TowerDefenseNew
 					{
 						if (enemy != null)
 						{
+							GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
+							GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+							GL.Enable(EnableCap.Blend);
+							DrawText($"HP:{ enemy.health}", enemy.Center.X - 0.5f, enemy.Center.Y + .85f, .3f);
+
+							GL.Disable(EnableCap.Blend);
 							GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 							GL.Enable(EnableCap.Blend);
 							if(enemy.health >= model.enemyHealth * 0.8)
@@ -271,7 +281,10 @@ namespace TowerDefenseNew
             DrawText($"Kills:", 54.5f, 26f, 0.6f);
             DrawText($"{model.killCount}", 54.5f, 25f, 0.5f);
 
-            DrawText("____________", 54.2f, 14.8f, 0.35f);
+			DrawText($"Stage:", 54.5f, 24f, 0.6f);
+			DrawText($"{model.stage}", 54.5f, 23f, 0.5f);
+
+			DrawText("____________", 54.2f, 14.8f, 0.35f);
             DrawText("How to play:", 54.25f, 15f, 0.35f);
 
             DrawText("1+Click to", 54.25f, 14f, 0.4f);
