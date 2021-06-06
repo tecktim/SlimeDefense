@@ -1,9 +1,5 @@
 ﻿using OpenTK.Mathematics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TowerDefenseNew.GameObjects
 {
@@ -23,9 +19,9 @@ namespace TowerDefenseNew.GameObjects
         public bool Intersects(IReadOnlyCircle obj)
         {
             //circlecollider
-            if(obj != null)
+            if (obj != null)
             {
-                float radius = this.Radius + obj.Radius;
+                float radius = Radius + obj.Radius;
                 float deltaX = Center.X - obj.Center.X;
                 float deltaY = Center.Y - obj.Center.Y;
                 float distance = (float)Math.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
