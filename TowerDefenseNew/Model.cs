@@ -25,13 +25,14 @@ namespace TowerDefenseNew
             sniperCost = 20;
             rifleCost = 5;
             enemySpawnRate = 3000;
-            enemyHealth = 1200;
+            enemyHealth = 1000;
             gameOver = false;
             timer = new System.Timers.Timer(enemySpawnRate);
             killCount = 0;
             placed = false;
             applyScaling = true;
             stage = 0;
+            bounty = 1;
         }
 
         internal bool switchGameOver(bool lose)
@@ -65,10 +66,13 @@ namespace TowerDefenseNew
         {
             if (killCount % 25 == 0 && applyScaling == true && killCount != 0)
             {
-                enemyHealth += enemyHealth / 10;
-                Console.WriteLine("enemy health + 10%");
+                enemyHealth += (enemyHealth / 100) * 15;
                 applyScaling = false;
                 stage++;
+                if (stage % 3 == 0)
+                {
+                    bounty++;
+                }
             }
             if (!(killCount % 25 == 0))
             {
@@ -197,7 +201,8 @@ namespace TowerDefenseNew
                         {
                             //onEnemyKill
                             killCount++;
-                            cash++;
+
+                            cash += bounty;
                             Explosion exp = new Explosion(bullet.Center + new Vector2(0.45f, 1.5f), 2f, 0.75f);
                             explosions.Add(exp);
                             Console.WriteLine("Enemy killed. Cash: " + cash);
@@ -248,7 +253,7 @@ namespace TowerDefenseNew
         {
             if (cash >= sniperCost)
             {
-                Tower tower = new Tower(new Vector2(column, row), 12f, 25, 1000, enemies, bullets, 0);
+                Tower tower = new Tower(new Vector2(column, row), 5f, 150, 1000, enemies, bullets, 0);
                 _grid[column, row] = CellType.Sniper;
                 towers.Add(tower);
                 cash -= sniperCost;
@@ -262,12 +267,25 @@ namespace TowerDefenseNew
         {
             if (cash >= rifleCost)
             {
-                Tower tower = new Tower(new Vector2(column, row), 3f, 10, 100, enemies, bullets, 1);
+                Tower tower = new Tower(new Vector2(column, row), 2f, 10, 100, enemies, bullets, 1);
                 _grid[column, row] = CellType.Rifle;
                 towers.Add(tower);
                 cash -= rifleCost;
                 Math.Floor(cash);
                 Console.WriteLine("Rifle bought for: " + rifleCost + " || New balance: " + cash);
+            }
+            else return;
+        }
+        internal void PlaceBouncer(int column, int row)
+        {
+            if (cash >= bouncerCost)
+            {
+                Tower tower = new Tower(new Vector2(column, row), 3f, 50, 500, enemies, bullets, 0);
+                _grid[column, row] = CellType.Bouncer;
+                towers.Add(tower);
+                cash -= bouncerCost;
+                Math.Floor(cash);
+                Console.WriteLine("Bouncer bought for: " + bouncerCost + " || New balance: " + cash);
             }
             else return;
         }
@@ -444,15 +462,14 @@ namespace TowerDefenseNew
 
         private bool placed;
         private bool applyScaling;
-
         internal int stage;
-
         private int checkCol = 0, checkRow = 0, spawnRow;
         internal int enemyHealth;
         private readonly IGrid _grid;
         private readonly List<Vector2> waypoints;
         internal double sniperCost;
         internal double rifleCost;
+        internal double bouncerCost;
         private Timer timer;
         internal bool gameOver;
         //private int life;
@@ -463,6 +480,8 @@ namespace TowerDefenseNew
         internal List<Explosion> explosions;
         internal int enemySpawnRate;
         internal int killCount;
+        private int bounty;
+
         internal float Time { get; private set; } = 0;
     }
 }

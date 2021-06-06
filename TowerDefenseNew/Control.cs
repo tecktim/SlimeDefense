@@ -79,6 +79,22 @@ namespace TowerDefenseNew
                     return;
                 }
 
+                //Sniper verkaufen
+                if (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.D4))
+                {
+                    //Sell Sniper hi dev brach
+                    foreach (Tower tower in _model.towers.ToList())
+                    {
+                        if (tower.Center.X == column && tower.Center.Y == row)
+                        {
+                            _model.ClearCell(column, row, tower);
+                            Console.WriteLine("sold sniper, new balance: " + _model.cash);
+                        }
+                        else continue;
+                    }
+                    return;
+                }
+
                 //Schauen ob Cell leer ist
                 if (cell == Grid.CellType.Empty)
                 {
@@ -95,6 +111,13 @@ namespace TowerDefenseNew
                     {
                         if (cell != Grid.CellType.Empty) { return; }
                         else { _model.PlaceRifle(column, row); }
+                        return;
+                    }
+                    //Rifle kaufen
+                    if (keyboard.IsKeyDown(Keys.D6))
+                    {
+                        if (cell != Grid.CellType.Empty) { return; }
+                        else { _model.PlaceBouncer(column, row); }
                         return;
                     }
                 }
@@ -161,6 +184,17 @@ namespace TowerDefenseNew
                     else
                     {
                         _view.sampleRifle = true;
+                        _view.sampleColRow = new Vector2(column, row);
+                    }//Snake 
+                    return;
+                }
+                else _view.sampleRifle = false;
+                if (keyboard.IsKeyDown(Keys.D6))
+                {
+                    if (cell != Grid.CellType.Empty) { return; }
+                    else
+                    {
+                        _view.sampleBouncer = true;
                         _view.sampleColRow = new Vector2(column, row);
                     }//Snake 
                     return;

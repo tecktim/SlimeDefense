@@ -37,6 +37,7 @@ namespace TowerDefenseNew
         internal Camera Camera { get; } = new Camera();
         public GameWindow Window { get; }
         internal List<Vector2> circlePoints = CreateCirclePoints(360);
+        internal bool sampleBouncer;
 
         internal void Draw(Model model)
         {
@@ -60,7 +61,7 @@ namespace TowerDefenseNew
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-                DrawSamples(sampleSniper, sampleRifle, sampleColRow.X, sampleColRow.Y);
+                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, sampleColRow.X, sampleColRow.Y);
                 GL.Disable(EnableCap.Blend);
                 try
                 {
@@ -102,7 +103,10 @@ namespace TowerDefenseNew
 
                     foreach (Bullet bullet in model.bullets.ToList())
                     {
-                        DrawBullet(bullet, bullet.TowerType);
+                        if (bullet != null)
+                        {
+                            DrawBullet(bullet, bullet.TowerType);
+                        }else continue;
                     }
 
                     DrawExplosion(model.explosions);
@@ -111,23 +115,32 @@ namespace TowerDefenseNew
                 {
                     Console.WriteLine("View.Draw exception");
                 }
+                catch (System.NullReferenceException)
+                {
+                    Console.WriteLine("View.Draw exception");
+                }
                 DrawHelpText(model);
             }
         }
 
-        private void DrawSamples(bool sampleSniper, bool sampleRifle, float column, float row)
+        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, float column, float row)
         {
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             if (sampleSniper)
             {
-                DrawCircle(new Vector2(column + .5f, row + .5f), 12f, Color4.White);
+                DrawCircle(new Vector2(column + .5f, row + .5f), 5f, Color4.White);
                 DrawTile(column, row, 0f, 0f, 1 * 5);
             }
             else if (sampleRifle)
             {
-                DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
+                DrawCircle(new Vector2(column + .5f, row + .5f), 2f, Color4.White);
                 DrawTile(column, row, 0f, 0f, 2 * 5);
+            }
+            else if(sampleBouncer)
+            {
+                DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
+                DrawTile(column, row, 0f, 0f, 6 * 5);
             }
             GL.Disable(EnableCap.Blend);
         }
@@ -182,6 +195,10 @@ namespace TowerDefenseNew
                     {
                         DrawTile(column, row, 0f, 0f, 2 * 5); //Ghost
                     }
+                    if (CellType.Bouncer == grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 6 * 5); //Bouncer
+                    }
                     if (CellType.Path == grid[column, row])
                     {
                         DrawTile(column, row, 0f, 0f, 1); //Path
@@ -200,25 +217,11 @@ namespace TowerDefenseNew
 
         private void DrawBullet(IReadOnlyCircle bullet, uint type)
         {
-            try
-            {
-                //DrawCircle(bullet.Center, bullet.Radius, Color4.Black);
-                GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
-                GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                GL.Enable(EnableCap.Blend);
-
-                //DrawTile(bullet.Center.X, bullet.Center.Y, (1 + type) * 5 + 2);
-
-                //debug sniper
-                DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, 25 + (type*5));
-
-                GL.Disable(EnableCap.Blend);
-                //DrawCircleTexture(bullet, new Rect(0f, 0f, 1f, 1f));
-            }
-            catch (System.NullReferenceException)
-            {
-                Console.WriteLine("DrawBullet NullReferenceException");
-            }
+            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GL.Enable(EnableCap.Blend);
+            DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, 25 + (type*5));
+            GL.Disable(EnableCap.Blend);
         }
 
         private void DrawExplosion(IEnumerable<Explosion> explosions)
@@ -282,8 +285,8 @@ namespace TowerDefenseNew
             DrawText($"{model.stage}", 54.5f, 24f, 0.5f);
 
             DrawText("Costs:", 54.25f, 21f, 0.4f);
-            DrawText("Sniper 20$", 54.25f, 20.4f, 0.4f);
-            DrawText("Rifle 5$", 54.25f, 19.8f, 0.4f);
+            DrawText("Rifle 5$", 54.25f, 20.4f, 0.4f);
+            DrawText("Sniper 20$", 54.25f, 19.8f, 0.4f);
 
             DrawText("____________", 54.2f, 14.8f, 0.35f);
             DrawText("How to play:", 54.25f, 15f, 0.35f);

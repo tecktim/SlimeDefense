@@ -30,6 +30,7 @@ namespace TowerDefenseNew.GameObjects
                 {
                     if (Intersects(enemy))
                     {
+
                         if (enemy.isShot(Damage))
                         {
                             //normal hit if true
@@ -51,7 +52,7 @@ namespace TowerDefenseNew.GameObjects
             {
                 Console.WriteLine("checkHit exception");
             }
-            if (lifeTime >= 120)
+            if (lifeTime >= 60)
             {
                 Bullets.Remove(this);
             }
