@@ -15,8 +15,6 @@ namespace TowerDefenseNew
 	internal class View
 	{
 		private readonly Texture texExplosion;
-		private readonly Texture texEnemy1;
-		private readonly Texture texEnemy2;
 		private readonly Texture texFont;
 		private readonly Texture tileSet;
 		//private readonly Texture texSniper;
@@ -30,13 +28,11 @@ namespace TowerDefenseNew
 
 			var content = $"{nameof(TowerDefenseNew)}.Content.";
 
-			texEnemy1 = TextureLoader.LoadFromResource(content + "laughEmoji.png");
-			texEnemy2 = TextureLoader.LoadFromResource(content + "fuckedUpEmoji.png");
 			//texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
 			texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
 			texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
 			tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG.png");
-
+			
 		}
 
 		internal Camera Camera { get; } = new Camera();
@@ -48,6 +44,7 @@ namespace TowerDefenseNew
             GL.Clear(ClearBufferMask.ColorBufferBit); // clear the screen
 			if (model.gameOver)
 			{
+				
 				GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
 				DrawText("GAME OVER", 24f, 15f, 1f);
 				DrawText("Press ESC to close the game", 22f, 14f, 0.5f);
@@ -169,7 +166,6 @@ namespace TowerDefenseNew
 			DrawRectangleTexture(rect, tileCoords);
         }
 
-		bool portalPlaced = false;
 		private void DrawGrid(IReadOnlyGrid grid, Color4 color)
 		{
 			
@@ -178,11 +174,6 @@ namespace TowerDefenseNew
 			{
 				for (int row = 0; row < grid.Rows; ++row)
 				{
-					if(CellType.Path == grid[column, row] && portalPlaced == false)
-                    {
-						DrawTile(column, row, 2); //Portal, nur 1x
-						portalPlaced = true;
-                    }
 
 					if (CellType.Sniper == grid[column, row])
 					{
@@ -196,6 +187,10 @@ namespace TowerDefenseNew
                     {
 						DrawTile(column, row, 1); //Path
 					}
+					if(CellType.Path == grid[column, row] && column == 0)
+                    {
+						DrawTile(column, row, 2); //Portal, nur 1x
+                    }
 					if (CellType.Empty == grid[column, row] || CellType.Finish == grid[column, row])
                     {
 						DrawTile(column, row, 0); //Weed :)
@@ -278,11 +273,15 @@ namespace TowerDefenseNew
             DrawText($"Cash:", 54.5f, 29f, 0.7f);
             DrawText($"{model.cash}$", 54.5f, 28f, 0.5f);
             
-            DrawText($"Kills:", 54.5f, 26f, 0.6f);
-            DrawText($"{model.killCount}", 54.5f, 25f, 0.5f);
+            DrawText($"Kills:", 54.5f, 27f, 0.6f);
+            DrawText($"{model.killCount}", 54.5f, 26f, 0.5f);
 
-			DrawText($"Stage:", 54.5f, 24f, 0.6f);
-			DrawText($"{model.stage}", 54.5f, 23f, 0.5f);
+			DrawText($"Stage:", 54.5f, 25f, 0.6f);
+			DrawText($"{model.stage}", 54.5f, 24f, 0.5f);
+
+			DrawText("Costs:", 54.25f, 21f, 0.4f);
+			DrawText("Sniper 20$", 54.25f, 20.4f, 0.4f);
+			DrawText("Rifle 5$", 54.25f, 19.8f, 0.4f);
 
 			DrawText("____________", 54.2f, 14.8f, 0.35f);
             DrawText("How to play:", 54.25f, 15f, 0.35f);

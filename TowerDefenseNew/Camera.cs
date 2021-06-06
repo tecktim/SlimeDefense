@@ -55,7 +55,7 @@ namespace TowerDefenseNew
 		}
 
 		private Matrix4 cameraMatrix = Matrix4.Identity;
-		private float _scale = 16f;
+		private float _scale { get; set; } = 16f;
 		private float _windowAspectRatio = 1f;
 
 		private Vector2 _center;
