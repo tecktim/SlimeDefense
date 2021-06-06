@@ -20,14 +20,11 @@ namespace TowerDefenseNew
 
         public View(GameWindow window)
         {
-            //TODO: Change the clear color of the screen.
             GL.ClearColor(Color4.Black);
             Window = window;
 
-
             var content = $"{nameof(TowerDefenseNew)}.Content.";
 
-            //texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
             tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG.png");
@@ -141,11 +138,7 @@ namespace TowerDefenseNew
             var rect = new Rect(x, y, size, size); // rectangle of the first character
             foreach (var spriteId in SpriteSheetTools.StringToSpriteIds(text, firstCharacter))
             {
-                //TODO: Calculate the texture coordinates of the characters letter from the bitmap font texture
-                //TODO: Draw a rectangle at the characters relative position
                 var texCoords = SpriteSheetTools.CalcTexCoords(spriteId, charactersPerRow, charactersPerColumn);
-
-
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);
                 DrawRectangleTexture(rect, texCoords);
@@ -157,7 +150,7 @@ namespace TowerDefenseNew
         public void DrawTile(float x, float y, uint tileNumber)
         {
             GL.Color4(Color4.White);
-            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
+            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
             const uint tilesPerColumn = 10;
             const uint tilesPerRow = 5;
             var rect = new Rect(x, y, 1f, 1f);
@@ -202,15 +195,11 @@ namespace TowerDefenseNew
         {
             try
             {
-                //DrawCircle(bullet.Center, bullet.Radius, Color4.Black);
                 GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);
-
                 DrawTile(bullet.Center.X, bullet.Center.Y, (1 + type) * 5 + 2);
-
                 GL.Disable(EnableCap.Blend);
-                //DrawCircleTexture(bullet, new Rect(0f, 0f, 1f, 1f));
             }
             catch (System.NullReferenceException)
             {
