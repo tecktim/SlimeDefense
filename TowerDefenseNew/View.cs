@@ -105,8 +105,12 @@ namespace TowerDefenseNew
                     {
                         if (bullet != null)
                         {
-                            DrawBullet(bullet, bullet.TowerType);
-                        }else continue;
+                            if (bullet.TowerType == 2)
+                            { DrawBullet(bullet, 0); }
+                            else { DrawBullet(bullet, bullet.TowerType); }
+
+                        }
+                        else continue;
                     }
 
                     DrawExplosion(model.explosions);
@@ -137,11 +141,12 @@ namespace TowerDefenseNew
                 DrawCircle(new Vector2(column + .5f, row + .5f), 2f, Color4.White);
                 DrawTile(column, row, 0f, 0f, 2 * 5);
             }
-            else if(sampleBouncer)
+            else if (sampleBouncer)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
-                DrawTile(column, row, 0f, 0f, 6 * 5);
+                DrawTile(column, row, 0f, 0f, 6);
             }
+            else return;
             GL.Disable(EnableCap.Blend);
         }
 
@@ -197,7 +202,7 @@ namespace TowerDefenseNew
                     }
                     if (CellType.Bouncer == grid[column, row])
                     {
-                        DrawTile(column, row, 0f, 0f, 6 * 5); //Bouncer
+                        DrawTile(column, row, 0f, 0f, 6); //Bouncer
                     }
                     if (CellType.Path == grid[column, row])
                     {
@@ -274,6 +279,22 @@ namespace TowerDefenseNew
             GL.Enable(EnableCap.Blend);
             //text to help the player
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
+            switch (model.stage) {
+                case 0:
+                    DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
+                    DrawText("and drag the mouse from left to right", 8f, -1f, 1f);
+                    break;
+                case 1:
+                    DrawText("!!! ENEMIES ARE INCOMING !!!", 13f, 30f, 1f);
+                    DrawText("Place towers to kill them before they reach the end", 2f, -1f, 1f);
+                    break;
+                case 2:
+                    DrawText("Pro tip: Every new stage you reach,", 9f, 30f, 1f);
+                    DrawText("enemies will increase in HP by 10%", 9f, -1f, 1f);
+                    break;
+                default: 
+                    break; 
+            }
 
             DrawText($"Cash:", 54.5f, 29f, 0.7f);
             DrawText($"{model.cash}$", 54.5f, 28f, 0.5f);
@@ -287,6 +308,7 @@ namespace TowerDefenseNew
             DrawText("Costs:", 54.25f, 21f, 0.4f);
             DrawText("Rifle 5$", 54.25f, 20.4f, 0.4f);
             DrawText("Sniper 20$", 54.25f, 19.8f, 0.4f);
+            DrawText("Bouncer 40$", 54.25f, 19.2f, 0.4f);
 
             DrawText("____________", 54.2f, 14.8f, 0.35f);
             DrawText("How to play:", 54.25f, 15f, 0.35f);
@@ -297,10 +319,10 @@ namespace TowerDefenseNew
             DrawText("2+Click to", 54.25f, 12.5f, 0.4f);
             DrawText("buy Rifle", 54.25f, 12f, 0.4f);
 
-            DrawText("3+Drag to", 54.25f, 11f, 0.4f);
-            DrawText("place Path", 54.25f, 10.5f, 0.4f);
+            DrawText("3+Click to", 54.25f, 11f, 0.4f);
+            DrawText("buy Bouncer", 54.25f, 10.5f, 0.4f);
 
-            DrawText("4+Click to", 54.25f, 9.5f, 0.4f);
+            DrawText("DEL+Click to", 54.25f, 9.5f, 0.4f);
             DrawText("sell Tower", 54.25f, 9f, 0.4f);
 
             DrawText("To start the", 54.15f, 8f, 0.3f);

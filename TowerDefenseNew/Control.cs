@@ -32,25 +32,16 @@ namespace TowerDefenseNew
             var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
             var pixelCoordinates = new Vector2(x, y);
             var world = pixelCoordinates.Transform(fromViewportToWorld);
-            //Console.WriteLine($"{world}");
             if (world.X < 0 || _model.Grid.Columns < world.X) return;
             if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
             var column = (int)Math.Truncate(world.X);
             var row = (int)Math.Truncate(world.Y);
-            //Console.WriteLine($"{column}, {row}");
             var cell = _model.CheckCell(column, row);
-            //Console.WriteLine(cell);
-
-            if (keyboard.IsKeyDown(Keys.D0))
-            {
-                _model.switchGameOver(true);
-            }
             if (_model.gameOver == false)
             {
                 //Sniper verkaufen
-                if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.D4))
+                if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.Delete))
                 {
-                    //Sell Sniper hi dev brach
                     foreach (Tower tower in _model.towers.ToList())
                     {
                         if (tower.Center.X == column && tower.Center.Y == row)
@@ -64,7 +55,7 @@ namespace TowerDefenseNew
                 }
 
                 //Rifle verkaufen
-                if (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.D4))
+                if (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.Delete))
                 {
                     //Sell Rifle
                     foreach (Tower tower in _model.towers.ToList())
@@ -79,10 +70,9 @@ namespace TowerDefenseNew
                     return;
                 }
 
-                //Sniper verkaufen
-                if (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.D4))
+                //Bouncer verkaufen
+                if (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.Delete))
                 {
-                    //Sell Sniper hi dev brach
                     foreach (Tower tower in _model.towers.ToList())
                     {
                         if (tower.Center.X == column && tower.Center.Y == row)
@@ -98,23 +88,22 @@ namespace TowerDefenseNew
                 //Schauen ob Cell leer ist
                 if (cell == Grid.CellType.Empty)
                 {
-
                     //Sniper kaufen
-                    if (keyboard.IsKeyDown(Keys.D1))
+                    if (keyboard.IsKeyDown(Keys.D2))
                     {
                         if (cell != Grid.CellType.Empty) { return; }
                         else { _model.PlaceSniper(column, row); }
                         return;
                     }
                     //Rifle kaufen
-                    if (keyboard.IsKeyDown(Keys.D2))
+                    if (keyboard.IsKeyDown(Keys.D1))
                     {
                         if (cell != Grid.CellType.Empty) { return; }
                         else { _model.PlaceRifle(column, row); }
                         return;
                     }
-                    //Rifle kaufen
-                    if (keyboard.IsKeyDown(Keys.D6))
+                    //Bouncer kaufen
+                    if (keyboard.IsKeyDown(Keys.D3))
                     {
                         if (cell != Grid.CellType.Empty) { return; }
                         else { _model.PlaceBouncer(column, row); }
@@ -138,7 +127,7 @@ namespace TowerDefenseNew
             if (cell == Grid.CellType.Empty)
             {
                 //Path setzen
-                if (keyboard.IsKeyDown(Keys.D3))
+                if (keyboard.IsKeyDown(Keys.Space))
                 {
                     if (cell != Grid.CellType.Empty) { return; }
                     else
@@ -167,7 +156,7 @@ namespace TowerDefenseNew
 
             if (cell == Grid.CellType.Empty)
             {
-                if (keyboard.IsKeyDown(Keys.D1))
+                if (keyboard.IsKeyDown(Keys.D2))
                 {
                     if (cell != Grid.CellType.Empty) { return; }
                     else
@@ -178,7 +167,7 @@ namespace TowerDefenseNew
                     return;
                 }
                 else _view.sampleSniper = false;
-                if (keyboard.IsKeyDown(Keys.D2))
+                if (keyboard.IsKeyDown(Keys.D1))
                 {
                     if (cell != Grid.CellType.Empty) { return; }
                     else
@@ -189,7 +178,7 @@ namespace TowerDefenseNew
                     return;
                 }
                 else _view.sampleRifle = false;
-                if (keyboard.IsKeyDown(Keys.D6))
+                if (keyboard.IsKeyDown(Keys.D3))
                 {
                     if (cell != Grid.CellType.Empty) { return; }
                     else
@@ -199,7 +188,7 @@ namespace TowerDefenseNew
                     }//Snake 
                     return;
                 }
-                else _view.sampleRifle = false;
+                else _view.sampleBouncer = false;
             }
 
         }

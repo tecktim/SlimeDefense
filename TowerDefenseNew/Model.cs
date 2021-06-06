@@ -20,8 +20,8 @@ namespace TowerDefenseNew
             bullets = new List<Bullet>();
             explosions = new List<Explosion>();
 
-            cash = 25;
-            //this.life = 1;
+            cash = 30;
+            bouncerCost = 40;
             sniperCost = 20;
             rifleCost = 5;
             enemySpawnRate = 3000;
@@ -280,7 +280,7 @@ namespace TowerDefenseNew
         {
             if (cash >= bouncerCost)
             {
-                Tower tower = new Tower(new Vector2(column, row), 3f, 50, 500, enemies, bullets, 0);
+                Tower tower = new Tower(new Vector2(column, row), 3f, 10, 500, enemies, bullets, 2);
                 _grid[column, row] = CellType.Bouncer;
                 towers.Add(tower);
                 cash -= bouncerCost;
