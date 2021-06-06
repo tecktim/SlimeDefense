@@ -30,7 +30,7 @@ namespace TowerDefenseNew
             //texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
-            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG.png");
+            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_offset_1_top_after_first_tile.png");
 
         }
 
@@ -78,23 +78,23 @@ namespace TowerDefenseNew
                             GL.Enable(EnableCap.Blend);
                             if (enemy.health >= model.enemyHealth * 0.8)
                             {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 4);
+                                DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 4);
                             }
                             else if (enemy.health >= model.enemyHealth * 0.6)
                             {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 3);
+                                DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 3);
                             }
                             else if (enemy.health >= model.enemyHealth * 0.4)
                             {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 2);
+                                DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 2);
                             }
                             else if (enemy.health >= model.enemyHealth * 0.2)
                             {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 1);
+                                DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 1);
                             }
                             else if (enemy.health > 0)
                             {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5);
+                                DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5);
                             }
                             GL.Disable(EnableCap.Blend);
                         }
@@ -122,12 +122,12 @@ namespace TowerDefenseNew
             if (sampleSniper)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 12f, Color4.White);
-                DrawTile(column, row, 1 * 5);
+                DrawTile(column, row, 0f, 0f, 1 * 5);
             }
             else if (sampleRifle)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
-                DrawTile(column, row, 2 * 5);
+                DrawTile(column, row, 0f, 0f, 2 * 5);
             }
             GL.Disable(EnableCap.Blend);
         }
@@ -154,13 +154,13 @@ namespace TowerDefenseNew
             }
         }
 
-        public void DrawTile(float x, float y, uint tileNumber)
+        public void DrawTile(float x, float y, float offset, float scale, uint tileNumber)
         {
             GL.Color4(Color4.White);
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
             const uint tilesPerColumn = 10;
             const uint tilesPerRow = 5;
-            var rect = new Rect(x, y, 1f, 1f);
+            var rect = new Rect(x+offset, y+offset, 1f-scale, 1f-scale);
             var tileCoords = SpriteSheetTools.CalcTexCoords(tileNumber, tilesPerRow, tilesPerColumn);
             DrawRectangleTexture(rect, tileCoords);
         }
@@ -176,23 +176,23 @@ namespace TowerDefenseNew
 
                     if (CellType.Sniper == grid[column, row])
                     {
-                        DrawTile(column, row, 1 * 5); //Snake
+                        DrawTile(column, row, 0f, 0f, 1 * 5); //Snake
                     }
                     if (CellType.Rifle == grid[column, row])
                     {
-                        DrawTile(column, row, 2 * 5); //Ghost
+                        DrawTile(column, row, 0f, 0f, 2 * 5); //Ghost
                     }
                     if (CellType.Path == grid[column, row])
                     {
-                        DrawTile(column, row, 1); //Path
+                        DrawTile(column, row, 0f, 0f, 1); //Path
                     }
                     if (CellType.Path == grid[column, row] && column == 0)
                     {
-                        DrawTile(column, row, 2); //Portal, nur 1x
+                        DrawTile(column, row, 0f, 0f, 2); //Portal, nur 1x
                     }
                     if (CellType.Empty == grid[column, row] || CellType.Finish == grid[column, row])
                     {
-                        DrawTile(column, row, 0); //Weed :)
+                        DrawTile(column, row, 0f, 0f, 0); //Weed :)
                     }
                 }
             }
@@ -207,7 +207,10 @@ namespace TowerDefenseNew
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);
 
-                DrawTile(bullet.Center.X, bullet.Center.Y, (1 + type) * 5 + 2);
+                //DrawTile(bullet.Center.X, bullet.Center.Y, (1 + type) * 5 + 2);
+
+                //debug sniper
+                DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, 25 + (type*5));
 
                 GL.Disable(EnableCap.Blend);
                 //DrawCircleTexture(bullet, new Rect(0f, 0f, 1f, 1f));
