@@ -27,11 +27,13 @@ namespace TowerDefenseNew
 			this.sniperCost = 20;
 			this.rifleCost = 5;
 			this.enemySpawnRate = 3000;
-			this.enemyHealth = 500;
+			this.enemyHealth = 1200;
 			this.gameOver = false;
 			this.timer = new System.Timers.Timer(this.enemySpawnRate);
 			this.killCount = 0;
 			this.placed = false;
+			this.applyScaling = true;
+			this.stage = 0;
 		}
 
 		internal bool switchGameOver(bool lose)
@@ -55,10 +57,26 @@ namespace TowerDefenseNew
 		internal void Update(float deltaTime)
 		{
 			Time += deltaTime;
+			UpdateScaling();
 			UpdateExplosions(deltaTime);
 			UpdateBullets(deltaTime);
 			UpdateEnemies(deltaTime);
 		}
+
+		private void UpdateScaling()
+        {
+			if (killCount % 25 == 0 && this.applyScaling == true && killCount != 0)
+            {
+				this.enemyHealth += this.enemyHealth / 10;
+				Console.WriteLine("enemy health + 10%");
+				this.applyScaling = false;
+				this.stage++;
+            }
+			if (!(killCount % 25 == 0))
+            {
+				this.applyScaling = true;
+            }
+        }
 
 		private void UpdateEnemies(float frameTime)
 		{
@@ -238,7 +256,7 @@ namespace TowerDefenseNew
 		{
 			if (this.cash >= this.sniperCost)
 			{
-				Tower tower = new Tower(new Vector2(column, row), 12f, 20, 1000, this.enemies, this.bullets, 0);
+				Tower tower = new Tower(new Vector2(column, row), 12f, 25, 1000, this.enemies, this.bullets, 0);
 				_grid[column, row] = CellType.Sniper;
 				this.towers.Add(tower);
 				this.cash -= this.sniperCost;
@@ -312,6 +330,7 @@ namespace TowerDefenseNew
 			}
 			if (CheckCell(checkCol, row) == CellType.Finish && this.placed == false)
 			{
+				this.stage = 1;
 				_grid[checkCol, row] = CellType.Path;
 				waypoints.Add(new Vector2(checkCol, row));
 				this.placed = true;
@@ -345,8 +364,8 @@ namespace TowerDefenseNew
 			var rnd = new Random();
 			int spot = rnd.Next(0, 3);
 			float size = 0.35f;
-			enemies.Add(new Enemy(new Vector2(0, row), size, enemyHealth * 2));
-			if (enemySpawnRate >= 2000)
+			enemies.Add(new Enemy(new Vector2(0, row), size, enemyHealth));
+			if (enemySpawnRate >= 2200)
             {
 				this.enemySpawnRate = (int)Math.Pow(this.enemySpawnRate, 0.9964); // 0.9964);
 			}
@@ -428,7 +447,11 @@ namespace TowerDefenseNew
         }
 
 		private bool placed;
-		private int checkCol = 0, checkRow = 0, spawnRow; 
+        private bool applyScaling;
+
+		internal int stage;
+
+        private int checkCol = 0, checkRow = 0, spawnRow; 
 		internal int enemyHealth;
         private readonly IGrid _grid;
         private readonly List<Vector2> waypoints;
