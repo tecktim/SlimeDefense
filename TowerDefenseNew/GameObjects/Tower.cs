@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
-using TowerDefenseNew.Grid;
 
 namespace TowerDefenseNew.GameObjects
 {
@@ -15,15 +12,15 @@ namespace TowerDefenseNew.GameObjects
 
         internal Tower(Vector2 center, float attackRadius, int damage, int attackSpeed, List<Enemy> enemies, List<Bullet> bullets, uint type) : base(center, attackRadius)
         {
-            this.Center = center;
-            this.Enemies = enemies;
+            Center = center;
+            Enemies = enemies;
             this.attackSpeed = attackSpeed;
             this.damage = damage;
-            this.Radius = attackRadius;
-            this.Bullets = bullets;
-            this.Timer = new Timer(attackSpeed);
+            Radius = attackRadius;
+            Bullets = bullets;
+            Timer = new Timer(attackSpeed);
             asTimer(true);
-            this.Type = type;
+            Type = type;
         }
 
         public void asTimer(bool active)
@@ -56,12 +53,13 @@ namespace TowerDefenseNew.GameObjects
             {
                 foreach (Enemy enemy in Enemies.ToList())
                 {
-                    if (this.Intersects(enemy))
+                    if (Intersects(enemy))
                     {
-                        Bullet bullet = new Bullet(this.Center + new Vector2(0.5f, 0.5f), this.Radius / 35, this.damage, this.Bullets, this.Enemies, this.Type);
+                        Bullet bullet = new Bullet(Center + new Vector2(0.5f, 0.5f), Radius / 35, damage, Bullets, Enemies, Type);
 
                         //Correction of Starting Point of Bullets, damit Schüsse aus dem Mund der Tower kommen
-                        if (bullet.TowerType == 0) {
+                        if (bullet.TowerType == 0)
+                        {
                             bullet.Center += new Vector2(-0.8f, -0.5f);
                         }
                         if (bullet.TowerType == 1)

@@ -1,9 +1,4 @@
 ﻿using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TowerDefenseNew.GameObjects
 {
@@ -14,13 +9,13 @@ namespace TowerDefenseNew.GameObjects
 
         public Explosion(Vector2 center, float radius, float animationLength) : base(center, radius)
         {
-            this.AnimationLength = animationLength;
+            AnimationLength = animationLength;
         }
 
         public void Update(float frameTime)
         {
             NormalizedAnimationTime += frameTime / AnimationLength;
-            if(NormalizedAnimationTime >= 1f)
+            if (NormalizedAnimationTime >= 1f)
             {
                 IsAlive = false;
             }
