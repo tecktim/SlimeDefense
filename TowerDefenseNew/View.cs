@@ -30,84 +30,48 @@ namespace TowerDefenseNew
             //texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
-            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG.png");
+            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_offset_1_top_after_first_tile.png");
 
         }
 
         internal Camera Camera { get; } = new Camera();
         public GameWindow Window { get; }
         internal List<Vector2> circlePoints = CreateCirclePoints(360);
+        internal bool sampleBouncer;
 
         internal void Draw(Model model)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit); // clear the screen
             if (model.gameOver)
             {
-
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
                 DrawText("GAME OVER", 24f, 15f, 1f);
                 DrawText("Press ESC to close the game", 22f, 14f, 0.5f);
                 DrawText($"Total kills:{model.killCount}", 25f, 11f, 0.5f);
                 DrawText($"Stage {model.stage} was conquered", 23f, 10f, 0.5f);
-
                 Window.UpdateFrequency = 0;
                 Window.RenderFrequency = 0;
             }
             else
             {
                 Camera.Draw();
-                DrawGrid(model.Grid, Color4.White);
+                DrawGrid(model);
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-                DrawSamples(sampleSniper, sampleRifle, sampleColRow.X, sampleColRow.Y);
+                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, sampleColRow.X, sampleColRow.Y);
                 GL.Disable(EnableCap.Blend);
                 try
                 {
-                    foreach (Enemy enemy in model.enemies.ToList())
-                    {
-                        if (enemy != null)
-                        {
-                            GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-                            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                            GL.Enable(EnableCap.Blend);
-                            DrawText($"HP:{ enemy.health}", enemy.Center.X - 0.5f, enemy.Center.Y + .85f, .3f);
-
-                            GL.Disable(EnableCap.Blend);
-                            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                            GL.Enable(EnableCap.Blend);
-                            if (enemy.health >= model.enemyHealth * 0.8)
-                            {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 4);
-                            }
-                            else if (enemy.health >= model.enemyHealth * 0.6)
-                            {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 3);
-                            }
-                            else if (enemy.health >= model.enemyHealth * 0.4)
-                            {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 2);
-                            }
-                            else if (enemy.health >= model.enemyHealth * 0.2)
-                            {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5 + 1);
-                            }
-                            else if (enemy.health > 0)
-                            {
-                                DrawTile(enemy.Center.X, enemy.Center.Y, 4 * 5);
-                            }
-                            GL.Disable(EnableCap.Blend);
-                        }
-                    }
-
-                    foreach (Bullet bullet in model.bullets.ToList())
-                    {
-                        DrawBullet(bullet, bullet.TowerType);
-                    }
-
+                    DrawEnemy(model);
+                    DrawBullet(model);
                     DrawExplosion(model.explosions);
                 }
                 catch (System.ArgumentException)
+                {
+                    Console.WriteLine("View.Draw exception");
+                }
+                catch (System.NullReferenceException)
                 {
                     Console.WriteLine("View.Draw exception");
                 }
@@ -115,20 +79,106 @@ namespace TowerDefenseNew
             }
         }
 
-        private void DrawSamples(bool sampleSniper, bool sampleRifle, float column, float row)
+        private void DrawBullet(Model model)
+        {
+            foreach (Bullet bullet in model.bullets.ToList())
+            {
+                if (bullet != null)
+                {
+                    if (bullet.TowerType == 2)
+                    { DrawBullet(bullet, 0); }
+                    else { DrawBullet(bullet, bullet.TowerType); }
+
+                }
+                else continue;
+            }
+        }
+
+        private void DrawEnemy(Model model)
+        {
+            foreach (Enemy enemy in model.enemies.ToList())
+            {
+                if (enemy != null)
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
+                    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+                    GL.Enable(EnableCap.Blend);
+                    DrawText($"HP:{ enemy.health}", enemy.Center.X - 0.5f, enemy.Center.Y + .85f, .3f);
+
+                    GL.Disable(EnableCap.Blend);
+                    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+                    GL.Enable(EnableCap.Blend);
+                    if (enemy.dir == direction.right || enemy.dir == direction.up || enemy.dir == direction.down)
+                    {
+                        if (enemy.health >= model.enemyHealth * 0.8)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 4);
+                        }
+                        else if (enemy.health >= model.enemyHealth * 0.6)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 3);
+                        }
+                        else if (enemy.health >= model.enemyHealth * 0.4)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 2);
+                        }
+                        else if (enemy.health >= model.enemyHealth * 0.2)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 1);
+                        }
+                        else if (enemy.health > 0)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5);
+                        }
+                    }
+                    if (enemy.dir == direction.left || enemy.dir == direction.up || enemy.dir == direction.down)
+                    {
+                        if (enemy.health >= model.enemyHealth * 0.8)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5 + 4);
+                        }
+                        else if (enemy.health >= model.enemyHealth * 0.6)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5 + 3);
+                        }
+                        else if (enemy.health >= model.enemyHealth * 0.4)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5 + 2);
+                        }
+                        else if (enemy.health >= model.enemyHealth * 0.2)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5 + 1);
+                        }
+                        else if (enemy.health > 0)
+                        {
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5);
+                        }
+                    }
+                        GL.Disable(EnableCap.Blend);
+                }
+            }
+        }
+
+        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, float column, float row)
         {
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             if (sampleSniper)
             {
-                DrawCircle(new Vector2(column + .5f, row + .5f), 12f, Color4.White);
-                DrawTile(column, row, 1 * 5);
+                DrawCircle(new Vector2(column + .5f, row + .5f), 5f, Color4.White);
+                DrawTile(column, row, 0f, 0f, 1 * 5);
             }
             else if (sampleRifle)
             {
-                DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
-                DrawTile(column, row, 2 * 5);
+                DrawCircle(new Vector2(column + .5f, row + .5f), 2f, Color4.White);
+                DrawTile(column, row, 0f, 0f, 2 * 5);
             }
+            else if (sampleBouncer)
+            {
+                DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
+                DrawTile(column, row, 0f, 0f, 6);
+            }
+            else return;
             GL.Disable(EnableCap.Blend);
         }
 
@@ -154,45 +204,86 @@ namespace TowerDefenseNew
             }
         }
 
-        public void DrawTile(float x, float y, uint tileNumber)
+        public void DrawTile(float x, float y, float offset, float scale, uint tileNumber)
         {
             GL.Color4(Color4.White);
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
             const uint tilesPerColumn = 10;
             const uint tilesPerRow = 5;
-            var rect = new Rect(x, y, 1f, 1f);
+            var rect = new Rect(x+offset, y+offset, 1f-scale, 1f-scale);
             var tileCoords = SpriteSheetTools.CalcTexCoords(tileNumber, tilesPerRow, tilesPerColumn);
             DrawRectangleTexture(rect, tileCoords);
         }
 
-        private void DrawGrid(IReadOnlyGrid grid, Color4 color)
+        private void DrawGrid(Model model)
         {
 
-            DrawGridLines(grid.Columns, grid.Rows);
-            for (int column = 0; column < grid.Columns; ++column)
+            DrawGridLines(model.Grid.Columns, model.Grid.Rows);
+            for (int column = 0; column < model.Grid.Columns; ++column)
             {
-                for (int row = 0; row < grid.Rows; ++row)
+                for (int row = 0; row < model.Grid.Rows; ++row)
                 {
-
-                    if (CellType.Sniper == grid[column, row])
+                    foreach (Tower tower in model.towers)
                     {
-                        DrawTile(column, row, 1 * 5); //Snake
+                        if (tower.aimAtEnemy != null)
+                        {
+                            if (tower.aimAtEnemy.Center.X < column)
+                            {
+                                if (CellType.Sniper == model.Grid[column, row])
+                                {
+                                    DrawTile(column, row, 0f, 0f, 1 * 5); //Snake
+                                }
+                                if (CellType.Rifle == model.Grid[column, row])
+                                {
+                                    DrawTile(column, row, 0f, 0f, 2 * 5); //Ghost
+                                }
+                                if (CellType.Bouncer == model.Grid[column, row])
+                                {
+                                    DrawTile(column, row, 0f, 0f, 1 * 5); //Bouncer
+                                }
+                            }
+                            if (tower.aimAtEnemy.Center.X > column)
+                            {
+                                if (CellType.Sniper == model.Grid[column, row])
+                                {
+                                    DrawTile(column, row, 0f, 0f, 1 * 5 + 1); //Snake
+                                }
+                                if (CellType.Rifle == model.Grid[column, row])
+                                {
+                                    DrawTile(column, row, 0f, 0f, 2 * 5 + 1); //Ghost
+                                }
+                                if (CellType.Bouncer == model.Grid[column, row])
+                                {
+                                    DrawTile(column, row, 0f, 0f, 1 * 5 + 1); //Bouncer
+                                }
+                            }
+                        }else
+                        {
+                            if (CellType.Sniper == model.Grid[column, row])
+                            {
+                                DrawTile(column, row, 0f, 0f, 1 * 5); //Snake
+                            }
+                            if (CellType.Rifle == model.Grid[column, row])
+                            {
+                                DrawTile(column, row, 0f, 0f, 2 * 5); //Ghost
+                            }
+                            if (CellType.Bouncer == model.Grid[column, row])
+                            {
+                                DrawTile(column, row, 0f, 0f, 1 * 5); //Bouncer
+                            }
+                        }
                     }
-                    if (CellType.Rifle == grid[column, row])
+                    if (CellType.Path == model.Grid[column, row])
                     {
-                        DrawTile(column, row, 2 * 5); //Ghost
+                        DrawTile(column, row, 0f, 0f, 1); //Path
                     }
-                    if (CellType.Path == grid[column, row])
+                    if (CellType.Path == model.Grid[column, row] && column == 0)
                     {
-                        DrawTile(column, row, 1); //Path
+                        DrawTile(column, row, 0f, 0f, 2); //Portal, nur 1x
                     }
-                    if (CellType.Path == grid[column, row] && column == 0)
+                    if (CellType.Empty == model.Grid[column, row] || CellType.Finish == model.Grid[column, row])
                     {
-                        DrawTile(column, row, 2); //Portal, nur 1x
-                    }
-                    if (CellType.Empty == grid[column, row] || CellType.Finish == grid[column, row])
-                    {
-                        DrawTile(column, row, 0); //Weed :)
+                        DrawTile(column, row, 0f, 0f, 0); //Weed :)
                     }
                 }
             }
@@ -200,22 +291,11 @@ namespace TowerDefenseNew
 
         private void DrawBullet(IReadOnlyCircle bullet, uint type)
         {
-            try
-            {
-                //DrawCircle(bullet.Center, bullet.Radius, Color4.Black);
-                GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
-                GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                GL.Enable(EnableCap.Blend);
-
-                DrawTile(bullet.Center.X, bullet.Center.Y, (1 + type) * 5 + 2);
-
-                GL.Disable(EnableCap.Blend);
-                //DrawCircleTexture(bullet, new Rect(0f, 0f, 1f, 1f));
-            }
-            catch (System.NullReferenceException)
-            {
-                Console.WriteLine("DrawBullet NullReferenceException");
-            }
+            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GL.Enable(EnableCap.Blend);
+            DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, 25 + (type*5));
+            GL.Disable(EnableCap.Blend);
         }
 
         private void DrawExplosion(IEnumerable<Explosion> explosions)
@@ -268,6 +348,26 @@ namespace TowerDefenseNew
             GL.Enable(EnableCap.Blend);
             //text to help the player
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
+            switch (model.stage) {
+                case 0:
+                    DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
+                    DrawText("and drag the mouse from left to right", 8f, -1f, 1f);
+                    break;
+                case 1:
+                    DrawText("!!! ENEMIES ARE INCOMING !!!", 13f, 30f, 1f);
+                    DrawText("Place towers to kill them before they reach the end", 2f, -1f, 1f);
+                    break;
+                case 2:
+                    DrawText("Pro tip: Every new stage you reach,", 9f, 30f, 1f);
+                    DrawText("enemies will increase in HP by 10%", 9f, -1f, 1f);
+                    break;
+                case 3:
+                    DrawText("Pro tip: Every third stage you reach,", 9f, 30f, 1f);
+                    DrawText("the per kill bounty increases by 1$", 9f, -1f, 1f);
+                    break;
+                default: 
+                    break; 
+            }
 
             DrawText($"Cash:", 54.5f, 29f, 0.7f);
             DrawText($"{model.cash}$", 54.5f, 28f, 0.5f);
@@ -279,8 +379,9 @@ namespace TowerDefenseNew
             DrawText($"{model.stage}", 54.5f, 24f, 0.5f);
 
             DrawText("Costs:", 54.25f, 21f, 0.4f);
-            DrawText("Sniper 20$", 54.25f, 20.4f, 0.4f);
-            DrawText("Rifle 5$", 54.25f, 19.8f, 0.4f);
+            DrawText("Rifle 5$", 54.25f, 20.4f, 0.4f);
+            DrawText("Sniper 20$", 54.25f, 19.8f, 0.4f);
+            DrawText("Bouncer 40$", 54.25f, 19.2f, 0.4f);
 
             DrawText("____________", 54.2f, 14.8f, 0.35f);
             DrawText("How to play:", 54.25f, 15f, 0.35f);
@@ -291,10 +392,10 @@ namespace TowerDefenseNew
             DrawText("2+Click to", 54.25f, 12.5f, 0.4f);
             DrawText("buy Rifle", 54.25f, 12f, 0.4f);
 
-            DrawText("3+Drag to", 54.25f, 11f, 0.4f);
-            DrawText("place Path", 54.25f, 10.5f, 0.4f);
+            DrawText("3+Click to", 54.25f, 11f, 0.4f);
+            DrawText("buy Bouncer", 54.25f, 10.5f, 0.4f);
 
-            DrawText("4+Click to", 54.25f, 9.5f, 0.4f);
+            DrawText("DEL+Click to", 54.25f, 9.5f, 0.4f);
             DrawText("sell Tower", 54.25f, 9f, 0.4f);
 
             DrawText("To start the", 54.15f, 8f, 0.3f);

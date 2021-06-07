@@ -18,6 +18,7 @@ namespace TowerDefenseNew.GameObjects
             Bullets.Add(this);
             TowerType = towerType;
             lifeTime = 0;
+            bounceCount = 0;
         }
 
         internal bool checkHit()
@@ -26,11 +27,11 @@ namespace TowerDefenseNew.GameObjects
             bool isDead = false;
             try
             {
-                foreach (Enemy enemy in Enemies.ToList())
+                for(int i = 0; i < Enemies.Count-1; i++)
                 {
-                    if (Intersects(enemy))
+                    if (Intersects(Enemies[i]) && TowerType != 2)
                     {
-                        if (enemy.isShot(Damage))
+                        if (Enemies[i].isShot(Damage))
                         {
                             //normal hit if true
                             isDead = false;
@@ -39,11 +40,26 @@ namespace TowerDefenseNew.GameObjects
                         {
                             //he dead if false
                             isDead = true;
-
-                            Enemies.Remove(enemy);
+                            Enemies.Remove(Enemies[i]);
                         }
                         Bullets.Remove(this);
                         continue;
+                    }
+                    if (Intersects(Enemies[i]) && TowerType == 2)
+                    {
+                        bounceCount++;
+                        bulletVelocity(Enemies[i + 1]);
+                        if (Enemies[i].isShot(Damage))
+                        {
+                            //normal hit if true
+                            isDead = false;
+                        }
+                        else
+                        {
+                            //he dead if false
+                            isDead = true;
+                            Enemies.Remove(Enemies[i]);
+                        }
                     }
                 }
             }
@@ -51,10 +67,11 @@ namespace TowerDefenseNew.GameObjects
             {
                 Console.WriteLine("checkHit exception");
             }
-            if (lifeTime >= 120)
+            if (lifeTime >= 60 && TowerType != 2)
             {
                 Bullets.Remove(this);
             }
+            else if ((lifeTime >= 120 || bounceCount > 15) && TowerType == 2) { Bullets.Remove(this); }
             return isDead;
         }
 
@@ -82,6 +99,7 @@ namespace TowerDefenseNew.GameObjects
         public int Damage { get; }
         public uint TowerType { get; private set; }
 
+        private int bounceCount;
         private int lifeTime;
         internal float speedX;
         internal float speedY;
