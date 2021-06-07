@@ -30,7 +30,8 @@ namespace TowerDefenseNew
             //texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
-            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_offset_1_top_after_first_tile.png");
+            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_no_offset.png");
+            //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_offset_1_top_after_first_tile.png");
 
         }
 
@@ -166,7 +167,7 @@ namespace TowerDefenseNew
             if (sampleSniper)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 5f, Color4.White);
-                DrawTile(column, row, 0f, 0f, 1 * 5);
+                DrawTile(column, row, 0f, 0f, 7 * 5);
             }
             else if (sampleRifle)
             {
@@ -176,7 +177,7 @@ namespace TowerDefenseNew
             else if (sampleBouncer)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
-                DrawTile(column, row, 0f, 0f, 6);
+                DrawTile(column, row, 0f, 0f, 8 * 5);
             }
             else return;
             GL.Disable(EnableCap.Blend);
@@ -231,7 +232,7 @@ namespace TowerDefenseNew
                             {
                                 if (CellType.Sniper == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 1 * 5); //Snake
+                                    DrawTile(column, row, 0f, 0f, 7 * 5); //Snake
                                 }
                                 if (CellType.Rifle == model.Grid[column, row])
                                 {
@@ -239,14 +240,14 @@ namespace TowerDefenseNew
                                 }
                                 if (CellType.Bouncer == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 1 * 5); //Bouncer
+                                    DrawTile(column, row, 0f, 0f, 8 * 5); //Bouncer
                                 }
                             }
                             if (tower.aimAtEnemy.Center.X > column)
                             {
                                 if (CellType.Sniper == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 1 * 5 + 1); //Snake
+                                    DrawTile(column, row, 0f, 0f, 7 * 5 + 1); //Snake
                                 }
                                 if (CellType.Rifle == model.Grid[column, row])
                                 {
@@ -254,14 +255,14 @@ namespace TowerDefenseNew
                                 }
                                 if (CellType.Bouncer == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 1 * 5 + 1); //Bouncer
+                                    DrawTile(column, row, 0f, 0f, 8 * 5 + 1); //Bouncer
                                 }
                             }
                         }else
                         {
                             if (CellType.Sniper == model.Grid[column, row])
                             {
-                                DrawTile(column, row, 0f, 0f, 1 * 5); //Snake
+                                DrawTile(column, row, 0f, 0f, 7 * 5); //Snake
                             }
                             if (CellType.Rifle == model.Grid[column, row])
                             {
@@ -269,7 +270,7 @@ namespace TowerDefenseNew
                             }
                             if (CellType.Bouncer == model.Grid[column, row])
                             {
-                                DrawTile(column, row, 0f, 0f, 1 * 5); //Bouncer
+                                DrawTile(column, row, 0f, 0f, 8 * 5); //Bouncer
                             }
                         }
                     }
@@ -387,10 +388,10 @@ namespace TowerDefenseNew
             DrawText("How to play:", 54.25f, 15f, 0.35f);
 
             DrawText("1+Click to", 54.25f, 14f, 0.4f);
-            DrawText("buy Sniper", 54.25f, 13.5f, 0.4f);
+            DrawText("buy Rifle", 54.25f, 13.5f, 0.4f);
 
             DrawText("2+Click to", 54.25f, 12.5f, 0.4f);
-            DrawText("buy Rifle", 54.25f, 12f, 0.4f);
+            DrawText("buy Sniper", 54.25f, 12f, 0.4f);
 
             DrawText("3+Click to", 54.25f, 11f, 0.4f);
             DrawText("buy Bouncer", 54.25f, 10.5f, 0.4f);
