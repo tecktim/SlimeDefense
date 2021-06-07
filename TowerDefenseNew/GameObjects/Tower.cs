@@ -57,10 +57,18 @@ namespace TowerDefenseNew.GameObjects
                     {
                         Bullet bullet = new Bullet(Center + new Vector2(0.5f, 0.5f), Radius / 35, damage, Bullets, Enemies, Type);
 
+                        aimAtEnemy = enemy;
                         //Correction of Starting Point of Bullets, damit Schüsse aus dem Mund der Tower kommen
                         if (bullet.TowerType == 0)
                         {
-                            bullet.Center += new Vector2(-0.8f, -0.5f);
+                            if (aimAtEnemy.Center.X < this.Center.X)
+                            {
+                                bullet.Center += new Vector2(-0.8f, -0.5f);
+                            }
+                            else
+                            {
+                                bullet.Center += new Vector2(-0.2f, -0.5f);
+                            }
                         }
                         if (bullet.TowerType == 1)
                         {
@@ -74,10 +82,9 @@ namespace TowerDefenseNew.GameObjects
             catch (System.ArgumentException)
             {
                 Console.WriteLine("checkRange exception");
-                return;
             }
         }
-
+        internal Enemy aimAtEnemy { get; set; }
         private int attackSpeed { get; set; }
         internal int damage { get; set; }
         private List<Enemy> Enemies { get; set; }
