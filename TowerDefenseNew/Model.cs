@@ -397,17 +397,16 @@ namespace TowerDefenseNew
             }
             else if (column == checkCol - 1 && row == checkRow - 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
+                if (row > 0)
+                { 
                 if (CheckCell(column - 1, row + 1) == CellType.PathRight)
                 {
-                    _grid[column, row + 1] = CellType.PathDown;
+                _grid[column, row + 1] = CellType.PathDown;
                 }
                 if (CheckCell(column + 1, row + 1) == CellType.PathLeft)
                 {
-                    _grid[column, row + 1] = CellType.PathDown;
+                _grid[column, row + 1] = CellType.PathDown;
                 }
-
-                if (row > 0)
-                {
                     if (CellTypeIsAnyPath(column, row - 1) && !CellTypeIsAnyPath(column, row - 2) && !CellTypeIsAnyPath(column, row - 3))
                     {
                         _grid[column, row] = CellType.PathDown;
