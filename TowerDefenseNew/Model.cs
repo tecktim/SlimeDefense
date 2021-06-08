@@ -289,7 +289,7 @@ namespace TowerDefenseNew
             else return;
         }
 
-        private bool placePoint = true;
+        
         internal bool PlacePath(int column, int row)
         {
             //First is always placed left
@@ -419,6 +419,7 @@ namespace TowerDefenseNew
         private bool placed;
         private bool applyScaling;
         internal int stage;
+        private bool placePoint = true;
         private int checkCol = 0, checkRow = 0, spawnRow;
         internal int enemyHealth;
         private readonly IGrid _grid;
