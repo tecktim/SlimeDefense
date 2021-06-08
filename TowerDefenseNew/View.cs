@@ -346,8 +346,8 @@ namespace TowerDefenseNew
             switch (model.stage)
             {
                 case 0:
-                    DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
-                    DrawText("and drag the mouse from left to right", 8f, -1f, 1f);
+                   // DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
+                    DrawText("To start the game,hold SPACEBAR and drag the mouse from left to right", 8f, -.75f, .5f);
                     break;
                 case 1:
                     DrawText("!!! ENEMIES ARE INCOMING !!!", 13f, 30f, 1f);
@@ -375,23 +375,16 @@ namespace TowerDefenseNew
             DrawText($"{model.stage}", 54.5f, 24f, 0.5f);
 
             DrawText("Drag&Drop", 54.25f, 17.5f, 0.4f);
-            DrawText("Rifle 5$", 54.25f, 20.4f, 0.4f);
-            DrawText("Sniper 20$", 54.25f, 19.8f, 0.4f);
-            DrawText("Bouncer 40$", 54.25f, 19.2f, 0.4f);
+            DrawText("Rifle 5$", 55.3f, 16.33f, 0.33f);
+            DrawText("Sniper 20$", 55.3f, 14.83f, 0.33f);
+            DrawText("Bounce 40$", 55.3f, 13.33f, 0.33f);
 
-            DrawText("2+Click to", 54.25f, 12.5f, 0.4f);
-            DrawText("buy Sniper", 54.25f, 12f, 0.4f);
-
-            DrawText("3+Click to", 54.25f, 11f, 0.4f);
-            DrawText("buy Bouncer", 54.25f, 10.5f, 0.4f);
-
-            DrawText("DEL+Click to", 54.25f, 9.5f, 0.4f);
-            DrawText("sell Tower", 54.25f, 9f, 0.4f);
+            
 
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
-            DrawTile(54.5f, 14.5f, 0f, 0f, 7 * 5);
-            DrawTile(54.5f, 16f, 0f, 0f, 2 * 5);
-            DrawTile(54.5f, 13f, 0f, 0f, 8 * 5);
+            DrawTile(54.2f, 14.5f, 0f, 0f, 7 * 5);
+            DrawTile(54.2f, 16f, 0f, 0f, 2 * 5);
+            DrawTile(54.2f, 13f, 0f, 0f, 8 * 5);
 
             GL.Disable(EnableCap.Blend);
         }
