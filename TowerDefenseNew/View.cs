@@ -32,6 +32,7 @@ namespace TowerDefenseNew
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
             tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_no_offset.png");
             //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_offset_1_top_after_first_tile.png");
+            //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_gras_tile_1_bottom_extend.png");
 
         }
 
@@ -277,7 +278,7 @@ namespace TowerDefenseNew
                     {
                         DrawTile(column, row, 0f, 0f, 0); //Weed :)
                     }
-                    if (CellType.Destination == model.Grid[column, row])
+                    if (CellType.Path == model.Grid[column, row] && column == 53)
                     {
                         DrawTile(column, row, 0f, 0f, 1 * 5 + 2); //Portal red
                     }
