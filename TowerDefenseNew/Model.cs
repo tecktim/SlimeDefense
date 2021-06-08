@@ -307,6 +307,98 @@ namespace TowerDefenseNew
             {
                 if (CheckCell(column + 1, row) == CellType.Path)
                 {
+                    _grid[column, row] = CellType.Path;
+                    _grid[column + 2, row] = CellType.Path;
+                    checkCol += 3;
+                }
+                else
+                {
+                    _grid[column, row] = CellType.Path;
+                    if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+                    checkCol++;
+                }
+            }
+            else if (column == checkCol - 2 && row == checkRow && column != 0)
+            {
+                if (CheckCell(column - 1, row) == CellType.Path)
+                {
+                    _grid[column, row] = CellType.Path;
+                    _grid[column - 2, row] = CellType.Path;
+                    checkCol -= 3;
+                }
+                else
+                {
+                    _grid[column, row] = CellType.Path;
+                    if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+                    checkCol--;
+                }
+            }
+            else if (column == checkCol - 1 &&  row == checkRow - 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
+            {
+                if (CheckCell(column, row - 1) == CellType.Path)
+                {
+                    _grid[column, row] = CellType.Path;
+                    _grid[column, row - 2] = CellType.Path;
+                    checkRow -= 3;
+                }
+                else
+                {
+                    _grid[column, row] = CellType.Path;
+                    if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
+                    checkRow = row;
+                }
+            }
+            else if (column == checkCol - 1 && row == checkRow + 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
+            {
+                if (CheckCell(column, row + 1) == CellType.Path)
+                {
+                    _grid[column, row] = CellType.Path;
+                    _grid[column, row + 2] = CellType.Path;
+                    checkRow += 3;
+                }
+                else
+                {
+                    _grid[column, row] = CellType.Path;
+                    if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
+                    checkRow = row;
+                }
+            }
+                if (CheckCell(checkCol, row) == CellType.Finish && placed == false)
+            {
+                stage = 1;
+                _grid[checkCol, row] = CellType.Path;
+                waypoints.Add(new Vector2(checkCol, row));
+                placed = true;
+                enemySpawnTimer(spawnRow);
+            }
+
+            if(placed == true)
+            {
+                for(int i=0;i<waypoints.Count;i++)
+                {
+                    Console.Write($"Waypoint: {waypoints[i].X}, {waypoints[i].Y}\n");
+                }
+            }
+            return placed;
+        }
+
+        /* altes placepath
+         * internal bool PlacePath(int column, int row)
+        {
+            //First is always placed left
+            if (column == 0 && waypoints.Count == 0)
+            {
+                _grid[column, row] = CellType.Path;
+                waypoints.Add(new Vector2(column, row));
+                checkCol++;
+                checkRow = row;
+                spawnRow = row;
+            }
+
+            else if (column == checkCol && row == checkRow && column != 0)
+            {
+                if (CheckCell(column + 1, row) == CellType.Path)
+                {
                     Console.WriteLine("tru");
                     _grid[column, row] = CellType.Path;
                     _grid[column + 2, row] = CellType.Path;
@@ -351,7 +443,7 @@ namespace TowerDefenseNew
             }
 
             return placed;
-        }
+        }*/
 
 
 
