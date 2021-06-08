@@ -68,7 +68,7 @@ namespace TowerDefenseNew
                 enemyHealth += (enemyHealth / 100) * 15;
                 applyScaling = false;
                 stage++;
-                if (stage % 3 == 0)
+                if (stage % 10 == 0)
                 {
                     bounty++;
                 }

@@ -30,9 +30,10 @@ namespace TowerDefenseNew
             //texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
-            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_no_offset.png");
-            //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_offset_1_top_after_first_tile.png");
-            //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_gras_tile_1_bottom_extend.png");
+            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12.png");
+
+            //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_no_offset.png");
+
 
         }
 
@@ -201,7 +202,7 @@ namespace TowerDefenseNew
         {
             GL.Color4(Color4.White);
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
-            const uint tilesPerColumn = 10;
+            const uint tilesPerColumn = 12;
             const uint tilesPerRow = 5;
             var rect = new Rect(x + offset, y + offset, 1f - scale, 1f - scale);
             var tileCoords = SpriteSheetTools.CalcTexCoords(tileNumber, tilesPerRow, tilesPerColumn);
@@ -380,7 +381,7 @@ namespace TowerDefenseNew
                     DrawText("enemies will increase in HP by 10%", 9f, -1f, 1f);
                     break;
                 case 3:
-                    DrawText("Pro tip: Every third stage you reach,", 9f, 30f, 1f);
+                    DrawText("Pro tip: Every tenth stage you reach,", 9f, 30f, 1f);
                     DrawText("the per kill bounty increases by 1$", 9f, -1f, 1f);
                     break;
                 default:
