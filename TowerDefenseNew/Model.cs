@@ -297,13 +297,29 @@ namespace TowerDefenseNew
             else return;
         }
 
+        internal bool CellTypeIsAnyPath(int column, int row)
+        {
+            if (CheckCell(column, row) == CellType.PathRight ||
+                CheckCell(column, row) == CellType.PathUp ||
+                CheckCell(column, row) == CellType.PathLeft ||
+                CheckCell(column, row) == CellType.PathDown ||
+                CheckCell(column, row) == CellType.PathCross ||
+                CheckCell(column, row) == CellType.Path
+                )
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
         
         internal bool PlacePath(int column, int row)
         {
             //First is always placed left
             if (column == 0 && waypoints.Count == 0)
             {
-                _grid[column, row] = CellType.Path;
+                _grid[column, row] = CellType.PathRight;
                 waypoints.Add(new Vector2(column, row));
                 checkCol++;
                 checkRow = row;
@@ -312,14 +328,24 @@ namespace TowerDefenseNew
 
             else if (column == checkCol && row == checkRow && column != 0)
             {
-                if (CheckCell(column + 1, row) == CellType.Path)// && CheckCell(i + 2, row) != CellType.Path && CheckCell(i + 3, row) != CellType.Path)
+                if (CheckCell(column - 1 , row - 1) == CellType.PathUp)
+                {
+                    _grid[column - 1, row] = CellType.PathRight;
+                }
+                if (CheckCell(column - 1, row + 1) == CellType.PathDown)
+                {
+                    _grid[column - 1, row] = CellType.PathRight;
+                }
+
+                if (CellTypeIsAnyPath(column + 1, row))// && CheckCell(i + 2, row) != CellType.Path && CheckCell(i + 3, row) != CellType.Path)
                 {
                     for (int i = column; i < 51; i++)
                     {
                         if (CheckCell(i + 2, row) == CellType.Empty)
                         {
-                            _grid[column, row] = CellType.Path;
-                            _grid[i + 2, row] = CellType.Path;
+                            _grid[column, row] = CellType.PathRight;
+                            _grid[i + 1, row] = CellType.PathCross;
+                            _grid[i + 2, row] = CellType.PathRight;
                             checkCol = i + 3;
                             Console.WriteLine($"CROSS PATH checkcol: {checkCol}, i ist: {i}");
                             break;
@@ -330,44 +356,75 @@ namespace TowerDefenseNew
                 else if (CheckCell(checkCol, row) == CellType.Empty)
                 {
                     Console.WriteLine($"STRAIGHT PATH checkcol: {checkCol}");
-                    _grid[column, row] = CellType.Path;
+                    _grid[column, row] = CellType.PathRight;
                     checkCol++;
                 }
-                if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+                if (placePoint == false)
+                {
+                    waypoints.Add(new Vector2(column - 1, row));
+                    placePoint = true;
+                }
             }
 
             else if (column == checkCol - 2 && row == checkRow && column != 0)
             {
-                if (CheckCell(column - 1, row) == CellType.Path && CheckCell(column - 2, row) != CellType.Path && CheckCell(column - 3, row) != CellType.Path)
+                if (CheckCell(column + 1, row - 1) == CellType.PathUp)
                 {
-                    _grid[column, row] = CellType.Path;
-                    _grid[column - 2, row] = CellType.Path;
+                    _grid[column + 1, row] = CellType.PathLeft;
+                }
+                if (CheckCell(column + 1, row + 1) == CellType.PathDown)
+                {
+                    _grid[column + 1, row] = CellType.PathLeft;
+                }
+                if (CellTypeIsAnyPath(column - 1, row) && !CellTypeIsAnyPath(column - 2, row) && !CellTypeIsAnyPath(column - 3, row))
+                {
+                    _grid[column, row] = CellType.PathLeft;
+                    _grid[column - 1, row] = CellType.PathCross;
+                    _grid[column - 2, row] = CellType.PathLeft;
                     checkCol -= 3;
                 }
                 else
                 {
-                    _grid[column, row] = CellType.Path;
+                    _grid[column, row] = CellType.PathLeft;
                     checkCol--;
                 }
-                if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+                if (placePoint == false)
+                {
+                    waypoints.Add(new Vector2(column - 1, row));
+                    placePoint = true;
+                }
 
             }
             else if (column == checkCol - 1 && row == checkRow - 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
+                if (CheckCell(column - 1, row + 1) == CellType.PathRight)
+                {
+                    _grid[column, row + 1] = CellType.PathDown;
+                }
+                if (CheckCell(column + 1, row + 1) == CellType.PathLeft)
+                {
+                    _grid[column, row + 1] = CellType.PathDown;
+                }
+
                 if (row > 0)
                 {
-                    if (CheckCell(column, row - 1) == CellType.Path && CheckCell(column, row - 2) != CellType.Path && CheckCell(column, row - 3) != CellType.Path)
+                    if (CellTypeIsAnyPath(column, row - 1) && !CellTypeIsAnyPath(column, row - 2) && !CellTypeIsAnyPath(column, row - 3))
                     {
-                        _grid[column, row] = CellType.Path;
-                        _grid[column, row - 2] = CellType.Path;
+                        _grid[column, row] = CellType.PathDown;
+                        _grid[column, row - 1] = CellType.PathCross;
+                        _grid[column, row - 2] = CellType.PathDown;
                         checkRow -= 3;
                     }
                     else
                     {
-                        _grid[column, row] = CellType.Path;
+                        _grid[column, row] = CellType.PathDown;
                         checkRow = row;
                     }
-                    if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
+                    if (placePoint == true)
+                    {
+                        waypoints.Add(new Vector2(column, checkRow));
+                        placePoint = false;
+                    }
 
                 }
             }
@@ -375,24 +432,38 @@ namespace TowerDefenseNew
             {
                 if (row < 29)
                 {
-                    if (CheckCell(column, row + 1) == CellType.Path && CheckCell(column, row + 2) != CellType.Path && CheckCell(column, row + 3) != CellType.Path)
+                if (CheckCell(column - 1, row - 1) == CellType.PathRight)
+                {
+                    _grid[column, row - 1] = CellType.PathUp;
+                }
+                if (CheckCell(column + 1, row - 1) == CellType.PathLeft)
+                {
+                    _grid[column, row - 1] = CellType.PathUp;
+                }
+                
+                    if (CellTypeIsAnyPath(column, row + 1) && !CellTypeIsAnyPath(column, row + 2) && !CellTypeIsAnyPath(column, row + 3))
                     {
-                        _grid[column, row] = CellType.Path;
-                        _grid[column, row + 2] = CellType.Path;
+                        _grid[column, row] = CellType.PathUp;
+                        _grid[column, row + 1] = CellType.PathCross;
+                        _grid[column, row + 2] = CellType.PathUp;
                         checkRow += 3;
                     }
                     else
                     {
-                        _grid[column, row] = CellType.Path;
+                        _grid[column, row] = CellType.PathUp;
                         checkRow = row;
                     }
-                    if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
+                    if (placePoint == true)
+                    {
+                        waypoints.Add(new Vector2(column, checkRow));
+                        placePoint = false;
+                    }
                 }
             }
             if (CheckCell(checkCol, row) == CellType.Finish && placed == false)
             {
                 stage = 1;
-                _grid[checkCol, row] = CellType.Path;
+                _grid[checkCol, row] = CellType.PathRight;
                 waypoints.Add(new Vector2(checkCol, row));
                 placed = true;
                 enemySpawnTimer(spawnRow);

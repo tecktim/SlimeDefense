@@ -270,7 +270,27 @@ namespace TowerDefenseNew
                     {
                         DrawTile(column, row, 0f, 0f, 1 * 5); //Path
                     }
-                    if (CellType.Path == model.Grid[column, row] && column == 0)
+                    if (CellType.PathRight == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5); //Path
+                    }
+                    if (CellType.PathUp == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5 + 1); //Path
+                    }
+                    if (CellType.PathLeft == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5 + 2); //Path
+                    }
+                    if (CellType.PathDown == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5 + 3); //Path
+                    }
+                    if (CellType.PathCross == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5 + 4); //Path
+                    }
+                    if (CellType.PathRight == model.Grid[column, row] && column == 0)
                     {
                         DrawTile(column, row, 0f, 0f, 1 * 5 + 1); //Portal blue
                     }
@@ -278,7 +298,7 @@ namespace TowerDefenseNew
                     {
                         DrawTile(column, row, 0f, 0f, 0); //Weed :)
                     }
-                    if (CellType.Path == model.Grid[column, row] && column == 53)
+                    if (CellType.PathRight == model.Grid[column, row] && column == 53)
                     {
                         DrawTile(column, row, 0f, 0f, 1 * 5 + 2); //Portal red
                     }
