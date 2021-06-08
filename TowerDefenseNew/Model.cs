@@ -221,30 +221,41 @@ namespace TowerDefenseNew
 
         internal void ClearCell(int column, int row, Tower tower)
         {
-            if (CheckCell(column, row) == CellType.Rifle)
+            switch(CheckCell(column, row))
             {
-                Console.WriteLine("Niggered");
-                cash += Math.Floor(rifleCost) * 0.8;
-                if (tower.Center.X == column && tower.Center.Y == row)
-                {
-                    _grid[column, row] = CellType.Empty;
-                    towers.Remove(tower);
-                    tower.asTimer(false);
-                    Math.Floor(cash);
-                    return;
-                }
-            }
-            if (CheckCell(column, row) == CellType.Sniper)
-            {
-                cash += Math.Floor(sniperCost) * 0.8;
-                if (tower.Center.X == column && tower.Center.Y == row)
-                {
-                    _grid[column, row] = CellType.Empty;
-                    towers.Remove(tower);
-                    tower.asTimer(false);
-                    Math.Floor(cash);
-                    return;
-                }
+                case CellType.Rifle:
+                    cash += Math.Floor(rifleCost) * 0.8;
+                    if (tower.Center.X == column && tower.Center.Y == row)
+                    {
+                        _grid[column, row] = CellType.Empty;
+                        towers.Remove(tower);
+                        tower.asTimer(false);
+                        Math.Floor(cash);
+                        return;
+                    }
+                    break;
+                case CellType.Sniper:
+                    cash += Math.Floor(sniperCost) * 0.8;
+                    if (tower.Center.X == column && tower.Center.Y == row)
+                    {
+                        _grid[column, row] = CellType.Empty;
+                        towers.Remove(tower);
+                        tower.asTimer(false);
+                        Math.Floor(cash);
+                        return;
+                    }
+                    break;
+                case CellType.Bouncer:
+                    cash += Math.Floor(bouncerCost) * 0.8;
+                    if (tower.Center.X == column && tower.Center.Y == row)
+                    {
+                        _grid[column, row] = CellType.Empty;
+                        towers.Remove(tower);
+                        tower.asTimer(false);
+                        Math.Floor(cash);
+                        return;
+                    }
+                    break;
             }
         }
 
@@ -257,7 +268,6 @@ namespace TowerDefenseNew
                 towers.Add(tower);
                 cash -= sniperCost;
                 Math.Floor(cash);
-                Console.WriteLine("Sniper bought for: " + sniperCost + " || New balance: " + cash);
             }
             else return;
         }
@@ -271,7 +281,6 @@ namespace TowerDefenseNew
                 towers.Add(tower);
                 cash -= rifleCost;
                 Math.Floor(cash);
-                Console.WriteLine("Rifle bought for: " + rifleCost + " || New balance: " + cash);
             }
             else return;
         }
@@ -284,7 +293,6 @@ namespace TowerDefenseNew
                 towers.Add(tower);
                 cash -= bouncerCost;
                 Math.Floor(cash);
-                Console.WriteLine("Bouncer bought for: " + bouncerCost + " || New balance: " + cash);
             }
             else return;
         }

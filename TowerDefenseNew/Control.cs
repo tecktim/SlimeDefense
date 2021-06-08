@@ -40,14 +40,13 @@ namespace TowerDefenseNew
             if (_model.gameOver == false)
             {
                 //Sniper verkaufen
-                if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.Delete))
+               /* if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.Delete))
                 {
                     foreach (Tower tower in _model.towers.ToList())
                     {
                         if (tower.Center.X == column && tower.Center.Y == row)
                         {
                             _model.ClearCell(column, row, tower);
-                            Console.WriteLine("sold sniper, new balance: " + _model.cash);
                         }
                         else continue;
                     }
@@ -63,7 +62,6 @@ namespace TowerDefenseNew
                         if (tower.Center.X == column && tower.Center.Y == row)
                         {
                             _model.ClearCell(column, row, tower);
-                            Console.WriteLine("sold rifle, new balance: " + _model.cash);
                         }
                         else continue;
                     }
@@ -78,7 +76,19 @@ namespace TowerDefenseNew
                         if (tower.Center.X == column && tower.Center.Y == row)
                         {
                             _model.ClearCell(column, row, tower);
-                            Console.WriteLine("sold sniper, new balance: " + _model.cash);
+                        }
+                        else continue;
+                    }
+                    return;
+                }*/
+
+                if ((cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.Delete)) || (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.Delete)) || (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.Delete)))
+                {
+                    foreach (Tower tower in _model.towers.ToList())
+                    {
+                        if (tower.Center.X == column && tower.Center.Y == row)
+                        {
+                            _model.ClearCell(column, row, tower);
                         }
                         else continue;
                     }
