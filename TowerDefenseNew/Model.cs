@@ -19,7 +19,7 @@ namespace TowerDefenseNew
             bullets = new List<Bullet>();
             explosions = new List<Explosion>();
 
-            cash = 30;
+            cash = 300;
             bouncerCost = 40;
             sniperCost = 20;
             rifleCost = 5;
@@ -392,7 +392,7 @@ namespace TowerDefenseNew
             if (CheckCell(checkCol, row) == CellType.Finish && placed == false)
             {
                 stage = 1;
-                _grid[checkCol, row] = CellType.Path;
+                _grid[checkCol, row] = CellType.Destination;
                 waypoints.Add(new Vector2(checkCol, row));
                 placed = true;
                 enemySpawnTimer(spawnRow);
