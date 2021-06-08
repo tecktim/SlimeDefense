@@ -393,18 +393,6 @@ namespace TowerDefenseNew
 
             DrawText("DEL+Click to", 54.25f, 9.5f, 0.4f);
             DrawText("sell Tower", 54.25f, 9f, 0.4f);
-
-            DrawText("To start the", 54.15f, 8f, 0.3f);
-            DrawText("game,first you", 54.15f, 7.6f, 0.3f);
-            DrawText("place a path", 54.15f, 7.2f, 0.3f);
-            DrawText("from left to", 54.15f, 6.8f, 0.3f);
-            DrawText("right.When the", 54.15f, 6.4f, 0.3f);
-            DrawText("path reaches", 54.15f, 6f, 0.3f);
-            DrawText("the right side,", 54.15f, 5.6f, 0.3f);
-            DrawText("enemies will", 54.15f, 5.2f, 0.3f);
-            DrawText("spawn.Dont let", 54.15f, 4.8f, 0.3f);
-            DrawText("them reach the", 54.15f, 4.4f, 0.3f);
-            DrawText("end!", 54.15f, 4f, 0.3f);
             GL.Disable(EnableCap.Blend);
         }
         private static void DrawCircleTexture(IReadOnlyCircle circle, IReadOnlyRectangle texCoords)
