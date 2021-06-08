@@ -102,12 +102,6 @@ namespace TowerDefenseNew
                 if (enemy != null)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-                    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                    GL.Enable(EnableCap.Blend);
-                    DrawText($"HP:{ enemy.health}", enemy.Center.X - 0.5f, enemy.Center.Y + .85f, .3f);
-
-                    GL.Disable(EnableCap.Blend);
-                    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                     GL.Enable(EnableCap.Blend);
                     if (enemy.dir == direction.right || enemy.dir == direction.up || enemy.dir == direction.down)
                     {
@@ -218,7 +212,6 @@ namespace TowerDefenseNew
 
         private void DrawGrid(Model model)
         {
-
             DrawGridLines(model.Grid.Columns, model.Grid.Rows);
             for (int column = 0; column < model.Grid.Columns; ++column)
             {
