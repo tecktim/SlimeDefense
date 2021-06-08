@@ -155,7 +155,7 @@ namespace TowerDefenseNew
                             DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5);
                         }
                     }
-                        GL.Disable(EnableCap.Blend);
+                    GL.Disable(EnableCap.Blend);
                 }
             }
         }
@@ -211,7 +211,7 @@ namespace TowerDefenseNew
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
             const uint tilesPerColumn = 10;
             const uint tilesPerRow = 5;
-            var rect = new Rect(x+offset, y+offset, 1f-scale, 1f-scale);
+            var rect = new Rect(x + offset, y + offset, 1f - scale, 1f - scale);
             var tileCoords = SpriteSheetTools.CalcTexCoords(tileNumber, tilesPerRow, tilesPerColumn);
             DrawRectangleTexture(rect, tileCoords);
         }
@@ -258,7 +258,8 @@ namespace TowerDefenseNew
                                     DrawTile(column, row, 0f, 0f, 8 * 5 + 1); //Bouncer
                                 }
                             }
-                        }else
+                        }
+                        else
                         {
                             if (CellType.Sniper == model.Grid[column, row])
                             {
@@ -295,7 +296,7 @@ namespace TowerDefenseNew
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.Enable(EnableCap.Blend);
-            DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, 25 + (type*5));
+            DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, 25 + (type * 5));
             GL.Disable(EnableCap.Blend);
         }
 
@@ -349,7 +350,8 @@ namespace TowerDefenseNew
             GL.Enable(EnableCap.Blend);
             //text to help the player
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-            switch (model.stage) {
+            switch (model.stage)
+            {
                 case 0:
                     DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
                     DrawText("and drag the mouse from left to right", 8f, -1f, 1f);
@@ -366,8 +368,8 @@ namespace TowerDefenseNew
                     DrawText("Pro tip: Every third stage you reach,", 9f, 30f, 1f);
                     DrawText("the per kill bounty increases by 1$", 9f, -1f, 1f);
                     break;
-                default: 
-                    break; 
+                default:
+                    break;
             }
 
             DrawText($"Cash:", 54.5f, 29f, 0.7f);

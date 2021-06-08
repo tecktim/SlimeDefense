@@ -317,7 +317,7 @@ namespace TowerDefenseNew
                     checkCol++;
                 }
                 if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
-                
+
             }
             else if (column == checkCol - 2 && row == checkRow && column != 0)
             {
@@ -333,13 +333,13 @@ namespace TowerDefenseNew
                     checkCol--;
                 }
                 if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
-                
+
             }
             else if (column == checkCol - 1 && row == checkRow - 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
                 if (row > 0)
                 {
-                    if (CheckCell(column, row - 1) == CellType.Path && CheckCell(column, row-2) != CellType.Path)
+                    if (CheckCell(column, row - 1) == CellType.Path && CheckCell(column, row - 2) != CellType.Path)
                     {
                         _grid[column, row] = CellType.Path;
                         _grid[column, row - 2] = CellType.Path;
@@ -351,7 +351,7 @@ namespace TowerDefenseNew
                         checkRow = row;
                     }
                     if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
-                    
+
                 }
             }
             else if (column == checkCol - 1 && row == checkRow + 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
@@ -370,7 +370,7 @@ namespace TowerDefenseNew
                         checkRow = row;
                     }
                     if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
-                    
+
                 }
             }
             if (CheckCell(checkCol, row) == CellType.Finish && placed == false)
@@ -380,14 +380,6 @@ namespace TowerDefenseNew
                 waypoints.Add(new Vector2(checkCol, row));
                 placed = true;
                 enemySpawnTimer(spawnRow);
-            }
-
-            if (placed == true)
-            {
-                for (int i = 0; i < waypoints.Count; i++)
-                {
-                    Console.Write($"Waypoint: {waypoints[i].X}, {waypoints[i].Y}\n");
-                }
             }
             return placed;
         }

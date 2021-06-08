@@ -61,7 +61,7 @@ namespace TowerDefenseNew.GameObjects
                         //Correction of Starting Point of Bullets, damit Schüsse aus dem Mund der Tower kommen
                         if (bullet.TowerType == 0)
                         {
-                            if (aimAtEnemy.Center.X < this.Center.X)
+                            if (aimAtEnemy.Center.X < Center.X)
                             {
                                 bullet.Center += new Vector2(-0.8f, -0.5f);
                             }

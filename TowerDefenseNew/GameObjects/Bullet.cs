@@ -1,7 +1,6 @@
 ﻿using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace TowerDefenseNew.GameObjects
 {
@@ -27,7 +26,7 @@ namespace TowerDefenseNew.GameObjects
             bool isDead = false;
             try
             {
-                for(int i = 0; i < Enemies.Count-1; i++)
+                for (int i = 0; i < Enemies.Count - 1; i++)
                 {
                     if (Intersects(Enemies[i]) && TowerType != 2)
                     {
