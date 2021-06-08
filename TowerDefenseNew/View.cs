@@ -374,16 +374,10 @@ namespace TowerDefenseNew
             DrawText($"Stage:", 54.5f, 25f, 0.6f);
             DrawText($"{model.stage}", 54.5f, 24f, 0.5f);
 
-            DrawText("Costs:", 54.25f, 21f, 0.4f);
+            DrawText("Drag&Drop", 54.25f, 17.5f, 0.4f);
             DrawText("Rifle 5$", 54.25f, 20.4f, 0.4f);
             DrawText("Sniper 20$", 54.25f, 19.8f, 0.4f);
             DrawText("Bouncer 40$", 54.25f, 19.2f, 0.4f);
-
-            DrawText("____________", 54.2f, 14.8f, 0.35f);
-            DrawText("How to play:", 54.25f, 15f, 0.35f);
-
-            DrawText("1+Click to", 54.25f, 14f, 0.4f);
-            DrawText("buy Rifle", 54.25f, 13.5f, 0.4f);
 
             DrawText("2+Click to", 54.25f, 12.5f, 0.4f);
             DrawText("buy Sniper", 54.25f, 12f, 0.4f);
@@ -393,6 +387,12 @@ namespace TowerDefenseNew
 
             DrawText("DEL+Click to", 54.25f, 9.5f, 0.4f);
             DrawText("sell Tower", 54.25f, 9f, 0.4f);
+
+            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
+            DrawTile(54.5f, 14.5f, 0f, 0f, 7 * 5);
+            DrawTile(54.5f, 16f, 0f, 0f, 2 * 5);
+            DrawTile(54.5f, 13f, 0f, 0f, 8 * 5);
+
             GL.Disable(EnableCap.Blend);
         }
         private static void DrawCircleTexture(IReadOnlyCircle circle, IReadOnlyRectangle texCoords)
