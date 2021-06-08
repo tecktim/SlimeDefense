@@ -10,7 +10,6 @@ namespace TowerDefenseNew
 {
     internal class Model
     {
-
         public Model(IGrid grid)
         {
             _grid = grid;
