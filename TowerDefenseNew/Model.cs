@@ -92,14 +92,14 @@ namespace TowerDefenseNew
                         {
                             if (enemy.wayPointIterator < waypoints.Count - 1)
                             {
-                                if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y > enemy.Center.Y && enemy.dir == direction.right && enemy.dir != direction.down)
+                                if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y >= enemy.Center.Y && enemy.dir == direction.right && enemy.dir != direction.down)
                                 {
                                     enemy.changeDirection(direction.up);
                                     enemy.wayPointIterator++;
                                     continue;
                                 }
                                 //new
-                                if (enemy.Center.X < waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y > enemy.Center.Y && enemy.dir == direction.left && enemy.dir != direction.down)
+                                if (enemy.Center.X < waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y >= enemy.Center.Y && enemy.dir == direction.left && enemy.dir != direction.down)
                                 {
                                     //if (enemy == enemies[0]) Console.WriteLine("up");
                                     enemy.changeDirection(direction.up);
@@ -107,14 +107,14 @@ namespace TowerDefenseNew
                                     continue;
                                 }
 
-                                else if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y < enemy.Center.Y && enemy.dir == direction.right && enemy.dir != direction.up)
+                                else if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y <= enemy.Center.Y && enemy.dir == direction.right && enemy.dir != direction.up)
                                 {
                                     enemy.changeDirection(direction.down);
                                     enemy.wayPointIterator++;
                                     continue;
                                 }
                                 //new
-                                if (enemy.Center.X < waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y < enemy.Center.Y && enemy.dir == direction.left && enemy.dir != direction.up)
+                                if (enemy.Center.X <= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y < enemy.Center.Y && enemy.dir == direction.left && enemy.dir != direction.up)
                                 {
                                     //if (enemy == enemies[0]) Console.WriteLine("up");
                                     enemy.changeDirection(direction.down);
@@ -122,7 +122,7 @@ namespace TowerDefenseNew
                                     continue;
                                 }
                                 //new
-                                if (enemy.Center.X > waypoints[enemy.wayPointIterator + 1].X && waypoints[enemy.wayPointIterator].Y > enemy.Center.Y && enemy.dir == direction.down && enemy.dir != direction.left)
+                                if (enemy.Center.X >= waypoints[enemy.wayPointIterator + 1].X && waypoints[enemy.wayPointIterator].Y > enemy.Center.Y && enemy.dir == direction.down && enemy.dir != direction.left)
                                 {
                                     //if (enemy == enemies[0]) Console.WriteLine("up");
                                     enemy.changeDirection(direction.left);
@@ -130,7 +130,7 @@ namespace TowerDefenseNew
                                     continue;
                                 }
                                 //new
-                                if (enemy.Center.X > waypoints[enemy.wayPointIterator + 1].X && waypoints[enemy.wayPointIterator].Y <= enemy.Center.Y && enemy.dir == direction.up && enemy.dir != direction.left)
+                                if (enemy.Center.X >= waypoints[enemy.wayPointIterator + 1].X && waypoints[enemy.wayPointIterator].Y <= enemy.Center.Y && enemy.dir == direction.up && enemy.dir != direction.left)
                                 {
                                     //if (enemy == enemies[0]) Console.WriteLine("up");
                                     enemy.changeDirection(direction.left);
@@ -138,14 +138,14 @@ namespace TowerDefenseNew
                                     continue;
                                 }
 
-                                else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y < waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.down && enemy.dir != direction.right)
+                                else if (enemy.Center.X <= waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y < waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.down && enemy.dir != direction.right)
                                 {
                                     //if (enemy == enemies[0]) Console.WriteLine("right");
                                     enemy.changeDirection(direction.right);
                                     enemy.wayPointIterator++;
                                     continue;
                                 }
-                                else if (enemy.Center.X < waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y >= waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.up && enemy.dir != direction.right)
+                                else if (enemy.Center.X <= waypoints[enemy.wayPointIterator + 1].X && enemy.Center.Y >= waypoints[enemy.wayPointIterator].Y && enemy.dir == direction.up && enemy.dir != direction.right)
                                 {
                                     enemy.changeDirection(direction.right);
                                     enemy.wayPointIterator++;
@@ -305,7 +305,7 @@ namespace TowerDefenseNew
 
             else if (column == checkCol && row == checkRow && column != 0)
             {
-                if (CheckCell(column + 1, row) == CellType.Path)
+                if (CheckCell(column + 1, row) == CellType.Path && CheckCell(column + 2, row) != CellType.Path)
                 {
                     _grid[column, row] = CellType.Path;
                     _grid[column + 2, row] = CellType.Path;
@@ -314,13 +314,14 @@ namespace TowerDefenseNew
                 else
                 {
                     _grid[column, row] = CellType.Path;
-                    if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
                     checkCol++;
                 }
+                if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+                
             }
             else if (column == checkCol - 2 && row == checkRow && column != 0)
             {
-                if (CheckCell(column - 1, row) == CellType.Path)
+                if (CheckCell(column - 1, row) == CellType.Path && CheckCell(column - 2, row) != CellType.Path)
                 {
                     _grid[column, row] = CellType.Path;
                     _grid[column - 2, row] = CellType.Path;
@@ -329,15 +330,16 @@ namespace TowerDefenseNew
                 else
                 {
                     _grid[column, row] = CellType.Path;
-                    if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
                     checkCol--;
                 }
+                if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+                
             }
             else if (column == checkCol - 1 && row == checkRow - 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
                 if (row > 0)
                 {
-                    if (CheckCell(column, row - 1) == CellType.Path)
+                    if (CheckCell(column, row - 1) == CellType.Path && CheckCell(column, row-2) != CellType.Path)
                     {
                         _grid[column, row] = CellType.Path;
                         _grid[column, row - 2] = CellType.Path;
@@ -346,16 +348,17 @@ namespace TowerDefenseNew
                     else
                     {
                         _grid[column, row] = CellType.Path;
-                        if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
                         checkRow = row;
                     }
+                    if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
+                    
                 }
             }
             else if (column == checkCol - 1 && row == checkRow + 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
                 if (row < 29)
                 {
-                    if (CheckCell(column, row + 1) == CellType.Path)
+                    if (CheckCell(column, row + 1) == CellType.Path && CheckCell(column, row + 2) != CellType.Path)
                     {
                         _grid[column, row] = CellType.Path;
                         _grid[column, row + 2] = CellType.Path;
@@ -364,9 +367,10 @@ namespace TowerDefenseNew
                     else
                     {
                         _grid[column, row] = CellType.Path;
-                        if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
                         checkRow = row;
                     }
+                    if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
+                    
                 }
             }
             if (CheckCell(checkCol, row) == CellType.Finish && placed == false)
