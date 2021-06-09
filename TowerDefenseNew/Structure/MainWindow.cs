@@ -1,7 +1,9 @@
 ﻿using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Common.Input;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using Zenseless.OpenTK;
 
 namespace TowerDefenseNew.Structure
 {
@@ -33,15 +35,16 @@ namespace TowerDefenseNew.Structure
                     window.Close();
                 }
             };
-            window.WindowBorder = WindowBorder.Hidden;
-            window.WindowState = WindowState.Maximized;
+            window.WindowBorder = WindowBorder.Resizable;
+            window.WindowState = WindowState.Normal;
+            window.CenterWindow();
             return window;
         }
 
         private static void Window_RenderFrame(FrameEventArgs obj)
         {
             fpsCounter.NextFrame();
-            window.Title = $"TowerDefenseNew {fpsCounter.Value} FPS";
+            window.Title = $"Slime Defense {fpsCounter.Value} FPS";
         }
     }
 }

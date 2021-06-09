@@ -3,9 +3,14 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <ApplicationIcon>Content\Slime.ico</ApplicationIcon>
+    <Win32Resource></Win32Resource>
+    <AssemblyName>TowerDefenseNew</AssemblyName>
+    <RootNamespace>TowerDefenseNew</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Content\Slime.ico" />
     <None Remove="Content\smokin.png" />
     <None Remove="Content\sonic_asalga.png" />
     <None Remove="Content\TileSet_CG.png" />
@@ -14,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Content\Slime.ico" />
     <EmbeddedResource Include="Content\smokin.png" />
     <EmbeddedResource Include="Content\sonic_asalga.png" />
     <EmbeddedResource Include="Content\TileSet_CG.png" />
