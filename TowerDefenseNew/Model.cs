@@ -334,23 +334,33 @@ namespace TowerDefenseNew
                     _grid[column - 1, row] = CellType.PathRight;
                 }
 
-                if (CellTypeIsAnyPath(column + 1, row))// && CheckCell(i + 2, row) != CellType.Path && CheckCell(i + 3, row) != CellType.Path)
+                if (CellTypeIsAnyPath(column + 1, row))
                 {
                     for (int i = column; i < 51; i++)
                     {
                         if (CheckCell(i + 2, row) == CellType.Empty)
                         {
-                            _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
-                            _grid[i + 1, row] = CellType.PathCross;
-                            _grid[i + 2, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
-                            checkCol = i + 3;
-                            Console.WriteLine($"CROSS PATH checkcol: {checkCol}, i ist: {i}");
-                            break;
+                            //Check if dead end loch (dein lieblings dead end, max)
+                            if (CheckCell(i + 3, row) == CellType.Path)
+                            {
+                                _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                                _grid[i + 1, row] = CellType.PathCross; // Path für Eckpfeile, PathRight für alle Pfeile
+                                _grid[i + 2, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                                continue;
+                            }
+                            else
+                            {
+                                _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                                _grid[i + 1, row] = CellType.PathCross;
+                                _grid[i + 2, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                                checkCol = i + 3;
+                                Console.WriteLine($"CROSS PATH checkcol: {checkCol}, i ist: {i}");
+                                break;
+                            }
                         }
                         else continue;
                     }
                 }
-                //right to left
                 else if (CheckCell(checkCol, row) == CellType.Empty)
                 {
                     Console.WriteLine($"STRAIGHT PATH checkcol: {checkCol}");
@@ -364,6 +374,7 @@ namespace TowerDefenseNew
                 }
             }
 
+            //right to left
             else if (column == checkCol - 2 && row == checkRow && column != 0)
             {
                 if (CheckCell(column + 1, row - 1) == CellType.PathUp || CheckCell(column + 1, row - 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
@@ -374,12 +385,34 @@ namespace TowerDefenseNew
                 {
                     _grid[column + 1, row] = CellType.PathLeft;
                 }
-                if (CellTypeIsAnyPath(column - 1, row) && !CellTypeIsAnyPath(column - 2, row) && !CellTypeIsAnyPath(column - 3, row))
+                if (CellTypeIsAnyPath(column - 1, row))
                 {
-                    _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathLeft für alle Pfeile
-                    _grid[column - 1, row] = CellType.PathCross;
-                    _grid[column - 2, row] = CellType.Path; // Path für Eckpfeile, PathLeft für alle Pfeile
-                    checkCol -= 3;
+                    for (int i = column; i > 0; i--)
+                    {
+                        if (CheckCell(i - 1, row) == CellType.Empty)
+                        {   
+                            //Check if dead end loch (dein lieblings dead end, max)
+                            if (CheckCell(i - 2, row) == CellType.Path)
+                            {
+                                _grid[column, row] = CellType.Path;
+                                _grid[i, row] = CellType.PathCross;
+                                _grid[i - 1, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                                continue;
+                            }
+                            else
+                            {
+                                
+                                _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                                _grid[i, row] = CellType.PathCross;
+                                _grid[i - 1, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                                                                   //_grid[i - 2, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                                checkCol = i;
+                                Console.WriteLine($"CROSS PATH checkcol: {checkCol}, i ist: {i}");
+                                break;
+                            }
+                        }
+                        else continue;
+                    }
                 }
                 else
                 {
@@ -391,7 +424,6 @@ namespace TowerDefenseNew
                     waypoints.Add(new Vector2(column - 1, row));
                     placePoint = true;
                 }
-
             }
             else if (column == checkCol - 1 && row == checkRow - 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
