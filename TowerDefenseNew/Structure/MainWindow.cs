@@ -43,9 +43,10 @@ namespace TowerDefenseNew.Structure
         private static void Window_RenderFrame(FrameEventArgs obj)
         {
             //set minimum client size
-            if (window.Size.X <= 1440 || window.Size.Y <= 720) 
+            if (window.Size.X < 1440 || window.Size.Y < 720) 
             {
                 window.Size = new Vector2i(1440, 720);
+                window.CenterWindow();
             }
             fpsCounter.NextFrame();
             window.Title = $"Slime Defense {fpsCounter.Value} FPS";
