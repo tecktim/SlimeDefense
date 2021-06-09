@@ -163,7 +163,6 @@ namespace TowerDefenseNew
 
             }
         }
-
         private void UpdateExplosions(float frameTime)
         {
             try
@@ -186,7 +185,6 @@ namespace TowerDefenseNew
                 Console.WriteLine("UpdateExplosions exception, NullReferenceException");
             }
         }
-
         private void UpdateBullets(float frameTime)
         {
             try
@@ -218,7 +216,6 @@ namespace TowerDefenseNew
                 Console.WriteLine("UpdateBullet exception, NullReferenceException");
             }
         }
-
         internal void ClearCell(int column, int row, Tower tower)
         {
             switch(CheckCell(column, row))
@@ -325,7 +322,7 @@ namespace TowerDefenseNew
                 checkRow = row;
                 spawnRow = row;
             }
-
+            //left to right
             else if (column == checkCol && row == checkRow && column != 0)
             {
                 if (CheckCell(column - 1 , row - 1) == CellType.PathUp || CheckCell(column - 1, row - 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
@@ -353,6 +350,7 @@ namespace TowerDefenseNew
                         else continue;
                     }
                 }
+                //right to left
                 else if (CheckCell(checkCol, row) == CellType.Empty)
                 {
                     Console.WriteLine($"STRAIGHT PATH checkcol: {checkCol}");

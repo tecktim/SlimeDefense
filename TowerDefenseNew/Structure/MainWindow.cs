@@ -51,12 +51,13 @@ namespace TowerDefenseNew.Structure
                 window.Size = new Vector2i(1440, 810);
                 window.CenterWindow();
             }
-            if (window.Size.X > 1440 && window.Size.Y > 810 && window.WindowState != WindowState.Maximized)
+            if (window.Size.X >= 1440 && window.Size.Y > 810 && window.WindowState != WindowState.Maximized)
             {
                 int width = window.Size.Y / 9 * 16;
                 window.Size = new Vector2i(width, window.Size.Y);
                 window.CenterWindow();
             }
+
             fpsCounter.NextFrame();
             window.Title = $"Slime Defense {fpsCounter.Value} FPS";
         }
