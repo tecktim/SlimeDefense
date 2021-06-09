@@ -20,7 +20,7 @@ namespace TowerDefenseNew.Structure
                 control.Update((float)args.Time, window.KeyboardState);
                 model.Update((float)args.Time);
             }; // call update once each frame
-            window.Resize += args => view.Resize(args.Width, args.Height); // on window resize inform view
+            window.Resize += args => view.Resize(window.Bounds.Size.X, window.Bounds.Size.Y); // on window resize inform view
             window.RenderFrame += _ => view.Draw(model); // first draw the model
             window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
             window.Run();
