@@ -370,19 +370,16 @@ namespace TowerDefenseNew
             {
                 case 0:
                    // DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
-                    DrawText("To start the game,hold SPACEBAR and drag the mouse from left to right", 8f, -.75f, .5f);
+                    DrawText("To start the game,hold SPACEBAR and drag the mouse from left to right", 8f, -1f, .5f);
                     break;
                 case 1:
-                    DrawText("!!! ENEMIES ARE INCOMING !!!", 13f, 30f, 1f);
-                    DrawText("Place towers to kill them before they reach the end", 2f, -1f, 1f);
+                    DrawText("ENEMIES ARE INCOMING,Place towers to kill them before they reach the end", 7f, -1f, .5f);
                     break;
                 case 2:
-                    DrawText("Pro tip: Every new stage you reach,", 9f, 30f, 1f);
-                    DrawText("enemies will increase in HP by 10%", 9f, -1f, 1f);
+                    DrawText("Pro tip 1: Every new stage you reach,enemies will increase in HP by 10%", 7.5f, -1f, .5f);
                     break;
                 case 3:
-                    DrawText("Pro tip: Every tenth stage you reach,", 9f, 30f, 1f);
-                    DrawText("the per kill bounty increases by 1$", 9f, -1f, 1f);
+                    DrawText("Pro tip: Every tenth stage you reach,the per kill bounty increases by 1$", 7.5f, -1f, .5f);
                     break;
                 default:
                     break;
@@ -397,17 +394,18 @@ namespace TowerDefenseNew
             DrawText($"Stage:", 54.5f, 25f, 0.6f);
             DrawText($"{model.stage}", 54.5f, 24f, 0.5f);
 
-            DrawText("Drag&Drop", 54.25f, 17.5f, 0.4f);
-            DrawText("Rifle 5$", 55.3f, 16.33f, 0.33f);
-            DrawText("Sniper 20$", 55.3f, 14.83f, 0.33f);
-            DrawText("Bounce 40$", 55.3f, 13.33f, 0.33f);
 
-            
-
-            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
-            DrawTile(54.2f, 14.5f, 0f, 0f, 3 * 5 + 4);
-            DrawTile(54.2f, 16f, 0f, 0f, 4 * 5 + 4);
-            DrawTile(54.2f, 13f, 0f, 0f, 5 * 5 + 4);
+            if (model.stage > 0)
+            {
+                DrawText("Drag&Drop", 54.25f, 17.5f, 0.4f);
+                DrawText("Rifle 5$", 55.3f, 16.33f, 0.33f);
+                DrawText("Sniper 20$", 55.3f, 14.83f, 0.33f);
+                DrawText("Bounce 40$", 55.3f, 13.33f, 0.33f);
+                GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
+                DrawTile(54.2f, 14.5f, 0f, 0f, 3 * 5 + 4);
+                DrawTile(54.2f, 16f, 0f, 0f, 4 * 5 + 4);
+                DrawTile(54.2f, 13f, 0f, 0f, 5 * 5 + 4);
+            }
 
             GL.Disable(EnableCap.Blend);
         }

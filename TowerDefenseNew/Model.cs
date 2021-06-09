@@ -387,7 +387,7 @@ namespace TowerDefenseNew
                 }
                 if (CellTypeIsAnyPath(column - 1, row))
                 {
-                    for (int i = column; i > 0; i--)
+                    for (int i = column; i > 1; i--)
                     {
                         if (CheckCell(i - 1, row) == CellType.Empty)
                         {   
