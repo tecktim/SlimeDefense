@@ -1,6 +1,6 @@
 ﻿namespace TowerDefenseNew.Grid
 {
-    public enum CellType { Empty, Path, Sniper, Rifle, Bouncer, Finish };
+    public enum CellType { Empty, PathRight, PathUp, PathLeft, PathDown, PathCross, Path, Sniper, Rifle, Bouncer, Finish};
 
     public interface IReadOnlyGrid
     {

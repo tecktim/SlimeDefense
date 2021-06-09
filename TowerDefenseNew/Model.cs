@@ -68,7 +68,7 @@ namespace TowerDefenseNew
                 enemyHealth += (enemyHealth / 100) * 15;
                 applyScaling = false;
                 stage++;
-                if (stage % 3 == 0)
+                if (stage % 10 == 0)
                 {
                     bounty++;
                 }
@@ -297,13 +297,29 @@ namespace TowerDefenseNew
             else return;
         }
 
+        internal bool CellTypeIsAnyPath(int column, int row)
+        {
+            if (CheckCell(column, row) == CellType.PathRight ||
+                CheckCell(column, row) == CellType.PathUp ||
+                CheckCell(column, row) == CellType.PathLeft ||
+                CheckCell(column, row) == CellType.PathDown ||
+                CheckCell(column, row) == CellType.PathCross ||
+                CheckCell(column, row) == CellType.Path
+                )
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
         
         internal bool PlacePath(int column, int row)
         {
             //First is always placed left
             if (column == 0 && waypoints.Count == 0)
             {
-                _grid[column, row] = CellType.Path;
+                _grid[column, row] = CellType.PathRight;
                 waypoints.Add(new Vector2(column, row));
                 checkCol++;
                 checkRow = row;
@@ -312,14 +328,24 @@ namespace TowerDefenseNew
 
             else if (column == checkCol && row == checkRow && column != 0)
             {
-                if (CheckCell(column + 1, row) == CellType.Path)// && CheckCell(i + 2, row) != CellType.Path && CheckCell(i + 3, row) != CellType.Path)
+                if (CheckCell(column - 1 , row - 1) == CellType.PathUp || CheckCell(column - 1, row - 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
+                {
+                    _grid[column - 1, row] = CellType.PathRight;
+                }
+                if (CheckCell(column - 1, row + 1) == CellType.PathDown || CheckCell(column - 1, row + 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
+                {
+                    _grid[column - 1, row] = CellType.PathRight;
+                }
+
+                if (CellTypeIsAnyPath(column + 1, row))// && CheckCell(i + 2, row) != CellType.Path && CheckCell(i + 3, row) != CellType.Path)
                 {
                     for (int i = column; i < 51; i++)
                     {
                         if (CheckCell(i + 2, row) == CellType.Empty)
                         {
-                            _grid[column, row] = CellType.Path;
-                            _grid[i + 2, row] = CellType.Path;
+                            _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
+                            _grid[i + 1, row] = CellType.PathCross;
+                            _grid[i + 2, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
                             checkCol = i + 3;
                             Console.WriteLine($"CROSS PATH checkcol: {checkCol}, i ist: {i}");
                             break;
@@ -333,15 +359,28 @@ namespace TowerDefenseNew
                     _grid[column, row] = CellType.Path;
                     checkCol++;
                 }
-                if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+                if (placePoint == false)
+                {
+                    waypoints.Add(new Vector2(column - 1, row));
+                    placePoint = true;
+                }
             }
 
             else if (column == checkCol - 2 && row == checkRow && column != 0)
             {
-                if (CheckCell(column - 1, row) == CellType.Path && CheckCell(column - 2, row) != CellType.Path && CheckCell(column - 3, row) != CellType.Path)
+                if (CheckCell(column + 1, row - 1) == CellType.PathUp || CheckCell(column + 1, row - 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
                 {
-                    _grid[column, row] = CellType.Path;
-                    _grid[column - 2, row] = CellType.Path;
+                    _grid[column + 1, row] = CellType.PathLeft;
+                }
+                if (CheckCell(column + 1, row + 1) == CellType.PathDown || CheckCell(column + 1, row + 1) == CellType.PathDown) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
+                {
+                    _grid[column + 1, row] = CellType.PathLeft;
+                }
+                if (CellTypeIsAnyPath(column - 1, row) && !CellTypeIsAnyPath(column - 2, row) && !CellTypeIsAnyPath(column - 3, row))
+                {
+                    _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathLeft für alle Pfeile
+                    _grid[column - 1, row] = CellType.PathCross;
+                    _grid[column - 2, row] = CellType.Path; // Path für Eckpfeile, PathLeft für alle Pfeile
                     checkCol -= 3;
                 }
                 else
@@ -349,17 +388,30 @@ namespace TowerDefenseNew
                     _grid[column, row] = CellType.Path;
                     checkCol--;
                 }
-                if (placePoint == false) waypoints.Add(new Vector2(column - 1, row)); placePoint = true;
+                if (placePoint == false)
+                {
+                    waypoints.Add(new Vector2(column - 1, row));
+                    placePoint = true;
+                }
 
             }
             else if (column == checkCol - 1 && row == checkRow - 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
                 if (row > 0)
-                {
-                    if (CheckCell(column, row - 1) == CellType.Path && CheckCell(column, row - 2) != CellType.Path && CheckCell(column, row - 3) != CellType.Path)
+                { 
+                if (CheckCell(column - 1, row + 1) == CellType.PathRight || CheckCell(column - 1, row + 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
                     {
-                        _grid[column, row] = CellType.Path;
-                        _grid[column, row - 2] = CellType.Path;
+                _grid[column, row + 1] = CellType.PathDown;
+                }
+                if (CheckCell(column + 1, row + 1) == CellType.PathLeft || CheckCell(column + 1, row + 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
+                    {
+                _grid[column, row + 1] = CellType.PathDown;
+                }
+                    if (CellTypeIsAnyPath(column, row - 1) && !CellTypeIsAnyPath(column, row - 2) && !CellTypeIsAnyPath(column, row - 3))
+                    {
+                        _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathDown für alle Pfeile
+                        _grid[column, row - 1] = CellType.PathCross;
+                        _grid[column, row - 2] = CellType.Path; // Path für Eckpfeile, PathDown für alle Pfeile
                         checkRow -= 3;
                     }
                     else
@@ -367,7 +419,11 @@ namespace TowerDefenseNew
                         _grid[column, row] = CellType.Path;
                         checkRow = row;
                     }
-                    if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
+                    if (placePoint == true)
+                    {
+                        waypoints.Add(new Vector2(column, checkRow));
+                        placePoint = false;
+                    }
 
                 }
             }
@@ -375,10 +431,20 @@ namespace TowerDefenseNew
             {
                 if (row < 29)
                 {
-                    if (CheckCell(column, row + 1) == CellType.Path && CheckCell(column, row + 2) != CellType.Path && CheckCell(column, row + 3) != CellType.Path)
+                if (CheckCell(column - 1, row - 1) == CellType.PathRight || CheckCell(column - 1, row - 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
                     {
-                        _grid[column, row] = CellType.Path;
-                        _grid[column, row + 2] = CellType.Path;
+                    _grid[column, row - 1] = CellType.PathUp;
+                }
+                if (CheckCell(column + 1, row - 1) == CellType.PathLeft || CheckCell(column + 1, row - 1) == CellType.Path) //Vorne ist für alle durchgehende Pfeile, hinten für nur Eckpfeile, hinten ist entfernbar wenn man alle Pfeile möchte
+                    {
+                    _grid[column, row - 1] = CellType.PathUp;
+                }
+                
+                    if (CellTypeIsAnyPath(column, row + 1) && !CellTypeIsAnyPath(column, row + 2) && !CellTypeIsAnyPath(column, row + 3))
+                    {
+                        _grid[column, row] = CellType.Path; // Path für Eckpfeile, PathUp für alle Pfeile
+                        _grid[column, row + 1] = CellType.PathCross;
+                        _grid[column, row + 2] = CellType.Path; // Path für Eckpfeile, PathUp für alle Pfeile
                         checkRow += 3;
                     }
                     else
@@ -386,13 +452,17 @@ namespace TowerDefenseNew
                         _grid[column, row] = CellType.Path;
                         checkRow = row;
                     }
-                    if (placePoint == true) waypoints.Add(new Vector2(column, checkRow)); placePoint = false;
+                    if (placePoint == true)
+                    {
+                        waypoints.Add(new Vector2(column, checkRow));
+                        placePoint = false;
+                    }
                 }
             }
             if (CheckCell(checkCol, row) == CellType.Finish && placed == false)
             {
                 stage = 1;
-                _grid[checkCol, row] = CellType.Path;
+                _grid[checkCol, row] = CellType.PathRight;
                 waypoints.Add(new Vector2(checkCol, row));
                 placed = true;
                 enemySpawnTimer(spawnRow);

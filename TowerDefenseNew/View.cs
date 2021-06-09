@@ -30,8 +30,10 @@ namespace TowerDefenseNew
             //texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
-            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_no_offset.png");
-            //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_offset_1_top_after_first_tile.png");
+            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12.png");
+
+            //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_no_offset.png");
+
 
         }
 
@@ -86,10 +88,7 @@ namespace TowerDefenseNew
             {
                 if (bullet != null)
                 {
-                    if (bullet.TowerType == 2)
-                    { DrawBullet(bullet, 0); }
-                    else { DrawBullet(bullet, bullet.TowerType); }
-
+                    DrawBullet(bullet, bullet.TowerType); 
                 }
                 else continue;
             }
@@ -103,50 +102,50 @@ namespace TowerDefenseNew
                 {
                     GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
                     GL.Enable(EnableCap.Blend);
-                    if (enemy.dir == direction.right || enemy.dir == direction.up || enemy.dir == direction.down)
+                    if (enemy.dir == direction.right || enemy.dir == direction.up )
                     {
                         if (enemy.health >= model.enemyHealth * 0.8)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 4);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 7 * 5 + 4);
                         }
                         else if (enemy.health >= model.enemyHealth * 0.6)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 3);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 7 * 5 + 3);
                         }
                         else if (enemy.health >= model.enemyHealth * 0.4)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 2);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 7 * 5 + 2);
                         }
                         else if (enemy.health >= model.enemyHealth * 0.2)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5 + 1);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 7 * 5 + 1);
                         }
                         else if (enemy.health > 0)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 4 * 5);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 7 * 5);
                         }
                     }
-                    if (enemy.dir == direction.left || enemy.dir == direction.up || enemy.dir == direction.down)
+                    if (enemy.dir == direction.left || enemy.dir == direction.down)
                     {
                         if (enemy.health >= model.enemyHealth * 0.8)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5 + 4);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 6 * 5 + 4);
                         }
                         else if (enemy.health >= model.enemyHealth * 0.6)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5 + 3);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 6 * 5 + 3);
                         }
                         else if (enemy.health >= model.enemyHealth * 0.4)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5 + 2);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 6 * 5 + 2);
                         }
                         else if (enemy.health >= model.enemyHealth * 0.2)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5 + 1);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 6 * 5 + 1);
                         }
                         else if (enemy.health > 0)
                         {
-                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 3 * 5);
+                            DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 0f, 6 * 5);
                         }
                     }
                     GL.Disable(EnableCap.Blend);
@@ -161,17 +160,17 @@ namespace TowerDefenseNew
             if (sampleSniper)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 5f, Color4.White);
-                DrawTile(column, row, 0f, 0f, 7 * 5);
+                DrawTile(column, row, 0f, 0f, 3 * 5);
             }
             else if (sampleRifle)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 2f, Color4.White);
-                DrawTile(column, row, 0f, 0f, 2 * 5);
+                DrawTile(column, row, 0f, 0f, 4 * 5);
             }
             else if (sampleBouncer)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
-                DrawTile(column, row, 0f, 0f, 8 * 5);
+                DrawTile(column, row, 0f, 0f, 5 * 5);
             }
             else return;
             GL.Disable(EnableCap.Blend);
@@ -203,7 +202,7 @@ namespace TowerDefenseNew
         {
             GL.Color4(Color4.White);
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
-            const uint tilesPerColumn = 10;
+            const uint tilesPerColumn = 12;
             const uint tilesPerRow = 5;
             var rect = new Rect(x + offset, y + offset, 1f - scale, 1f - scale);
             var tileCoords = SpriteSheetTools.CalcTexCoords(tileNumber, tilesPerRow, tilesPerColumn);
@@ -225,30 +224,30 @@ namespace TowerDefenseNew
                             {
                                 if (CellType.Sniper == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 7 * 5); //Snake
+                                    DrawTile(column, row, 0f, 0f, 3 * 5); //Sniper
                                 }
                                 if (CellType.Rifle == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 2 * 5); //Ghost
+                                    DrawTile(column, row, 0f, 0f, 4 * 5); //Rifler
                                 }
                                 if (CellType.Bouncer == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 8 * 5); //Bouncer
+                                    DrawTile(column, row, 0f, 0f, 5 * 5); //Bouncer
                                 }
                             }
                             if (tower.aimAtEnemy.Center.X > column)
                             {
                                 if (CellType.Sniper == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 7 * 5 + 1); //Snake
+                                    DrawTile(column, row, 0f, 0f, 3 * 5 + 1); //Sniper
                                 }
                                 if (CellType.Rifle == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 2 * 5 + 1); //Ghost
+                                    DrawTile(column, row, 0f, 0f, 4 * 5 + 1); //Rifler
                                 }
                                 if (CellType.Bouncer == model.Grid[column, row])
                                 {
-                                    DrawTile(column, row, 0f, 0f, 8 * 5 + 1); //Bouncer
+                                    DrawTile(column, row, 0f, 0f, 5 * 5 + 1); //Bouncer
                                 }
                             }
                         }
@@ -256,29 +255,53 @@ namespace TowerDefenseNew
                         {
                             if (CellType.Sniper == model.Grid[column, row])
                             {
-                                DrawTile(column, row, 0f, 0f, 7 * 5); //Snake
+                                DrawTile(column, row, 0f, 0f, 3 * 5); //Sniper
                             }
                             if (CellType.Rifle == model.Grid[column, row])
                             {
-                                DrawTile(column, row, 0f, 0f, 2 * 5); //Ghost
+                                DrawTile(column, row, 0f, 0f, 4 * 5); //Rifler
                             }
                             if (CellType.Bouncer == model.Grid[column, row])
                             {
-                                DrawTile(column, row, 0f, 0f, 8 * 5); //Bouncer
+                                DrawTile(column, row, 0f, 0f, 5 * 5); //Bouncer
                             }
                         }
                     }
                     if (CellType.Path == model.Grid[column, row])
                     {
-                        DrawTile(column, row, 0f, 0f, 1); //Path
+                        DrawTile(column, row, 0f, 0f, 1 * 5); //Path
                     }
-                    if (CellType.Path == model.Grid[column, row] && column == 0)
+                    if (CellType.PathRight == model.Grid[column, row])
                     {
-                        DrawTile(column, row, 0f, 0f, 2); //Portal, nur 1x
+                        DrawTile(column, row, 0f, 0f, 2 * 5); //Path
+                    }
+                    if (CellType.PathUp == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5 + 1); //Path
+                    }
+                    if (CellType.PathLeft == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5 + 2); //Path
+                    }
+                    if (CellType.PathDown == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5 + 3); //Path
+                    }
+                    if (CellType.PathCross == model.Grid[column, row])
+                    {
+                        DrawTile(column, row, 0f, 0f, 2 * 5 + 4); //Path
+                    }
+                    if (CellType.PathRight == model.Grid[column, row] && column == 0)
+                    {
+                        DrawTile(column, row, 0f, 0f, 1 * 5 + 1); //Portal blue
                     }
                     if (CellType.Empty == model.Grid[column, row] || CellType.Finish == model.Grid[column, row])
                     {
                         DrawTile(column, row, 0f, 0f, 0); //Weed :)
+                    }
+                    if (CellType.PathRight == model.Grid[column, row] && column == 53)
+                    {
+                        DrawTile(column, row, 0f, 0f, 1 * 5 + 2); //Portal red
                     }
                 }
             }
@@ -289,7 +312,7 @@ namespace TowerDefenseNew
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.Enable(EnableCap.Blend);
-            DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, 25 + (type * 5));
+            DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, ((type+3) * 5) + 2);
             GL.Disable(EnableCap.Blend);
         }
 
@@ -358,7 +381,7 @@ namespace TowerDefenseNew
                     DrawText("enemies will increase in HP by 10%", 9f, -1f, 1f);
                     break;
                 case 3:
-                    DrawText("Pro tip: Every third stage you reach,", 9f, 30f, 1f);
+                    DrawText("Pro tip: Every tenth stage you reach,", 9f, 30f, 1f);
                     DrawText("the per kill bounty increases by 1$", 9f, -1f, 1f);
                     break;
                 default:
@@ -382,9 +405,9 @@ namespace TowerDefenseNew
             
 
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
-            DrawTile(54.2f, 14.5f, 0f, 0f, 7 * 5);
-            DrawTile(54.2f, 16f, 0f, 0f, 2 * 5);
-            DrawTile(54.2f, 13f, 0f, 0f, 8 * 5);
+            DrawTile(54.2f, 14.5f, 0f, 0f, 3 * 5 + 4);
+            DrawTile(54.2f, 16f, 0f, 0f, 4 * 5 + 4);
+            DrawTile(54.2f, 13f, 0f, 0f, 5 * 5 + 4);
 
             GL.Disable(EnableCap.Blend);
         }
