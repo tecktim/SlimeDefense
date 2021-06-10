@@ -83,7 +83,7 @@ namespace TowerDefenseNew
 
         internal void ShowRange(float x, float y, MouseButton mb)
         {
-            _view.Window.IsMouseButtonPressed(MouseButton.Left));
+            _view.Window.IsMouseButtonPressed(MouseButton.Left);
             var cam = _view.Camera;
             var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
             var pixelCoordinates = new Vector2(x, y);
