@@ -26,6 +26,7 @@ namespace TowerDefenseNew
             }
         }
 
+
         internal void Click(float x, float y, KeyboardState keyboard)
         {
             var cam = _view.Camera;
@@ -39,49 +40,6 @@ namespace TowerDefenseNew
             var cell = _model.CheckCell(column, row);
             if (_model.gameOver == false)
             {
-                //Sniper verkaufen
-               /* if (cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.Delete))
-                {
-                    foreach (Tower tower in _model.towers.ToList())
-                    {
-                        if (tower.Center.X == column && tower.Center.Y == row)
-                        {
-                            _model.ClearCell(column, row, tower);
-                        }
-                        else continue;
-                    }
-                    return;
-                }
-
-                //Rifle verkaufen
-                if (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.Delete))
-                {
-                    //Sell Rifle
-                    foreach (Tower tower in _model.towers.ToList())
-                    {
-                        if (tower.Center.X == column && tower.Center.Y == row)
-                        {
-                            _model.ClearCell(column, row, tower);
-                        }
-                        else continue;
-                    }
-                    return;
-                }
-
-                //Bouncer verkaufen
-                if (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.Delete))
-                {
-                    foreach (Tower tower in _model.towers.ToList())
-                    {
-                        if (tower.Center.X == column && tower.Center.Y == row)
-                        {
-                            _model.ClearCell(column, row, tower);
-                        }
-                        else continue;
-                    }
-                    return;
-                }*/
-
                 if ((cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.Delete)) || (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.Delete)) || (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.Delete)))
                 {
                     foreach (Tower tower in _model.towers.ToList())
@@ -121,6 +79,46 @@ namespace TowerDefenseNew
                     }
                 }
             }
+        }
+
+        internal void ShowRange(float x, float y, MouseButton mb)
+        {
+            _view.Window.IsMouseButtonPressed(MouseButton.Left));
+            var cam = _view.Camera;
+            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
+            var pixelCoordinates = new Vector2(x, y);
+            var world = pixelCoordinates.Transform(fromViewportToWorld);
+            if (world.X < 0 || _model.Grid.Columns < world.X) return;
+            if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
+            var column = (int)Math.Truncate(world.X);
+            var row = (int)Math.Truncate(world.Y);
+            var cell = _model.CheckCell(column, row);
+
+            if (_view.Window.IsMouseButtonDown(mb))
+            {
+                if (cell == Grid.CellType.Sniper)
+                {
+                    _view.sampleSniper = true;
+                    _view.sampleColRow = new Vector2(column, row);
+                }
+                else _view.sampleSniper = false;
+                if (cell == Grid.CellType.Rifle)
+                {
+
+                    _view.sampleRifle = true;
+                    _view.sampleColRow = new Vector2(column, row);
+                }
+                else _view.sampleRifle = false;
+                if (cell == Grid.CellType.Bouncer)
+                {
+
+                    _view.sampleBouncer = true;
+                    _view.sampleColRow = new Vector2(column, row);
+
+                }
+                else _view.sampleBouncer = false;
+            }
+            else return;
         }
 
         internal void PlacePath(float x, float y, MouseButton mb)
