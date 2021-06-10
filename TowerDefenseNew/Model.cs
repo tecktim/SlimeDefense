@@ -265,6 +265,7 @@ namespace TowerDefenseNew
                 towers.Add(tower);
                 cash -= sniperCost;
                 Math.Floor(cash);
+                towerCount++;
             }
             else return;
         }
@@ -278,6 +279,7 @@ namespace TowerDefenseNew
                 towers.Add(tower);
                 cash -= rifleCost;
                 Math.Floor(cash);
+                towerCount++;
             }
             else return;
         }
@@ -290,6 +292,7 @@ namespace TowerDefenseNew
                 towers.Add(tower);
                 cash -= bouncerCost;
                 Math.Floor(cash);
+                towerCount++;
             }
             else return;
         }
@@ -555,6 +558,7 @@ namespace TowerDefenseNew
         internal int enemySpawnRate;
         internal int killCount;
         private int bounty;
+        internal int towerCount;
 
         internal float Time { get; private set; } = 0;
     }

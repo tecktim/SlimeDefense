@@ -20,8 +20,8 @@ namespace TowerDefenseNew.Structure
             fpsCounter = new FPScounter();
             window.RenderFrame += Window_RenderFrame;
             window.VSync = VSyncMode.Off;
-            window.RenderFrequency = 144;
-            window.UpdateFrequency = 144;
+            window.RenderFrequency = 30;
+            window.UpdateFrequency = 30;
             window.Size = new Vector2i(1440, 810);
             window.CenterWindow();
             // set window to halve monitor size

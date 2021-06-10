@@ -12,7 +12,7 @@ namespace TowerDefenseNew.Structure
             var model = new Model(GridLoader.CreateGrid());
             var control = new Control(model, view);
             var keyboard = window.KeyboardState;
-            var mBL = new MouseButton();
+            var mB = new MouseButton();
 
             window.MouseMove += args => control.PlacePath(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
             window.MouseDown += args => control.ShowRange(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);

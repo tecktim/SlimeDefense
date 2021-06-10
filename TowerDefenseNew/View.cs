@@ -431,9 +431,12 @@ namespace TowerDefenseNew
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
             if (model.stage > 0)
             {
-                DrawText("Press Button", 54.15f, 29.5f, 0.4f);
-                DrawText("and Click to", 54.15f, 29f, 0.4f);
-                DrawText("buy towers", 54.15f, 28.5f, 0.4f);
+                DrawText("Towers:", 54.2f, 29.2f, 0.7f);
+                DrawText($"{model.towerCount}/50", 54.2f, 28f, 1f);
+
+               // DrawText("Press Button", 54.15f, 29.5f, 0.4f);
+                //DrawText("and Click to", 54.15f, 29f, 0.4f);
+               // DrawText("buy towers", 54.15f, 28.5f, 0.4f);
                 //Rifle station
                 DrawText("Rifle   5$", 54.15f, 27f, .5f);
                 DrawText("|", 56.15f, 26f, .5f);

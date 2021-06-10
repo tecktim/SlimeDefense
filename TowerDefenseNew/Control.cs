@@ -54,7 +54,7 @@ namespace TowerDefenseNew
                 }
 
                 //Schauen ob Cell leer ist
-                if (cell == Grid.CellType.Empty)
+                if (cell == Grid.CellType.Empty && _model.towerCount < 50)
                 {
                     //Sniper kaufen
                     if (keyboard.IsKeyDown(Keys.D2))
@@ -83,7 +83,6 @@ namespace TowerDefenseNew
 
         internal void ShowRange(float x, float y, MouseButton mb)
         {
-            _view.Window.IsMouseButtonPressed(MouseButton.Left));
             var cam = _view.Camera;
             var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
             var pixelCoordinates = new Vector2(x, y);

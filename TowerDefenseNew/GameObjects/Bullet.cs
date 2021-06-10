@@ -66,11 +66,11 @@ namespace TowerDefenseNew.GameObjects
             {
                 Console.WriteLine("checkHit exception");
             }
-            if (lifeTime >= 144 && TowerType != 2)
+            if (lifeTime >= 30 && TowerType != 2)
             {
                 Bullets.Remove(this);
             }
-            else if ((lifeTime >= 144 || bounceCount > 15) && TowerType == 2) { Bullets.Remove(this); }
+            else if ((lifeTime >= 30 || bounceCount > 15) && TowerType == 2) { Bullets.Remove(this); }
             return isDead;
         }
 
