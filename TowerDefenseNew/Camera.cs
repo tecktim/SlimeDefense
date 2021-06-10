@@ -24,8 +24,6 @@ namespace TowerDefenseNew
         public void Resize(int width, int height)
         {
             GL.Viewport(0, 0, width, height); // tell OpenGL to use the whole window for drawing
-
-            //TODO: Save the view port aspect ratio for use in rendering
             _windowAspectRatio = height / (float)width;
 
             var viewport = Transformation2d.Combine(Transformation2d.Translate(Vector2.One), Transformation2d.Scale(width / 2f, height / 2f));
@@ -62,10 +60,6 @@ namespace TowerDefenseNew
 
         private void UpdateMatrix()
         {
-            //TODO: Implement window aspect ratio scaling
-            //TODO: Implement camera scaling
-            //TODO: Implement panning
-            //TODO: Calculate the resulting camera matrix
             var translate = Transformation2d.Translate(-Center - new Vector2(29f, 15f));
             var scale = Transformation2d.Scale(1f / Scale);
             var aspect = Transformation2d.Scale(_windowAspectRatio, 1f);

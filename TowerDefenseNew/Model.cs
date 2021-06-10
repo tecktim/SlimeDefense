@@ -46,8 +46,7 @@ namespace TowerDefenseNew
 
         internal void giveCash()
         {
-            cash += 1000;
-            Console.Write("New balance: " + cash);
+            cash += 10000;
         }
 
         internal IReadOnlyGrid Grid => _grid;
@@ -202,7 +201,6 @@ namespace TowerDefenseNew
                             cash += bounty;
                             Explosion exp = new Explosion(bullet.Center + new Vector2(0.45f, 1.5f), 2f, 0.75f);
                             explosions.Add(exp);
-                            Console.WriteLine("Enemy killed. Cash: " + cash);
                         }
                     }
                 }
@@ -357,7 +355,6 @@ namespace TowerDefenseNew
                                 _grid[i + 1, row] = CellType.PathCross;
                                 _grid[i + 2, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
                                 checkCol = i + 3;
-                                Console.WriteLine($"CROSS PATH checkcol: {checkCol}, i ist: {i}");
                                 break;
                             }
                         }
@@ -366,7 +363,6 @@ namespace TowerDefenseNew
                 }
                 else if (CheckCell(checkCol, row) == CellType.Empty)
                 {
-                    Console.WriteLine($"STRAIGHT PATH checkcol: {checkCol}");
                     _grid[column, row] = CellType.Path;
                     checkCol++;
                 }
@@ -410,7 +406,6 @@ namespace TowerDefenseNew
                                 _grid[i - 1, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
                                                                    //_grid[i - 2, row] = CellType.Path; // Path für Eckpfeile, PathRight für alle Pfeile
                                 checkCol = i;
-                                Console.WriteLine($"CROSS PATH checkcol: {checkCol}, i ist: {i}");
                                 break;
                             }
                         }

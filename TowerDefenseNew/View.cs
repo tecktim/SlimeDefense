@@ -409,7 +409,7 @@ namespace TowerDefenseNew
                     DrawText("ENEMIES ARE INCOMING,Place towers to kill them before they reach the end", 7f, -1f, .5f);
                     break;
                 case 2:
-                    DrawText("Pro tip 1: Every new stage you reach,enemies will increase in HP by 10%", 7.5f, -1f, .5f);
+                    DrawText("Pro tip 1: Every new stage you reach,enemies will increase in HP by 15%", 7.5f, -1f, .5f);
                     break;
                 case 3:
                     DrawText("Pro tip: Every tenth stage you reach,the per kill bounty increases by 1$", 7.5f, -1f, .5f);
@@ -486,7 +486,7 @@ namespace TowerDefenseNew
                 DrawTile(58.15f, 18.5f, 0f, 1f, 9 * 5 + 3);
                 //Sell station
                 DrawRectangle(new Vector2(54.1f, 0f), new Vector2(5f, 1f), Color4.White);
-                DrawTile(56.5f, 0f, 0f, 1f, 9 * 5 + 2);
+                DrawTile(56.5f, 0f, 0f, 1f, 9 * 5 + 4);
                 DrawTile(58.2f, 0f, 0f, 1f, 9 * 5 + 3);
             }
 

@@ -70,11 +70,11 @@ namespace TowerDefenseNew.GameObjects
             {
                 Bullets.Remove(this);
             }
-            if (lifeTime >= 144 && TowerType != 2)
+            if (lifeTime >= 60 && TowerType != 2)
             {
                 Bullets.Remove(this);
             }
-            else if ((lifeTime >= 30 || bounceCount > 15) && TowerType == 2) { Bullets.Remove(this); }
+            else if ((lifeTime >= 60 || bounceCount > 15) && TowerType == 2) { Bullets.Remove(this); }
             return isDead;
         }
 
