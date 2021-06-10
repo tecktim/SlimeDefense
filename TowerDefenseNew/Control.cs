@@ -123,7 +123,7 @@ namespace TowerDefenseNew
             }
         }
 
-        internal void PlacePath(float x, float y, KeyboardState keyboard)
+        internal void PlacePath(float x, float y, MouseButton mb)
         {
             var cam = _view.Camera;
             var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
@@ -137,7 +137,7 @@ namespace TowerDefenseNew
             if (cell == Grid.CellType.Empty)
             {
                 //Path setzen
-                if (keyboard.IsKeyDown(Keys.Space))
+                if (_view.Window.IsMouseButtonDown(mb))
                 {
                     if (cell != Grid.CellType.Empty) { return; }
                     else
@@ -148,6 +148,11 @@ namespace TowerDefenseNew
                         }
                     }
                     return;
+                }
+                else if (!_view.Window.IsMouseButtonDown(mb))
+                {
+                    _view.samplePath = true;
+                    _view.sampleColRow = new Vector2(column, row);
                 }
             }
         }

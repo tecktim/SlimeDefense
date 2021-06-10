@@ -41,6 +41,7 @@ namespace TowerDefenseNew
         public GameWindow Window { get; }
         internal List<Vector2> circlePoints = CreateCirclePoints(360);
         internal bool sampleBouncer;
+        internal bool samplePath;
 
         internal void Draw(Model model)
         {
@@ -62,7 +63,11 @@ namespace TowerDefenseNew
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, sampleColRow.X, sampleColRow.Y);
+                if (model.placed == true)
+                {
+                    samplePath = false;
+                }
+                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, sampleColRow.X, sampleColRow.Y);
                 GL.Disable(EnableCap.Blend);
                 try
                 {
@@ -153,7 +158,7 @@ namespace TowerDefenseNew
             }
         }
 
-        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, float column, float row)
+        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, bool samplePath, float column, float row)
         {
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -171,6 +176,17 @@ namespace TowerDefenseNew
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
                 DrawTile(column, row, 0f, 0f, 5 * 5);
+            }
+            else if (samplePath)
+            {
+                if (column == 0)
+                {
+                    DrawTile(column, row, 0f, 0f, 7);
+                }
+                else if (column > 0 && column < 53)
+                {
+                    DrawTile(column, row, 0f, 0f, 1);
+                }
             }
             else return;
             GL.Disable(EnableCap.Blend);
@@ -298,6 +314,14 @@ namespace TowerDefenseNew
                     if (CellType.Empty == model.Grid[column, row] || CellType.Finish == model.Grid[column, row])
                     {
                         DrawTile(column, row, 0f, 0f, 0); //Weed :)
+                    }
+                    if (CellType.Empty == model.Grid[column, row] && column == 0 && !model.placed)
+                    {
+                        DrawTile(column, row, 0f, 0f, 1); //WeedIndicator :)
+                    }
+                    if (CellType.Finish == model.Grid[column, row] && column == 53 && !model.placed)
+                    {
+                        DrawTile(column, row, 0f, 0f, 1); //WeedIndicator :)
                     }
                     if (CellType.PathRight == model.Grid[column, row] && column == 53)
                     {

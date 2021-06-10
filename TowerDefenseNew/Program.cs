@@ -1,4 +1,5 @@
-﻿using TowerDefenseNew.Grid;
+﻿using OpenTK.Windowing.GraphicsLibraryFramework;
+using TowerDefenseNew.Grid;
 
 namespace TowerDefenseNew.Structure
 {
@@ -11,8 +12,9 @@ namespace TowerDefenseNew.Structure
             var model = new Model(GridLoader.CreateGrid());
             var control = new Control(model, view);
             var keyboard = window.KeyboardState;
+            var mB = new MouseButton();
 
-            window.MouseMove += args => control.PlacePath(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
+            window.MouseMove += args => control.PlacePath(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
             window.MouseMove += args => control.ShowTowerSample(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
             window.MouseDown += args => control.Click(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
             window.UpdateFrame += args =>

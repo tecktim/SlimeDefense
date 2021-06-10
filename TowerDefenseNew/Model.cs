@@ -533,7 +533,7 @@ namespace TowerDefenseNew
             return _grid[column, row];
         }
 
-        private bool placed;
+        internal bool placed;
         private bool applyScaling;
         internal int stage;
         private bool placePoint = true;
