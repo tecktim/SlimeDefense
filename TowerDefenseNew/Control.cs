@@ -40,13 +40,14 @@ namespace TowerDefenseNew
             var cell = _model.CheckCell(column, row);
             if (_model.gameOver == false)
             {
-                if ((cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.Delete)) || (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.Delete)) || (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.Delete)))
+                if ((cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.R)) || (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.R)) || (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.R)))
                 {
                     foreach (Tower tower in _model.towers.ToList())
                     {
                         if (tower.Center.X == column && tower.Center.Y == row)
                         {
                             _model.ClearCell(column, row, tower);
+                            _model.towerCount--;
                         }
                         else continue;
                     }

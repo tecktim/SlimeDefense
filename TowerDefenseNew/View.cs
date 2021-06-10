@@ -455,6 +455,10 @@ namespace TowerDefenseNew
                 DrawText("|", 58.15f, 19.75f, .4f);
                 DrawText("+", 57.4f, 18.75f, .5f);
                 DrawText("Buy:", 54.15f, 18.75f, .5f);
+                //sell station
+                DrawText("+", 57.6f, .25f, .5f);
+                DrawText("Sell:", 54.15f, .25f, .5f);
+
                 GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
                 //rifle station
                 DrawRectangle(new Vector2(54.1f, 24.75f), new Vector2(5f, 3f), Color4.White);
@@ -480,6 +484,10 @@ namespace TowerDefenseNew
                 DrawTile(57.15f, 19.5f, 0f, 1f, 8);
                 DrawTile(56.15f, 18.5f, 0f, 1f, 9 * 5 + 2);
                 DrawTile(58.15f, 18.5f, 0f, 1f, 9 * 5 + 3);
+                //Sell station
+                DrawRectangle(new Vector2(54.1f, 0f), new Vector2(5f, 1f), Color4.White);
+                DrawTile(56.5f, 0f, 0f, 1f, 9 * 5 + 2);
+                DrawTile(58.2f, 0f, 0f, 1f, 9 * 5 + 3);
             }
 
             GL.Disable(EnableCap.Blend);
