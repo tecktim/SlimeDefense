@@ -375,7 +375,7 @@ namespace TowerDefenseNew
         private void DrawRectangle(Vector2 min, Vector2 size, Color4 color)
         {
             var max = min + size;
-            GL.Begin(PrimitiveType.Quads);
+            GL.Begin(PrimitiveType.LineLoop);
             GL.Color4(color);
             GL.Vertex2(min);
             GL.Vertex2(max.X, min.Y);
@@ -393,8 +393,8 @@ namespace TowerDefenseNew
             switch (model.stage)
             {
                 case 0:
-                   // DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
-                    DrawText("To start the game,hold SPACEBAR and drag the mouse from left to right", 8f, -1f, .5f);
+                    // DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
+                    DrawText("> > > > > To start the game,drag the mouse from left to right < < < < <", 8f, -1f, .5f);
                     break;
                 case 1:
                     DrawText("ENEMIES ARE INCOMING,Place towers to kill them before they reach the end", 7f, -1f, .5f);
@@ -409,27 +409,51 @@ namespace TowerDefenseNew
                     break;
             }
 
-            DrawText($"Cash:", 54.5f, 29f, 0.7f);
-            DrawText($"{model.cash}$", 54.5f, 28f, 0.5f);
 
-            DrawText($"Kills:", 54.5f, 27f, 0.6f);
-            DrawText($"{model.killCount}", 54.5f, 26f, 0.5f);
-
-            DrawText($"Stage:", 54.5f, 25f, 0.6f);
-            DrawText($"{model.stage}", 54.5f, 24f, 0.5f);
+            DrawText($":{model.cash}", 20f, 30.5f, 1f);
+            DrawText($":{model.killCount}", 26f, 30.5f, 1f);
+            DrawText($":{model.stage}", 32f, 30.5f, 1f);
 
 
-            if (model.stage > 0)
-            {
-                DrawText("Drag&Drop", 54.25f, 17.5f, 0.4f);
-                DrawText("Rifle 5$", 55.3f, 16.33f, 0.33f);
-                DrawText("Sniper 20$", 55.3f, 14.83f, 0.33f);
-                DrawText("Bounce 40$", 55.3f, 13.33f, 0.33f);
-                GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
-                DrawTile(54.2f, 14.5f, 0f, 0f, 3 * 5 + 4);
-                DrawTile(54.2f, 16f, 0f, 0f, 4 * 5 + 4);
-                DrawTile(54.2f, 13f, 0f, 0f, 5 * 5 + 4);
-            }
+            // if (model.stage > 0)
+            //{
+            DrawText("Press Button", 54.15f, 29.5f, 0.4f);
+            DrawText("and Click to", 54.15f, 29f, 0.4f);
+            DrawText("buy towers", 54.15f, 28.5f, 0.4f);
+
+            //Rifle station
+            DrawText("Rifle", 54.15f, 27f, .5f);
+            DrawText("|", 56.15f, 26f, .5f);
+            DrawText("||", 58.15f, 26f, .4f);
+
+
+
+            DrawText("Sniper 20$", 54.15f, 14.83f, 0.33f);
+            DrawText("Bounce 40$", 54.15f, 13.33f, 0.33f);
+            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
+
+            //cash skull stage
+            DrawTile(19f, 30.5f, 0f, 0f, 8 * 5);
+            DrawTile(25f, 30.5f, 0f, 0f, 8 * 5 + 2);
+            DrawTile(31f, 30.5f, 0f, 0f, 8 * 5 + 1);
+
+            //rifle station
+            DrawRectangle(new Vector2(54.1f, 24.5f), new Vector2(5f, 3.25f), Color4.White);
+            DrawTile(54.15f, 25.75f, 0f, 0f, 4 * 5 + 4);
+            DrawTile(55.15f, 25.75f, 0f, 0f, 3);
+            DrawTile(57.15f, 25.75f, 0f, 0f, 8);
+
+            //sniper station
+            DrawRectangle(new Vector2(54.1f, 21.5f), new Vector2(5f, 3.25f), Color4.White);
+            DrawTile(54.15f, 22.75f, 0f, 0f, 4 * 5 + 4);
+            DrawTile(55.15f, 22.75f, 0f, 0f, 3);
+            DrawTile(57.15f, 22.75f, 0f, 0f, 8);
+
+
+            //blabla
+            DrawTile(54.15f, 14.5f, 0f, 0f, 3 * 5 + 4);
+            DrawTile(54.2f, 13f, 0f, 0f, 5 * 5 + 4);
+            //}
 
             GL.Disable(EnableCap.Blend);
         }

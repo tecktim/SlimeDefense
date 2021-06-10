@@ -13,20 +13,14 @@
     <None Remove="Content\Slime.ico" />
     <None Remove="Content\smokin.png" />
     <None Remove="Content\sonic_asalga.png" />
-    <None Remove="Content\TileSet_CG.png" />
     <None Remove="Content\TileSet_CG_5x12.png" />
-    <None Remove="Content\TileSet_CG_no_offset.png" />
-    <None Remove="Content\TileSet_CG_offset_1_top_after_first_tile.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Content\Slime.ico" />
     <EmbeddedResource Include="Content\smokin.png" />
     <EmbeddedResource Include="Content\sonic_asalga.png" />
-    <EmbeddedResource Include="Content\TileSet_CG.png" />
     <EmbeddedResource Include="Content\TileSet_CG_5x12.png" />
-    <EmbeddedResource Include="Content\TileSet_CG_no_offset.png" />
-    <EmbeddedResource Include="Content\TileSet_CG_offset_1_top_after_first_tile.png" />
   </ItemGroup>
 
   <ItemGroup>
