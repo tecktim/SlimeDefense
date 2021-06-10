@@ -66,6 +66,10 @@ namespace TowerDefenseNew.GameObjects
             {
                 Console.WriteLine("checkHit exception");
             }
+            if (Center.X <= -0.5f || Center.X >= 53f || Center.Y <= -0.5f || Center.Y >= 29f)
+            {
+                Bullets.Remove(this);
+            }
             if (lifeTime >= 144 && TowerType != 2)
             {
                 Bullets.Remove(this);
