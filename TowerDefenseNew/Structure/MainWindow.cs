@@ -12,7 +12,6 @@ namespace TowerDefenseNew.Structure
     {
         public static FPScounter fpsCounter; // frames per second counter
         public static GameWindow window;
-        private static bool isResized = false;
 
         public static GameWindow Create()
         {
@@ -21,8 +20,8 @@ namespace TowerDefenseNew.Structure
             fpsCounter = new FPScounter();
             window.RenderFrame += Window_RenderFrame;
             window.VSync = VSyncMode.Off;
-            window.RenderFrequency = 60;
-            window.UpdateFrequency = 60;
+            window.RenderFrequency = 144;
+            window.UpdateFrequency = 144;
             window.Size = new Vector2i(1440, 810);
             window.CenterWindow();
             // set window to halve monitor size

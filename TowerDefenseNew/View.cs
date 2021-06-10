@@ -419,14 +419,14 @@ namespace TowerDefenseNew
             }
 
 
-            DrawText($":{model.cash}", 20f, 30.5f, 1f);
-            DrawText($":{model.killCount}", 26f, 30.5f, 1f);
-            DrawText($":{model.stage}", 32f, 30.5f, 1f);
+            DrawText($":{model.cash}", 15f, 30.5f, 1f);
+            DrawText($":{model.killCount}", 25f, 30.5f, 1f);
+            DrawText($":{model.stage}", 35f, 30.5f, 1f);
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
             //cash skull stage
-            DrawTile(19f, 30.5f, 0f, 0f, 8 * 5);
-            DrawTile(25f, 30.5f, 0f, 0f, 8 * 5 + 2);
-            DrawTile(31f, 30.5f, 0f, 0f, 8 * 5 + 1);
+            DrawTile(14f, 30.5f, 0f, 0f, 8 * 5);
+            DrawTile(24f, 30.5f, 0f, 0f, 8 * 5 + 2);
+            DrawTile(34f, 30.5f, 0f, 0f, 8 * 5 + 1);
 
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
             if (model.stage > 0)
