@@ -336,7 +336,16 @@ namespace TowerDefenseNew
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.Enable(EnableCap.Blend);
-            DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, 0.75f, ((type+3) * 5) + 2);
+            if (type == 0)
+            {
+                DrawTile(bullet.Center.X, bullet.Center.Y, .5f, 1.75f, ((type + 3) * 5) + 2);
+            }
+            if (type == 2)
+            {
+                DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, .75f, ((type + 3) * 5) + 2);
+            }
+            if (type == 1)
+            { DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, .75f, ((type + 3) * 5) + 2); }
             GL.Disable(EnableCap.Blend);
         }
 
@@ -413,47 +422,62 @@ namespace TowerDefenseNew
             DrawText($":{model.cash}", 20f, 30.5f, 1f);
             DrawText($":{model.killCount}", 26f, 30.5f, 1f);
             DrawText($":{model.stage}", 32f, 30.5f, 1f);
-
-
-            // if (model.stage > 0)
-            //{
-            DrawText("Press Button", 54.15f, 29.5f, 0.4f);
-            DrawText("and Click to", 54.15f, 29f, 0.4f);
-            DrawText("buy towers", 54.15f, 28.5f, 0.4f);
-
-            //Rifle station
-            DrawText("Rifle", 54.15f, 27f, .5f);
-            DrawText("|", 56.15f, 26f, .5f);
-            DrawText("||", 58.15f, 26f, .4f);
-
-
-
-            DrawText("Sniper 20$", 54.15f, 14.83f, 0.33f);
-            DrawText("Bounce 40$", 54.15f, 13.33f, 0.33f);
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
-
             //cash skull stage
             DrawTile(19f, 30.5f, 0f, 0f, 8 * 5);
             DrawTile(25f, 30.5f, 0f, 0f, 8 * 5 + 2);
             DrawTile(31f, 30.5f, 0f, 0f, 8 * 5 + 1);
 
-            //rifle station
-            DrawRectangle(new Vector2(54.1f, 24.5f), new Vector2(5f, 3.25f), Color4.White);
-            DrawTile(54.15f, 25.75f, 0f, 0f, 4 * 5 + 4);
-            DrawTile(55.15f, 25.75f, 0f, 0f, 3);
-            DrawTile(57.15f, 25.75f, 0f, 0f, 8);
-
-            //sniper station
-            DrawRectangle(new Vector2(54.1f, 21.5f), new Vector2(5f, 3.25f), Color4.White);
-            DrawTile(54.15f, 22.75f, 0f, 0f, 4 * 5 + 4);
-            DrawTile(55.15f, 22.75f, 0f, 0f, 3);
-            DrawTile(57.15f, 22.75f, 0f, 0f, 8);
-
-
-            //blabla
-            DrawTile(54.15f, 14.5f, 0f, 0f, 3 * 5 + 4);
-            DrawTile(54.2f, 13f, 0f, 0f, 5 * 5 + 4);
-            //}
+            GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
+            if (model.stage > 0)
+            {
+                DrawText("Press Button", 54.15f, 29.5f, 0.4f);
+                DrawText("and Click to", 54.15f, 29f, 0.4f);
+                DrawText("buy towers", 54.15f, 28.5f, 0.4f);
+                //Rifle station
+                DrawText("Rifle   5$", 54.15f, 27f, .5f);
+                DrawText("|", 56.15f, 26f, .5f);
+                DrawText("||", 58.15f, 26f, .4f);
+                DrawText("+", 57.4f, 25f, .5f);
+                DrawText("Buy:", 54.15f, 25f, .5f);
+                //Sniper station
+                DrawText("Sniper 20$", 54.15f, 23.85f, .5f);
+                DrawText("||", 56.15f, 23f, .5f);
+                DrawText("|", 58.15f, 23f, .4f);
+                DrawText("+", 57.4f, 22f, .5f);
+                DrawText("Buy:", 54.15f, 22f, .5f);
+                //bouncer station
+                DrawText("Bounce 40$", 54.15f, 20.75f, .5f);
+                DrawText("|", 56.15f, 19.75f, .5f);
+                DrawText("|", 58.15f, 19.75f, .4f);
+                DrawText("+", 57.4f, 18.75f, .5f);
+                DrawText("Buy:", 54.15f, 18.75f, .5f);
+                GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
+                //rifle station
+                DrawRectangle(new Vector2(54.1f, 24.75f), new Vector2(5f, 3f), Color4.White);
+                DrawRectangle(new Vector2(54.15f, 25.75f), new Vector2(1f, 1f), Color4.White);
+                DrawTile(54.15f, 25.75f, 0f, 0f, 4 * 5 + 4);
+                DrawTile(55.15f, 25.75f, 0f, 0f, 3);
+                DrawTile(57.15f, 25.75f, 0f, 0f, 8);
+                DrawTile(56.15f, 24.75f, 0f, 0f, 9 * 5);
+                DrawTile(58.15f, 24.75f, 0f, 0f, 9 * 5 + 3);
+                //sniper station
+                DrawRectangle(new Vector2(54.1f, 21.75f), new Vector2(5f, 2.75f), Color4.White);
+                DrawRectangle(new Vector2(54.15f, 22.75f), new Vector2(1f, 1f), Color4.White);
+                DrawTile(54.15f, 22.75f, 0f, 0f, 3 * 5 + 4);
+                DrawTile(55.15f, 22.75f, 0f, 0f, 3);
+                DrawTile(57.15f, 22.75f, 0f, 0f, 8);
+                DrawTile(56.15f, 21.75f, 0f, 0f, 9 * 5 + 1);
+                DrawTile(58.15f, 21.75f, 0f, 0f, 9 * 5 + 3);
+                //bouncer station
+                DrawRectangle(new Vector2(54.1f, 18.5f), new Vector2(5f, 3f), Color4.White);
+                DrawRectangle(new Vector2(54.15f, 19.5f), new Vector2(1f, 1f), Color4.White);
+                DrawTile(54.15f, 19.5f, 0f, 0f, 5 * 5 + 4);
+                DrawTile(55.15f, 19.5f, 0f, 0f, 3);
+                DrawTile(57.15f, 19.5f, 0f, 0f, 8);
+                DrawTile(56.15f, 18.5f, 0f, 0f, 9 * 5 + 2);
+                DrawTile(58.15f, 18.5f, 0f, 0f, 9 * 5 + 3);
+            }
 
             GL.Disable(EnableCap.Blend);
         }

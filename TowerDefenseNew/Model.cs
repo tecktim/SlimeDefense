@@ -260,7 +260,7 @@ namespace TowerDefenseNew
         {
             if (cash >= sniperCost)
             {
-                Tower tower = new Tower(new Vector2(column, row), 5f, 150, 1000, enemies, bullets, 0);
+                Tower tower = new Tower(new Vector2(column, row), 5f, 450, 3000, enemies, bullets, 0);
                 _grid[column, row] = CellType.Sniper;
                 towers.Add(tower);
                 cash -= sniperCost;
@@ -273,7 +273,7 @@ namespace TowerDefenseNew
         {
             if (cash >= rifleCost)
             {
-                Tower tower = new Tower(new Vector2(column, row), 2f, 10, 100, enemies, bullets, 1);
+                Tower tower = new Tower(new Vector2(column, row), 2f, 25, 333, enemies, bullets, 1);
                 _grid[column, row] = CellType.Rifle;
                 towers.Add(tower);
                 cash -= rifleCost;
@@ -285,7 +285,7 @@ namespace TowerDefenseNew
         {
             if (cash >= bouncerCost)
             {
-                Tower tower = new Tower(new Vector2(column, row), 3f, 10, 500, enemies, bullets, 2);
+                Tower tower = new Tower(new Vector2(column, row), 3f, 40, 2000, enemies, bullets, 2);
                 _grid[column, row] = CellType.Bouncer;
                 towers.Add(tower);
                 cash -= bouncerCost;

@@ -49,13 +49,18 @@ namespace TowerDefenseNew.GameObjects
 
         private void checkRange()
         {
+            //type 0 sniper
+            //type 1 rifle 
+            //type 2 bounce
             try
             {
                 foreach (Enemy enemy in Enemies.ToList())
                 {
                     if (Intersects(enemy))
                     {
-                        Bullet bullet = new Bullet(Center + new Vector2(0.5f, 0.5f), Radius / 35, damage, Bullets, Enemies, Type);
+                        Bullet bullet;
+                        if (this.Type == 0) { bullet = new Bullet(Center + new Vector2(0.5f, 0.5f), Radius / 17.5f, damage, Bullets, Enemies, Type); }
+                        else { bullet = new Bullet(Center + new Vector2(0.5f, 0.5f), Radius / 35, damage, Bullets, Enemies, Type); }
 
                         aimAtEnemy = enemy;
                         //Correction of Starting Point of Bullets, damit Schüsse aus dem Mund der Tower kommen
