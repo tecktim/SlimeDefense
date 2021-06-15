@@ -19,7 +19,7 @@ namespace TowerDefenseNew
             bullets = new List<Bullet>();
             explosions = new List<Explosion>();
 
-            cash = 30;
+            cash = 80;
             bouncerCost = 40;
             sniperCost = 20;
             rifleCost = 5;

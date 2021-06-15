@@ -96,20 +96,20 @@ namespace TowerDefenseNew
 
             if (_view.Window.IsMouseButtonDown(mb))
             {
-                if (cell == Grid.CellType.Sniper)
+                if (cell == Grid.CellType.Sniper && _model.cash >= 20)
                 {
                     _view.sampleSniper = true;
                     _view.sampleColRow = new Vector2(column, row);
                 }
                 else _view.sampleSniper = false;
-                if (cell == Grid.CellType.Rifle)
+                if (cell == Grid.CellType.Rifle && _model.cash >= 5)
                 {
 
                     _view.sampleRifle = true;
                     _view.sampleColRow = new Vector2(column, row);
                 }
                 else _view.sampleRifle = false;
-                if (cell == Grid.CellType.Bouncer)
+                if (cell == Grid.CellType.Bouncer && _model.cash >= 40)
                 {
 
                     _view.sampleBouncer = true;
@@ -171,22 +171,28 @@ namespace TowerDefenseNew
             {
                 if (keyboard.IsKeyDown(Keys.D2))
                 {
-                    if (cell != Grid.CellType.Empty) { return; }
+                    if (cell != Grid.CellType.Empty && _model.cash >= 20) { return; }
                     else
                     {
-                        _view.sampleSniper = true;
-                        _view.sampleColRow = new Vector2(column, row);
+                        if (_model.cash >= 20)
+                        {
+                            _view.sampleSniper = true;
+                            _view.sampleColRow = new Vector2(column, row);
+                        }
                     }//Snake
                     return;
                 }
                 else _view.sampleSniper = false;
                 if (keyboard.IsKeyDown(Keys.D1))
                 {
-                    if (cell != Grid.CellType.Empty) { return; }
+                    if (cell != Grid.CellType.Empty && _model.cash >= 5) { return; }
                     else
                     {
-                        _view.sampleRifle = true;
-                        _view.sampleColRow = new Vector2(column, row);
+                        if (_model.cash >= 5)
+                        {
+                            _view.sampleRifle = true;
+                            _view.sampleColRow = new Vector2(column, row);
+                        }
                     }//Snake 
                     return;
                 }
@@ -194,10 +200,13 @@ namespace TowerDefenseNew
                 if (keyboard.IsKeyDown(Keys.D3))
                 {
                     if (cell != Grid.CellType.Empty) { return; }
-                    else
+                    else 
                     {
-                        _view.sampleBouncer = true;
-                        _view.sampleColRow = new Vector2(column, row);
+                        if (_model.cash >= 40)
+                        {
+                            _view.sampleBouncer = true;
+                            _view.sampleColRow = new Vector2(column, row);
+                        }
                     }//Snake 
                     return;
                 }

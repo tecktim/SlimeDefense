@@ -48,6 +48,7 @@ namespace TowerDefenseNew.GameObjects
                     {
                         bounceCount++;
                         bulletVelocity(Enemies[i + 1]);
+                        Console.WriteLine("Hit by bouncer");
                         if (Enemies[i].isShot(Damage))
                         {
                             //normal hit if true

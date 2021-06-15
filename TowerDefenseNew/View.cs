@@ -393,6 +393,21 @@ namespace TowerDefenseNew
             GL.End();
         }
 
+        private void DrawQuadRectangle(Vector2 min, Vector2 size, Color4 color)
+        {
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            var max = min + size;
+            GL.Begin(PrimitiveType.Quads);
+            GL.Color4(color);
+            GL.Vertex2(min);
+            GL.Vertex2(max.X, min.Y);
+            GL.Vertex2(max);
+            GL.Vertex2(min.X, max.Y);
+            GL.End();
+            GL.Disable(EnableCap.Blend);
+        }
+
         private void DrawHelpText(Model model)
         {
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -468,6 +483,10 @@ namespace TowerDefenseNew
                 DrawTile(57.15f, 25.75f, 0f, 1f, 8);
                 DrawTile(56.15f, 24.75f, 0f, 1f, 9 * 5);
                 DrawTile(58.15f, 24.75f, 0f, 1f, 9 * 5 + 3);
+                if(model.cash < 5)
+                {
+                    DrawQuadRectangle(new Vector2(54.0f, 24.75f), new Vector2(5.2f, 3f), new Color4 (80, 80, 80, 160));
+                }
                 //sniper station
                 DrawRectangle(new Vector2(54.1f, 21.75f), new Vector2(5f, 2.75f), Color4.White);
                 DrawRectangle(new Vector2(54.15f, 22.75f), new Vector2(1f, 1f), Color4.White);
@@ -476,6 +495,10 @@ namespace TowerDefenseNew
                 DrawTile(57.15f, 22.75f, 0f, 1f, 8);
                 DrawTile(56.15f, 21.75f, 0f, 1f, 9 * 5 + 1);
                 DrawTile(58.15f, 21.75f, 0f, 1f, 9 * 5 + 3);
+                if (model.cash < 20)
+                {
+                    DrawQuadRectangle(new Vector2(54.0f, 21.75f), new Vector2(5.2f, 3f), new Color4(80, 80, 80, 160));
+                }
                 //bouncer station
                 DrawRectangle(new Vector2(54.1f, 18.5f), new Vector2(5f, 3f), Color4.White);
                 DrawRectangle(new Vector2(54.15f, 19.5f), new Vector2(1f, 1f), Color4.White);
@@ -484,6 +507,10 @@ namespace TowerDefenseNew
                 DrawTile(57.15f, 19.5f, 0f, 1f, 8);
                 DrawTile(56.15f, 18.5f, 0f, 1f, 9 * 5 + 2);
                 DrawTile(58.15f, 18.5f, 0f, 1f, 9 * 5 + 3);
+                if (model.cash < 40)
+                {
+                    DrawQuadRectangle(new Vector2(54.0f, 18.5f), new Vector2(5.2f, 3f), new Color4(80, 80, 80, 160));
+                }
                 //Sell station
                 DrawRectangle(new Vector2(54.1f, 0f), new Vector2(5f, 1f), Color4.White);
                 DrawTile(56.5f, 0f, 0f, 1f, 9 * 5 + 4);
