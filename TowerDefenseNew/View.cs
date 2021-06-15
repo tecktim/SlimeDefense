@@ -65,7 +65,7 @@ namespace TowerDefenseNew
                 GL.Enable(EnableCap.Blend);
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
                 UpdateSamples(model);
-                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, samplePortal, sampleColRow.X, sampleColRow.Y);
+                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, samplePortal, model.waypoints, sampleColRow.X, sampleColRow.Y);
                 GL.Disable(EnableCap.Blend);
                 try
                 {
@@ -168,7 +168,7 @@ namespace TowerDefenseNew
             }
         }
 
-        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, bool samplePath, bool samplePortal, float column, float row)
+        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, bool samplePath, bool samplePortal, List<Vector2> waypoints, float column, float row)
         {
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -199,6 +199,7 @@ namespace TowerDefenseNew
                 if (column > 0 && column < 53)
                 {
                     DrawTile(column, row, 0f, 1f, 1);
+                    DrawTile(waypoints.Last().X, waypoints.Last().Y, 0f, 1f, 1);
                 }
             }
             else return;
@@ -320,7 +321,7 @@ namespace TowerDefenseNew
                     {
                         DrawTile(column, row, 0f, 1f, 2 * 5 + 4); //Path
                     }
-                    if (CellType.PathRight == model.Grid[column, row] && column == 0)
+                    if (CellType.Path == model.Grid[column, row] && column == 0)
                     {
                         DrawTile(column, row, 0f, 1f, 1 * 5 + 1); //Portal blue
                     }
@@ -336,7 +337,7 @@ namespace TowerDefenseNew
                     {
                         DrawTile(column, row, 0f, 1f, 1); //WeedIndicator :)
                     }
-                    if (CellType.PathRight == model.Grid[column, row] && column == 53 && model.placed)
+                    if (CellType.Path == model.Grid[column, row] && column == 53 && model.placed)
                     {
                         DrawTile(column, row, 0f, 1f, 1 * 5 + 2); //Portal red
                     }

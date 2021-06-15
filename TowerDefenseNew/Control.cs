@@ -26,6 +26,14 @@ namespace TowerDefenseNew
             }
         }
 
+        internal void RemovePath(KeyboardState keyboard)
+        {
+            if (keyboard.IsKeyDown(Keys.R))
+            {
+                Console.WriteLine("RRRR");
+                _model.makeEmpty();
+            }
+        }
 
         internal void Click(float x, float y, KeyboardState keyboard)
         {

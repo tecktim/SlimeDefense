@@ -18,6 +18,8 @@ namespace TowerDefenseNew.Structure
             window.MouseDown += args => control.ShowRange(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
             window.MouseMove += args => control.ShowTowerSample(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
             window.MouseDown += args => control.Click(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
+            window.KeyDown += args => control.RemovePath(keyboard);
+
             window.UpdateFrame += args =>
             {
                 control.Update((float)args.Time, window.KeyboardState);

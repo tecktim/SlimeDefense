@@ -323,33 +323,50 @@ namespace TowerDefenseNew
                 checkRow = row;
                 spawnRow = row;
             }
-            //left to right
+            //right
             else if (column == checkCol && row == checkRow && column != 0)
             {
+                if(waypoints.Count >= 2)
+                {
+                    _grid[(int)waypoints[waypoints.Count - 1].X, (int)waypoints[waypoints.Count - 1].Y] = CellType.PathRight;
+                }
                 if (CheckCell(checkCol, row) == CellType.Empty)
                 {
-                    _grid[column, row] = CellType.Path;
+                    if(waypoints.Count == 0)
+                    {
+                        _grid[column, row] = CellType.PathRight;
+                    }else
+                    {
+                        _grid[column, row] = CellType.PathRight;
+                    }
                     waypoints.Add(new Vector2(column, row));
                     checkCol++;
                 }
             }
 
-            //right to left
+            //left
             else if (column == checkCol - 2 && row == checkRow && column != 0)
             {
-                _grid[column, row] = CellType.Path;
+                _grid[(int)waypoints[waypoints.Count - 1].X, (int)waypoints[waypoints.Count - 1].Y] = CellType.PathLeft;
+                _grid[column, row] = CellType.PathLeft;
                 waypoints.Add(new Vector2(column, row));
                 checkCol--;
             }
+
+            //down
             else if (column == checkCol - 1 && row == checkRow - 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
-                _grid[column, row] = CellType.Path;
+                _grid[(int)waypoints[waypoints.Count - 1].X, (int)waypoints[waypoints.Count - 1].Y] = CellType.PathDown;
+                _grid[column, row] = CellType.PathDown;
                 waypoints.Add(new Vector2(column, row));
                 checkRow = row;
             }
+
+            //up
             else if (column == checkCol - 1 && row == checkRow + 1 && CheckCell(checkCol, row) != CellType.Finish && column != 0)
             {
-                _grid[column, row] = CellType.Path;
+                _grid[(int)waypoints[waypoints.Count - 1].X, (int)waypoints[waypoints.Count - 1].Y] = CellType.PathUp;
+                _grid[column, row] = CellType.PathUp;
                 waypoints.Add(new Vector2(column, row));
                 checkRow = row;
             }
@@ -357,6 +374,7 @@ namespace TowerDefenseNew
             {
                 stage = 1;
                 _grid[checkCol, row] = CellType.Path;
+                waypoints.Add(new Vector2(checkCol-1, row));
                 waypoints.Add(new Vector2(checkCol, row));
                 placed = true;
                 enemySpawnTimer(spawnRow);
@@ -369,6 +387,29 @@ namespace TowerDefenseNew
 
             return placed;
         }
+
+        internal void makeEmpty()
+        {
+            if (_grid[(int)waypoints.Last().X, (int)waypoints.Last().Y] == CellType.PathRight)
+            {
+                checkCol--;
+            }
+            if (_grid[(int)waypoints.Last().X, (int)waypoints.Last().Y] == CellType.PathLeft)
+            {
+                checkCol++;
+            }
+            if (_grid[(int)waypoints.Last().X, (int)waypoints.Last().Y] == CellType.PathUp)
+            {
+                checkRow--;
+            }
+            if (_grid[(int)waypoints.Last().X, (int)waypoints.Last().Y] == CellType.PathDown)
+            {
+                checkRow++;
+            }
+            _grid[(int) waypoints.Last().X, (int) waypoints.Last().Y] = CellType.Empty;
+            waypoints.Remove(waypoints.Last());
+        }
+
         private void enemySpawnTimer(int row)
         {
             // Creating timer with attackSpeed (millis) as interval
