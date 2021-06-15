@@ -1,0 +1,35 @@
+Zusammengesetztes und bearbeitetes Tileset.
+
+2. und 5. Größe der Enemies, alle Tower, der Gelber Schuss und das Blaue Portal aus:
+https://bilious.alt.org/~paxed/nethack/nhsshot/tileset/nevanda_nethack.png
+
+1., 3. und 4. Größe der Enemies aus den zwei Vorlagen gemacht
+
+Rotes Portal, Farben von dem blauen Portal verändert
+
+Gras und Weg aus Minecraft Texture Pack:
+https://www.curseforge.com/minecraft/texture-packs/faithful-team
+
+Rote Fläche am Anfang und Ende des Spielfelds, Grasfläche mit Farbfilter
+
+Raucheffekt von:
+http://gushh.net/blog/free-game-sprites-smoke-1/
+
+Roter Schuss aus Original Minecraft Redstone gemacht, Blauer Schuss aus Lapis Lazuli
+https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/44/InvSprite.png/revision/latest?cb=20210602112157&cb=20210418193553&amp;version=1618774560214&amp;format=original&format=original
+
+Bullet Speed Icon aus
+https://cdn.iconscout.com/icon/free/png-256/bullets-1739121-1477907.png
+
+Bullet Damage Icon aus Bullet Speed Icon gemacht
+
+Dollar Treppe und Skull mit Vorlage aus den Farben unserer Schrift gemacht
+Vorlage für Skull: https://www.iconexperience.com/o_collection/icons/?icon=skull
+Vorlage für Dollar: https://freepngimg.com/download/dollar/64054-united-symbol-dollar-sign-states-currency-icon.png
+Treppe ohne Vorlage gemacht
+
+Buttons aus (hinten 1 änderbar in taste die man braucht): 
+https://www.iconexperience.com/_img/v_collection_png/256x256/shadow/keyboard_key_1.png
+
+Maus aus:
+https://image.freepik.com/free-icon/mouse-left-button_318-48280.jpg
