@@ -199,7 +199,10 @@ namespace TowerDefenseNew
                 if (column > 0 && column < 53)
                 {
                     DrawTile(column, row, 0f, 1f, 1);
-                    DrawTile(waypoints.Last().X, waypoints.Last().Y, 0f, 1f, 1);
+                    if(waypoints.Count > 0)
+                    {
+                        DrawTile(waypoints.Last().X, waypoints.Last().Y, 0f, 1f, 1);
+                    }
                 }
             }
             else return;

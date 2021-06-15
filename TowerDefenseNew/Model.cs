@@ -316,7 +316,7 @@ namespace TowerDefenseNew
         internal bool PlacePath(int column, int row)
         {
             //First is always placed left
-            if (column == 0 && waypoints.Count == 0)
+            if (column == 0 && waypoints.Count == 0 && checkCol == 0)
             {
                 _grid[column, row] = CellType.Path;
                 checkCol++;
@@ -332,13 +332,7 @@ namespace TowerDefenseNew
                 }
                 if (CheckCell(checkCol, row) == CellType.Empty)
                 {
-                    if(waypoints.Count == 0)
-                    {
-                        _grid[column, row] = CellType.PathRight;
-                    }else
-                    {
-                        _grid[column, row] = CellType.PathRight;
-                    }
+                    _grid[column, row] = CellType.PathRight;
                     waypoints.Add(new Vector2(column, row));
                     checkCol++;
                 }
@@ -374,7 +368,8 @@ namespace TowerDefenseNew
             {
                 stage = 1;
                 _grid[checkCol, row] = CellType.Path;
-                waypoints.Add(new Vector2(checkCol-1, row));
+                waypoints.Add(new Vector2(column, row));
+                waypoints.Add(new Vector2(column+1, row));
                 waypoints.Add(new Vector2(checkCol, row));
                 placed = true;
                 enemySpawnTimer(spawnRow);

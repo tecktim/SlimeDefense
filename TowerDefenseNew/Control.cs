@@ -28,7 +28,7 @@ namespace TowerDefenseNew
 
         internal void RemovePath(KeyboardState keyboard)
         {
-            if (keyboard.IsKeyDown(Keys.R))
+            if (keyboard.IsKeyDown(Keys.R) && _model.waypoints.Count > 1 && !_model.placed)
             {
                 Console.WriteLine("RRRR");
                 _model.makeEmpty();
