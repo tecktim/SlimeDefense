@@ -538,7 +538,6 @@ namespace TowerDefenseNew
         private int checkCol = 0, checkRow = 0, spawnRow;
         internal int enemyHealth;
         private readonly IGrid _grid;
-        private readonly List<Vector2> waypoints;
         internal double sniperCost;
         internal double rifleCost;
         internal double bouncerCost;
@@ -546,6 +545,7 @@ namespace TowerDefenseNew
         internal bool gameOver;
         //private int life;
         internal double cash;
+        internal List<Vector2> waypoints;
         internal List<Enemy> enemies;
         internal List<Tower> towers;
         internal List<Bullet> bullets;

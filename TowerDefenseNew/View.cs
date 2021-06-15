@@ -42,6 +42,7 @@ namespace TowerDefenseNew
         internal List<Vector2> circlePoints = CreateCirclePoints(360);
         internal bool sampleBouncer;
         internal bool samplePath;
+        internal bool samplePortal = true;
 
         internal void Draw(Model model)
         {
@@ -63,11 +64,8 @@ namespace TowerDefenseNew
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-                if (model.placed == true)
-                {
-                    samplePath = false;
-                }
-                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, sampleColRow.X, sampleColRow.Y);
+                UpdateSamples(model);
+                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, samplePortal, sampleColRow.X, sampleColRow.Y);
                 GL.Disable(EnableCap.Blend);
                 try
                 {
@@ -84,6 +82,18 @@ namespace TowerDefenseNew
                     Console.WriteLine("View.Draw exception");
                 }
                 DrawHelpText(model);
+            }
+        }
+
+        private void UpdateSamples(Model model)
+        {
+            if (model.placed == true)
+            {
+                samplePath = false;
+            }
+            if (model.waypoints.Count > 1)
+            {
+                samplePortal = false;
             }
         }
 
@@ -158,7 +168,7 @@ namespace TowerDefenseNew
             }
         }
 
-        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, bool samplePath, float column, float row)
+        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, bool samplePath, bool samplePortal, float column, float row)
         {
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -177,13 +187,16 @@ namespace TowerDefenseNew
                 DrawCircle(new Vector2(column + .5f, row + .5f), 3f, Color4.White);
                 DrawTile(column, row, 0f, 1f, 5 * 5);
             }
-            else if (samplePath)
+            else if (samplePortal)
             {
                 if (column == 0)
                 {
-                    DrawTile(column, row, 0f, 1f, 7);
+                    DrawTile(column, row, 0f, 1f, 6);
                 }
-                else if (column > 0 && column < 53)
+            }
+            else if (samplePath)
+            {
+                if (column > 0 && column < 53)
                 {
                     DrawTile(column, row, 0f, 1f, 1);
                 }
@@ -323,7 +336,7 @@ namespace TowerDefenseNew
                     {
                         DrawTile(column, row, 0f, 1f, 1); //WeedIndicator :)
                     }
-                    if (CellType.PathRight == model.Grid[column, row] && column == 53)
+                    if (CellType.PathRight == model.Grid[column, row] && column == 53 && model.placed)
                     {
                         DrawTile(column, row, 0f, 1f, 1 * 5 + 2); //Portal red
                     }

@@ -137,7 +137,7 @@ namespace TowerDefenseNew
                 //Path setzen
                 if (_view.Window.IsMouseButtonDown(mb))
                 {
-                    if (cell != Grid.CellType.Empty) { return; }
+                    if (cell != Grid.CellType.Empty) {  return; }
                     else
                     {
                         if (_model.PlacePath(column, row))
@@ -145,9 +145,10 @@ namespace TowerDefenseNew
                             return;
                         }
                     }
+                    _view.samplePath = false;
                     return;
                 }
-                else if (!_view.Window.IsMouseButtonDown(mb))
+                else
                 {
                     _view.samplePath = true;
                     _view.sampleColRow = new Vector2(column, row);
