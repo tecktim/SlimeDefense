@@ -91,7 +91,7 @@ namespace TowerDefenseNew
             {
                 samplePath = false;
             }
-            if (model.waypoints.Count > 1)
+            if (model.waypoints.Count != 0)
             {
                 samplePortal = false;
             }
