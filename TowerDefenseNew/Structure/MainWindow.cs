@@ -47,7 +47,7 @@ namespace TowerDefenseNew.Structure
             fpsCounter.NextFrame();
             window.Title = $"Slime Defense {fpsCounter.Value} FPS";
             //set minimum client size
-            if (window.Size.X < 1440 || window.Size.Y < 810) 
+           /* if (window.Size.X < 1440 || window.Size.Y < 810) 
             {
                 Console.WriteLine("zu klein");
 
