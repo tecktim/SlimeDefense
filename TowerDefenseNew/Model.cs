@@ -385,6 +385,12 @@ namespace TowerDefenseNew
 
         internal void makeEmpty()
         {
+            //Problem bei Undo: wenn wir um die Ecke gehen bei PlacePath, setzten wir nachträglich den Pfeil um
+            //wenn wir nun also bei makeEmpty uns den letzten anschauen, und dieser ist eine Ecke, spackt es rum
+
+            //vielleicht int cast auf grid zuerst kontrollieren ob er dann aúch das richtige anschaut
+
+
             if (_grid[(int)waypoints.Last().X, (int)waypoints.Last().Y] == CellType.PathRight)
             {
                 checkCol--;
