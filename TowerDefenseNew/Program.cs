@@ -14,20 +14,20 @@ namespace TowerDefenseNew.Structure
             var keyboard = window.KeyboardState;
             var mB = new MouseButton();
 
-            window.MouseMove += args => control.PlacePath(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
-            window.MouseDown += args => control.ShowRange(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
-            window.MouseMove += args => control.ShowTowerSample(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
-            window.MouseDown += args => control.Click(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
-            window.KeyDown += args => control.RemovePath(keyboard);
 
             window.UpdateFrame += args =>
             {
                 control.Update((float)args.Time, window.KeyboardState);
                 model.Update((float)args.Time);
             }; // call update once each frame
-            window.Resize += args => view.Resize(window.Bounds.Size.X, window.Bounds.Size.Y); // on window resize inform view
+            window.Resize += args => view.Resize(window.Size.X, window.Size.Y); // on window resize inform view
             window.RenderFrame += _ => view.Draw(model); // first draw the model
             window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
+            window.MouseMove += args => control.PlacePath(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
+            window.MouseDown += args => control.ShowRange(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
+            window.MouseMove += args => control.ShowTowerSample(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
+            window.MouseDown += args => control.Click(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
+            window.KeyDown += args => control.RemovePath(keyboard);
             window.Run();
         }
     }

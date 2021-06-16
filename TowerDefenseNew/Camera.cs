@@ -18,7 +18,6 @@ namespace TowerDefenseNew
         public void Draw()
         {
             GL.LoadMatrix(ref cameraMatrix);
-
         }
 
         public void Resize(int width, int height)
@@ -53,7 +52,7 @@ namespace TowerDefenseNew
         }
 
         private Matrix4 cameraMatrix = Matrix4.Identity;
-        private float _scale { get; set; } = 17f;
+        private float _scale { get; set; } = 18f;
         private float _windowAspectRatio = 1f;
 
         private Vector2 _center;
