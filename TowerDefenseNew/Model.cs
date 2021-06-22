@@ -387,9 +387,7 @@ namespace TowerDefenseNew
         {
             //Problem bei Undo: wenn wir um die Ecke gehen bei PlacePath, setzten wir nachträglich den Pfeil um
             //wenn wir nun also bei makeEmpty uns den letzten anschauen, und dieser ist eine Ecke, spackt es rum
-
             //vielleicht int cast auf grid zuerst kontrollieren ob er dann aúch das richtige anschaut
-
 
             if (_grid[(int)waypoints.Last().X, (int)waypoints.Last().Y] == CellType.PathRight)
             {
@@ -407,8 +405,11 @@ namespace TowerDefenseNew
             {
                 checkRow++;
             }
-            _grid[(int) waypoints.Last().X, (int) waypoints.Last().Y] = CellType.Empty;
+            _grid[(int)waypoints.Last().X, (int)waypoints.Last().Y] = CellType.Empty;
+
+            //_grid[(int)waypoints[waypoints.Count - 1].X, (int)waypoints[waypoints.Count - 1].Y] = CellType.Empty;
             waypoints.Remove(waypoints.Last());
+            
         }
 
         private void enemySpawnTimer(int row)
@@ -448,7 +449,6 @@ namespace TowerDefenseNew
         internal bool placed;
         private bool applyScaling;
         internal int stage;
-        private bool placePoint = true;
         private int checkCol = 0, checkRow = 0, spawnRow;
         internal int enemyHealth;
         private readonly IGrid _grid;

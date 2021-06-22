@@ -22,10 +22,11 @@ namespace TowerDefenseNew
 
         public void Resize(int width, int height)
         {
+            
             GL.Viewport(0, 0, width, height); // tell OpenGL to use the whole window for drawing
            
-            _windowAspectRatio = (height * 16) / ((float)width * 16);
-
+            //_windowAspectRatio = (height * 16) / ((float)width * 16);
+            _windowAspectRatio = height / (float)width;
 
 
             var viewport = Transformation2d.Combine(Transformation2d.Translate(Vector2.One), Transformation2d.Scale(width / 2f, height / 2f));

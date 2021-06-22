@@ -461,6 +461,11 @@ namespace TowerDefenseNew
             DrawTile(34f, 30.5f, 0f, 1f, 8 * 5 + 1);
 
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
+            if(model.stage == 0)
+            {
+                DrawText("Undo last:", 54.15f, 1.25f, .5f);
+                DrawText("Press R", 54.15f, .25f, .5f);
+            }
             if (model.stage > 0)
             {
                 DrawText("Towers:", 54.2f, 29.2f, 0.7f);
