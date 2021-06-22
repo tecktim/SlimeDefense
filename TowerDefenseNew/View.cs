@@ -27,7 +27,6 @@ namespace TowerDefenseNew
 
             var content = $"{nameof(TowerDefenseNew)}.Content.";
 
-            //texSniper = TextureLoader.LoadFromResource(content + "sniperTower.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
             tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12.png");
@@ -37,7 +36,8 @@ namespace TowerDefenseNew
 
         }
 
-        internal Camera Camera { get; } = new Camera();
+        internal Camera GameCamera { get; } = new Camera(17f, new Vector2(29f, 15f));
+        internal Camera GuiCamera { get; } = new Camera(17f, new Vector2(29f, 15f));
         public GameWindow Window { get; }
         internal List<Vector2> circlePoints = CreateCirclePoints(360);
         internal bool sampleBouncer;
@@ -59,7 +59,7 @@ namespace TowerDefenseNew
             }
             else
             {
-                Camera.Draw();
+                GameCamera.Draw();
                 DrawGrid(model);
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);
@@ -81,8 +81,18 @@ namespace TowerDefenseNew
                 {
                     Console.WriteLine("View.Draw exception");
                 }
-                DrawHelpText(model);
+                GuiCamera.Draw();
+                DrawGui(model);
             }
+        }
+
+        private void DrawGui(Model model)
+        {
+            DrawQuadRectangle(new Vector2(-2f, 30f), new Vector2(62f, 4f), Color4.Black);//balken oben
+            DrawQuadRectangle(new Vector2(54f, -2f), new Vector2(6f, 34f), Color4.Black);//balken rechts
+            DrawQuadRectangle(new Vector2(-2f, -2f), new Vector2(62f, 2f), Color4.Black);//balken unten
+            DrawQuadRectangle(new Vector2(-2f, -2f), new Vector2(2f, 34f), Color4.Black);//balkan links
+            DrawHelpText(model);
         }
 
         private void UpdateSamples(Model model)
@@ -244,7 +254,6 @@ namespace TowerDefenseNew
 
         private void DrawGrid(Model model)
         {
-            DrawGridLines(model.Grid.Columns, model.Grid.Rows);
             for (int column = 0; column < model.Grid.Columns; ++column)
             {
                 for (int row = 0; row < model.Grid.Rows; ++row)
@@ -616,7 +625,9 @@ namespace TowerDefenseNew
 
         internal void Resize(int width, int height)
         {
-            Camera.Resize(width, height);
+            GameCamera.Resize(width, height);
+            GuiCamera.Resize(width, height);
+
         }
 
         internal bool sampleSniper { get; set; } = false;

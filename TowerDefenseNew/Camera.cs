@@ -7,13 +7,18 @@ namespace TowerDefenseNew
 {
     internal class Camera
     {
-        public Camera()
+        public Camera(float scale, Vector2 centerOffset)
         {
+            this._scale = scale;
+            this._center = this._center - centerOffset;
         }
 
         public Matrix4 CameraMatrix => cameraMatrix;
 
         public Matrix4 InvViewportMatrix { get; private set; }
+
+        int _width;
+        int _height;
 
         public void Draw()
         {
@@ -24,15 +29,27 @@ namespace TowerDefenseNew
         {
             
             GL.Viewport(0, 0, width, height); // tell OpenGL to use the whole window for drawing
-           
-            //_windowAspectRatio = (height * 16) / ((float)width * 16);
-            _windowAspectRatio = height / (float)width;
+
+            // _windowAspectRatio = height / (float)width;
+
+            float ratioX = width / (float)height;
+            float ratioY = height / (float)width;
+            float ratio = ratioX < ratioY ? ratioX : ratioY;
+            float newHeight = height * ratio;
+            float newWidth = width * ratio;
+            if (ratio < 0.56f)
+            {
+                _windowAspectRatio = newHeight / newWidth;
+            }
+            else _windowAspectRatio = (newWidth * ratio) / newHeight;
 
 
+            Console.WriteLine($"{width}, {height}, {ratio}");
             var viewport = Transformation2d.Combine(Transformation2d.Translate(Vector2.One), Transformation2d.Scale(width / 2f, height / 2f));
             InvViewportMatrix = viewport.Inverted();
             GL.Ortho(0, width, height, 0, -1, 1);
             UpdateMatrix();
+
         }
 
         internal Vector2 Center
@@ -56,16 +73,19 @@ namespace TowerDefenseNew
         }
 
         private Matrix4 cameraMatrix = Matrix4.Identity;
-        private float _scale { get; set; } = 17f;
+        private float _scale { get; set; }
         private float _windowAspectRatio = 1f;
 
         private Vector2 _center;
 
         private void UpdateMatrix()
         {
-            var translate = Transformation2d.Translate(Center - new Vector2(29f, 15f));
+            var translate = Transformation2d.Translate(Center);
             var scale = Transformation2d.Scale(1f / Scale);
+
             var aspect = Transformation2d.Scale(_windowAspectRatio, 1f);
+           
+
             cameraMatrix = Transformation2d.Combine(translate, scale, aspect);
         }
 
