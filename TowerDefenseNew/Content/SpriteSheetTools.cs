@@ -16,14 +16,13 @@ namespace TowerDefenseNew
         internal static Rect CalcTexCoords(uint spriteId, uint columns, uint rows)
         {
             var result = new Rect(0f, 0f, 1f, 1f);
-            //TODO: Calculate texture coordinates for an animation frame (look at the method summary for details!)
             uint row = spriteId / columns;
             uint col = spriteId % columns;
 
             float x = col / (float)columns;
-            float y = 1f - (row + 1f) / rows;
+            float y = 1f + 0.0026f / 2 - (row + 1f) / rows;
             float width = 1f / columns;
-            float height = 1f / rows;
+            float height = (1f + 0.0026f / 2) / rows;
 
             result = new Rect(x, y, width, height);
             return result;

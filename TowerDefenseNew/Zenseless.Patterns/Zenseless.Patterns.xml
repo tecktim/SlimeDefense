@@ -1,0 +1,394 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Zenseless.Patterns</name>
+    </assembly>
+    <members>
+        <member name="T:Zenseless.Patterns.ArrayConverter">
+            <summary>
+            Reinterprets the data inside an array as a different data type 
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.ArrayConverter.FromByteArray``1(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Converts a byte array into an array of a given destination data type
+            </summary>
+            <typeparam name="T">The destination data type</typeparam>
+            <param name="source">The byte array to convert</param>
+            <param name="byteOffset">offset inside the source byte array</param>
+            <param name="destinationCount">count of array elements of the destination data type</param>
+            <returns>An array of destination type</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.ArrayConverter.ToFloatArray``1(``0[],System.Int32)">
+            <summary>
+            Converts a given array into an array of floats
+            </summary>
+            <typeparam name="SourceType">The data type of the source array</typeparam>
+            <param name="source">The source array</param>
+            <param name="byteOffset">offset inside the source byte array</param>
+            <returns>An array of floats</returns>
+        </member>
+        <member name="T:Zenseless.Patterns.DebugTools">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.DebugTools.GetSourcePositionForConsoleRef(System.String,System.Int32)">
+            <summary>
+            Returns the full path of the source file that contains the caller. This is the file path at the time of compile.
+            </summary>
+            <param name="doNotAssignCallerFilePath">Dummy default parameter. Needed for internal attribute evaluation. Do not assign.</param>
+            <param name="lineNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Zenseless.Patterns.DirtyFlag`1">
+            <summary>
+            Class that implements the dirty flag pattern http://gameprogrammingpatterns.com/dirty-flag.html.
+            A value is cached and only recalculated, if invalidated.
+            </summary>
+            <typeparam name="ValueType">The type of the cached value.</typeparam>
+        </member>
+        <member name="M:Zenseless.Patterns.DirtyFlag`1.#ctor(System.Func{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zenseless.Patterns.DirtyFlag`1"/> class.
+            </summary>
+            <param name="calculateValue">Functor for calculating the value.</param>
+            <exception cref="T:System.ArgumentNullException">calculateValue</exception>
+        </member>
+        <member name="M:Zenseless.Patterns.DirtyFlag`1.Invalidate">
+            <summary>
+            Invalidates the cached value.
+            </summary>
+        </member>
+        <member name="P:Zenseless.Patterns.DirtyFlag`1.Value">
+            <summary>
+            Gets the cached value. If value is not valid (isDirty == true) it will get recalculated.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="P:Zenseless.Patterns.DirtyFlag`1.IsCacheDirty">
+            <summary>
+            Gets a value indicating whether the cache is dirty (needs to be recalculated).
+            </summary>
+            <value>
+              <c>true</c> if this instance cache is dirty; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Zenseless.Patterns.Disposable">
+            <summary>
+            Implements the default disposing behavior as recommended by Microsoft.
+            If you have resources that need disposing, subclass this class.
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.Disposable.DisposeResources">
+            <summary>
+            Will be called from the default Dispose method.
+            Implementers should dispose all their resources her.
+            </summary>
+        </member>
+        <member name="P:Zenseless.Patterns.Disposable.Disposed">
+            <summary>
+            Dispose status of the instance.
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.Disposable.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.Disposable.DisposeAllFields(System.Object)">
+            <summary>
+            Calls <see cref="M:System.IDisposable.Dispose"/> on all fields of type <see cref="T:System.IDisposable"/> found on the given object.
+            Also calls <see cref="M:System.IDisposable.Dispose"/> on each item of fields of type <see cref="T:System.Collections.IEnumerable"/>
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Zenseless.Patterns.Disposable.Finalize">
+            <summary>
+            Leave out the finalizer altogether if this class doesn't
+            own unmanaged resources, but leave the other methods
+            exactly as they are.
+            </summary>
+        </member>
+        <member name="T:Zenseless.Patterns.ExponentialSmoothing">
+            <summary>
+            Class that implements exponential smoothing for series data
+            https://en.wikipedia.org/wiki/Exponential_smoothing#Choosing_the_initial_smoothed_value
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.ExponentialSmoothing.#ctor(System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zenseless.Patterns.ExponentialSmoothing"/> class.
+            </summary>
+            <param name="weight">The weight of a new sample. between ]0,1[.</param>
+        </member>
+        <member name="M:Zenseless.Patterns.ExponentialSmoothing.Clear">
+            <summary>
+            Clears the series.
+            </summary>
+        </member>
+        <member name="P:Zenseless.Patterns.ExponentialSmoothing.SmoothedValue">
+            <summary>
+            Gets the current smoothed value.
+            </summary>
+            <value>
+            The smoothed value.
+            </value>
+        </member>
+        <member name="M:Zenseless.Patterns.ExponentialSmoothing.NewSample(System.Double)">
+            <summary>
+            Adds a new sample to the series.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="T:Zenseless.Patterns.FileWatcher">
+            <summary>
+            Watches the file system for changes to a given file
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.FileWatcher.#ctor(System.String,System.ComponentModel.ISynchronizeInvoke)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zenseless.Patterns.FileWatcher"/> class.
+            </summary>
+            <param name="filePath">The file path.</param>
+            <param name="syncObject">The synchronize object.</param>
+            <exception cref="T:System.IO.FileNotFoundException">File does not exist</exception>
+        </member>
+        <member name="E:Zenseless.Patterns.FileWatcher.Changed">
+            <summary>
+            Occurs when the file has changed on disc.
+            </summary>
+        </member>
+        <member name="P:Zenseless.Patterns.FileWatcher.Dirty">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Zenseless.Patterns.FileWatcher"/> is dirty.
+            </summary>
+            <value>
+              <c>true</c> if dirty; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Zenseless.Patterns.FileWatcher.FullPath">
+            <summary>
+            Gets the full path of the file.
+            </summary>
+            <value>
+            The full path.
+            </value>
+        </member>
+        <member name="M:Zenseless.Patterns.FileWatcher.DisposeResources">
+            <summary>
+            Will be called from the default Dispose method.
+            Implementers should dispose all their resources her.
+            </summary>
+        </member>
+        <member name="T:Zenseless.Patterns.MathHelper">
+            <summary>
+            Contains static/extension methods for System.FMath
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.Clamp(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Clamp the input value x in between min and max. 
+            If x smaller min return min; 
+            if x bigger max return max; 
+            else return x unchanged
+            </summary>
+            <param name="x">input value that will be clamped</param>
+            <param name="min">lower limit</param>
+            <param name="max">upper limit</param>
+            <returns>clamped version of x</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.Clamp(System.Single,System.Single,System.Single)">
+            <summary>
+            Clamp the input value x in between min and max. 
+            If x smaller min return min; 
+            if x bigger max return max; 
+            else return x unchanged
+            </summary>
+            <param name="x">input value that will be clamped</param>
+            <param name="min">lower limit</param>
+            <param name="max">upper limit</param>
+            <returns>clamped version of x</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.Clamp(System.Double,System.Double,System.Double)">
+            <summary>
+            Clamp the input value x in between min and max. 
+            If x smaller min return min; 
+            if x bigger max return max; 
+            else return x unchanged
+            </summary>
+            <param name="x">input value that will be clamped</param>
+            <param name="min">lower limit</param>
+            <param name="max">upper limit</param>
+            <returns>clamped version of x</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.MipMapLevelCount(System.Int32,System.Int32)">
+            <summary>
+            Returns the number of mipmap levels (floor convention) required for MIP mapped filtering of an image.
+            </summary>
+            <param name="width">The image width in pixels.</param>
+            <param name="height">The image height in pixels.</param>
+            <returns>Number of mipmap levels</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.Normalize(System.UInt32)">
+            <summary>
+            Convert input uint from range [0,255] into float in range [0,1]
+            </summary>
+            <param name="v">input in range [0,255]</param>
+            <returns>range [0,1]</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.FindEncompassingIndices``1(``0[],``0)">
+            <summary>
+            Finds the indices into a sorted array that encompass a given value
+            </summary>
+            <typeparam name="TValue"></typeparam>
+            <param name="sorted">a sorted array of values</param>
+            <param name="value">a value</param>
+            <returns>two indices</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.Normalize(System.Single,System.Single,System.Single)">
+            <summary>
+            Transform the input value into the range [0..1]
+            </summary>
+            <param name="inputValue">the input value</param>
+            <param name="inputMin">the lower input range bound</param>
+            <param name="inputMax">the upper input range bound</param>
+            <returns></returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.Lerp(System.Single,System.Single,System.Single)">
+            <summary>
+            Linear interpolation of two known values a and b according to weight
+            </summary>
+            <param name="a">First value</param>
+            <param name="b">Second value</param>
+            <param name="weight">Interpolation weight</param>
+            <returns>Linearly interpolated value</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.Lerp(System.Double,System.Double,System.Double)">
+            <summary>
+            Linear interpolation of two known values a and b according to weight
+            </summary>
+            <param name="a">First value</param>
+            <param name="b">Second value</param>
+            <param name="weight">Interpolation weight</param>
+            <returns>Linearly interpolated value</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.MathHelper.FastTruncate(System.Single)">
+            <summary>
+            Returns the integer part of the specified floating-point number. 
+            Works not for constructs like <code>1f - float.epsilon</code> because this is outside of floating point precision
+            </summary>
+            <param name="x">Input floating-point number</param>
+            <returns>The integer part.</returns>
+        </member>
+        <member name="T:Zenseless.Patterns.PathTools">
+            <summary>
+            Contains helper functions for file paths
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.PathTools.GetCurrentProcessPath">
+            <summary>
+            Returns the full path of the main module of the current process.
+            </summary>
+            <returns>Full path of the main module of the current process.</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.PathTools.GetCurrentProcessOutputDir(System.String)">
+            <summary>
+            Returns the output directory for the current process:
+            a sub-directory of the directory the executable resides in 
+            and with the name of the executable and an appended time code.
+            </summary>
+            <param name="timeCodeFormat">string format for DateTime</param>
+            <returns>Output directory</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.PathTools.GetSourceFilePath(System.String)">
+            <summary>
+            Returns the full path of the source file that contains the caller. This is the file path at the time of compile.
+            </summary>
+            <param name="doNotAssignCallerFilePath">Dummy default parameter. Needed for internal attribute evaluation. Do not assign.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Zenseless.Patterns.Resource">
+            <summary>
+            Handles loading of embedded resources from the entry assembly
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.Resource.LoadString(System.String)">
+            <summary>
+            Load the resource given by name into a string
+            </summary>
+            <param name="name">The name of the resource.</param>
+            <returns>a string</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.Resource.LoadStream(System.String)">
+            <summary>
+            Load the resource given by name into a stream
+            </summary>
+            <param name="name">The name of the resource.</param>
+            <returns>a stream.</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.Resource.Matches(System.String)">
+            <summary>
+            Returns all resource names that contain the given text
+            </summary>
+            <param name="text">Text to search for</param>
+            <returns>A list of strings</returns>
+        </member>
+        <member name="T:Zenseless.Patterns.TypeRegistry">
+            <summary>
+            Holds a dictionary of type instances that can be registered and requested.
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.TypeRegistry.RegisterTypeInstance``1(``0)">
+            <summary>
+            Register an instance of a unique type with this type registry
+            </summary>
+            <typeparam name="TYPE">An unique type</typeparam>
+            <param name="instance">An instance</param>
+        </member>
+        <member name="M:Zenseless.Patterns.TypeRegistry.GetInstance``1">
+            <summary>
+            Returns the registered instance of the given type.
+            </summary>
+            <typeparam name="TYPE">An unique type</typeparam>
+            <returns>An instance of the given type</returns>
+        </member>
+        <member name="T:Zenseless.Patterns.XmlSerializationExtensions">
+            <summary>
+            Contains class instance serialization/deserialization methods. 
+            Can be used for persisting class instances to disc and reading them back to memory.
+            </summary>
+        </member>
+        <member name="M:Zenseless.Patterns.XmlSerializationExtensions.FromXMLFile``1(System.String)">
+            <summary>
+            Deserializes from an XML file into a new class instance of a given type.
+            </summary>
+            <typeparam name="DataType">The type of the class that will be deserialized.</typeparam>
+            <param name="fileName">The file name from which the serialized instance will be restored from.</param>
+            <returns>Deserialized class instance</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.XmlSerializationExtensions.FromXmlString``1(System.String)">
+            <summary>
+            Deserializes from an XML string into a new class instance of a given type.
+            </summary>
+            <typeparam name="DataType">The type of the class that will be deserialized.</typeparam>
+            <param name="xmlString">XML string from which to deserialize.</param>
+            <returns>Deserialized class instance</returns>
+        </member>
+        <member name="M:Zenseless.Patterns.XmlSerializationExtensions.ToXMLFile(System.Object,System.String)">
+            <summary>
+            Serializes the given class instance into a XML format file.
+            </summary>
+            <param name="serializable">The class instance to be serialized.</param>
+            <param name="fileName">The file name the serialized instance will be stored to.</param>
+        </member>
+        <member name="M:Zenseless.Patterns.XmlSerializationExtensions.ToXmlString(System.Object)">
+            <summary>
+            Serializes the given class instance into a XML string.
+            </summary>
+            <param name="serializable">The class instance to be serialized.</param>
+        </member>
+    </members>
+</doc>

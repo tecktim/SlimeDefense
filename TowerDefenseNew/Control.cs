@@ -20,10 +20,19 @@ namespace TowerDefenseNew
 
         internal void Update(float deltaTime, KeyboardState keyboard)
         {
-            if (keyboard.IsKeyReleased(Keys.D5))
-            {
-                _model.giveCash();
-            }
+            var axisX = keyboard.IsKeyDown(Keys.PageDown) ? -1f : keyboard.IsKeyDown(Keys.PageUp) ? 1f : 0f;
+            var camera = _view.GameCamera;
+            // zoom
+            var zoom = camera.Scale * (1 + deltaTime * axisX);
+            zoom = MathHelper.Clamp(zoom, 5f, 20f);
+            camera.Scale = zoom;
+
+            // translate
+            float axisLeftRight = keyboard.IsKeyDown(Keys.D) ? -1.0f : keyboard.IsKeyDown(Keys.A) ? 1.0f : 0.0f;
+            float axisUpDown = keyboard.IsKeyDown(Keys.W) ? -1.0f : keyboard.IsKeyDown(Keys.S) ? 1.0f : 0.0f;
+            var movement = deltaTime * new Vector2(axisLeftRight, axisUpDown);
+            // convert movement from camera space into world space
+            camera.Center += movement.TransformDirection(camera.CameraMatrix.Inverted());
         }
 
         internal void RemovePath(KeyboardState keyboard)
@@ -37,7 +46,7 @@ namespace TowerDefenseNew
 
         internal void Click(float x, float y, KeyboardState keyboard)
         {
-            var cam = _view.Camera;
+            var cam = _view.GameCamera;
             var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
             var pixelCoordinates = new Vector2(x, y);
             var world = pixelCoordinates.Transform(fromViewportToWorld);
@@ -92,7 +101,7 @@ namespace TowerDefenseNew
 
         internal void ShowRange(float x, float y, MouseButton mb)
         {
-            var cam = _view.Camera;
+            var cam = _view.GameCamera;
             var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
             var pixelCoordinates = new Vector2(x, y);
             var world = pixelCoordinates.Transform(fromViewportToWorld);
@@ -131,7 +140,7 @@ namespace TowerDefenseNew
 
         internal void PlacePath(float x, float y, MouseButton mb)
         {
-            var cam = _view.Camera;
+            var cam = _view.GameCamera;
             var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
             var pixelCoordinates = new Vector2(x, y);
             var world = pixelCoordinates.Transform(fromViewportToWorld);
@@ -166,7 +175,7 @@ namespace TowerDefenseNew
 
         internal void ShowTowerSample(float x, float y, KeyboardState keyboard)
         {
-            var cam = _view.Camera;
+            var cam = _view.GameCamera;
             var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
             var pixelCoordinates = new Vector2(x, y);
             var world = pixelCoordinates.Transform(fromViewportToWorld);

@@ -7,13 +7,18 @@ namespace TowerDefenseNew
 {
     internal class Camera
     {
-        public Camera()
+        public Camera(float scale, Vector2 centerOffset)
         {
+            this._scale = scale;
+            this._center = this._center - centerOffset;
         }
 
         public Matrix4 CameraMatrix => cameraMatrix;
 
         public Matrix4 InvViewportMatrix { get; private set; }
+
+        int _width;
+        int _height;
 
         public void Draw()
         {
@@ -90,11 +95,13 @@ namespace TowerDefenseNew
 
             GL.Viewport(0, 0, width, height); // tell OpenGL to use the whole window for drawing
 
+            Console.WriteLine($"{width}, {height}, {ratio}");
             var viewport = Transformation2d.Combine(Transformation2d.Translate(Vector2.One), Transformation2d.Scale(width / 2f, height / 2f));
 
             InvViewportMatrix = viewport.Inverted();
             GL.Ortho(0, width, height, 0, -1, 1);
             UpdateMatrix();
+
         }
 
 
@@ -127,7 +134,7 @@ namespace TowerDefenseNew
 
         private void UpdateMatrix()
         {
-            var translate = Transformation2d.Translate(Center - new Vector2(29f, 15f));
+            var translate = Transformation2d.Translate(Center);
             var scale = Transformation2d.Scale(1f / Scale);
             var aspect = Transformation2d.Scale(_windowAspectRatioX, _windowAspectRatioY);
             
