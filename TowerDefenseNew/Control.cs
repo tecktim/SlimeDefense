@@ -20,7 +20,7 @@ namespace TowerDefenseNew
 
         internal void Update(float deltaTime, KeyboardState keyboard)
         {
-            var axisX = keyboard.IsKeyDown(Keys.PageDown) ? -1f : keyboard.IsKeyDown(Keys.PageUp) ? 1f : 0f;
+            var axisX = keyboard.IsKeyDown(Keys.E) ? -1f : keyboard.IsKeyDown(Keys.Q) ? 1f : 0f;
             var camera = _view.GameCamera;
             // zoom
             var zoom = camera.Scale * (1 + deltaTime * axisX);

@@ -88,10 +88,10 @@ namespace TowerDefenseNew
 
         private void DrawGui(Model model)
         {
-            DrawQuadRectangle(new Vector2(-2f, 30f), new Vector2(62f, 4f), Color4.Black);//balken oben
-            DrawQuadRectangle(new Vector2(54f, -2f), new Vector2(6f, 34f), Color4.Black);//balken rechts
-            DrawQuadRectangle(new Vector2(-2f, -2f), new Vector2(62f, 2f), Color4.Black);//balken unten
-            DrawQuadRectangle(new Vector2(-2f, -2f), new Vector2(2f, 34f), Color4.Black);//balkan links
+            DrawQuadRectangle(new Vector2(-50f, 30f), new Vector2(150f, 100f), Color4.Black);//balken oben
+            DrawQuadRectangle(new Vector2(54f, -2f), new Vector2(100f, 34f), Color4.Black);//balken rechts
+            DrawQuadRectangle(new Vector2(-50f, -100f), new Vector2(150f, 100f), Color4.Black);//balken unten
+            DrawQuadRectangle(new Vector2(-100f, -2f), new Vector2(100f, 34f), Color4.Black);//balkan links
             DrawHelpText(model);
         }
 

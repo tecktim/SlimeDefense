@@ -83,19 +83,18 @@ namespace TowerDefenseNew
                 _windowAspectRatioY = _windowAspectRatioX * 16 / 9;
                 Console.WriteLine("2");
             }
-            if (width < height * 16 / 9)
+            /*else if (width < height * 16 / 9)
             {
                 _windowAspectRatioX = width / (float)height;
-                _windowAspectRatioY = _windowAspectRatioX * 9 / 16;
+                _windowAspectRatioY = _windowAspectRatioX * 16 / 9;
                 Console.WriteLine("3");
-            }
+            }*/
 
             Console.WriteLine($"W: {width}, H: {height}, X: {_windowAspectRatioX}, Y: {_windowAspectRatioY}");
 
 
             GL.Viewport(0, 0, width, height); // tell OpenGL to use the whole window for drawing
 
-            Console.WriteLine($"{width}, {height}, {ratio}");
             var viewport = Transformation2d.Combine(Transformation2d.Translate(Vector2.One), Transformation2d.Scale(width / 2f, height / 2f));
 
             InvViewportMatrix = viewport.Inverted();
