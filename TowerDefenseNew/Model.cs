@@ -86,23 +86,29 @@ namespace TowerDefenseNew
         private Vector2 smoke = new(0f, 1f);
         private void UpdateParticles(float frameTime, Enemy enemy)
         {
-            foreach (var particle in particles.ToList())
+            try
             {
-                particle.ApplyForce(smoke);
-                UpdateParticle(particle, frameTime);
-                var lifeTime = 1.2f;  //particles life 1.5 seconds
-                particle.Age += frameTime / lifeTime;
-
-                if (!particle.IsAlive)
+                foreach (var particle in particles.ToList())
                 {
-                    Seed(particle, enemy);
-                }
-                if (!enemy.IsAlive)
-                {
+                    particle.ApplyForce(smoke);
+                    UpdateParticle(particle, frameTime);
+                    var lifeTime = 1.2f;  //particles life 1.5 seconds
+                    particle.Age += frameTime / lifeTime;
 
-                    particles.Remove(particle);
-                    continue;
+                    if (!particle.IsAlive)
+                    {
+                        Seed(particle, enemy);
+                    }
+                    if (!enemy.IsAlive)
+                    {
+                        particles.Remove(particle);
+                        continue;
+                    }
                 }
+            }
+            catch (System.ArgumentException)
+            {
+                Console.WriteLine("update particle exception");
             }
         }
         private void UpdateParticle(Particle particle, float frameTime)
