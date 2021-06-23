@@ -23,7 +23,7 @@ namespace TowerDefenseNew
             GL.ClearColor(Color4.Black);
             Window = window;
             var content = $"{nameof(TowerDefenseNew)}.Content.";
-            texParticle = TextureLoader.LoadFromResource(content + "water_splash.png");
+            texParticle = TextureLoader.LoadFromResource(content + "smoke_256a.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
             tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12_kippe.png");
@@ -119,10 +119,17 @@ namespace TowerDefenseNew
             GL.Enable(EnableCap.Texture2D);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.Enable(EnableCap.Blend);
-            foreach (var particle in particles.ToList())
+            try
             {
-                GL.Color4(1f, 1f, 1f, 1f - particle.Age);
-                DrawParticle(particle.Location, 0.1f);
+                foreach (var particle in particles.ToList())
+                {
+                    GL.Color4(1f, 1f, 1f, 1f - particle.Age);
+                    DrawParticle(particle.Location, 0.05f);
+                }
+            }
+            catch (System.InvalidOperationException)
+            {
+                Console.WriteLine("particle draw exception");
             }
             GL.Disable(EnableCap.Texture2D);
             GL.Disable(EnableCap.Blend);
