@@ -16,24 +16,17 @@ namespace TowerDefenseNew
         private readonly Texture texExplosion;
         private readonly Texture texFont;
         private readonly Texture tileSet;
-        //private readonly Texture texSniper;
+        private readonly Texture texParticle;
 
         public View(GameWindow window)
         {
-            //TODO: Change the clear color of the screen.
             GL.ClearColor(Color4.Black);
             Window = window;
-
-
             var content = $"{nameof(TowerDefenseNew)}.Content.";
-
+            texParticle = TextureLoader.LoadFromResource(content + "water_splash.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
             tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12.png");
-
-            //tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_no_offset.png");
-
-
         }
 
         internal Camera GameCamera { get; } = new Camera(17f, new Vector2(29f, 15f));
@@ -72,6 +65,7 @@ namespace TowerDefenseNew
                     DrawEnemy(model);
                     DrawBullet(model);
                     DrawExplosion(model.explosions);
+                    DrawParticles(model.particles);
                 }
                 catch (System.ArgumentException)
                 {
@@ -117,6 +111,33 @@ namespace TowerDefenseNew
                 }
                 else continue;
             }
+        }
+
+        private void DrawParticles(IEnumerable<IParticle> particles)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, texParticle.Handle);
+            GL.Enable(EnableCap.Texture2D);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GL.Enable(EnableCap.Blend);
+            foreach (var particle in particles.ToList())
+            {
+                GL.Color4(1f, 1f, 1f, 1f - particle.Age);
+                DrawParticle(particle.Location, 0.1f);
+            }
+            GL.Disable(EnableCap.Texture2D);
+            GL.Disable(EnableCap.Blend);
+        }
+
+        private void DrawParticle(Vector2 location, float radius)
+        {
+            var transform = Transformation2d.Combine(Transformation2d.Scale(radius), Transformation2d.Translate(location.X, location.Y), GameCamera.CameraMatrix);
+            GL.LoadMatrix(ref transform);
+            GL.Begin(PrimitiveType.Quads);
+            GL.TexCoord2(0f, 0f); GL.Vertex2(-1f, -1f);
+            GL.TexCoord2(1f, 0f); GL.Vertex2(1f, -1f);
+            GL.TexCoord2(1f, 1f); GL.Vertex2(1f, 1f);
+            GL.TexCoord2(0f, 1f); GL.Vertex2(-1f, 1f);
+            GL.End();
         }
 
         private void DrawEnemy(Model model)

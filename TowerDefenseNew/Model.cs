@@ -18,7 +18,9 @@ namespace TowerDefenseNew
             towers = new List<Tower>();
             bullets = new List<Bullet>();
             explosions = new List<Explosion>();
+            particles = new List<Particle>();
 
+            
             cash = 80;
             bouncerCost = 40;
             sniperCost = 20;
@@ -58,6 +60,10 @@ namespace TowerDefenseNew
             UpdateExplosions(deltaTime);
             UpdateBullets(deltaTime);
             UpdateEnemies(deltaTime);
+            foreach(var e in enemies.ToList())
+            {
+                UpdateParticles(deltaTime, e);
+            }
         }
 
         private void UpdateScaling()
@@ -78,6 +84,60 @@ namespace TowerDefenseNew
             }
         }
 
+        private float particleTime = 0f;
+        private Vector2 smoke = new(0f, 1f);
+        private void UpdateParticles(float frameTime, Enemy enemy)
+        {
+            //calc velocity and location
+            particleTime += frameTime;
+            /*if (particleTime > 3f)
+            {
+
+                smoke = new Vector2(RndM11(), RndM11());
+                particleTime = 0f;
+            }*/
+            //TODO: apply force to each particle and update attributes
+            foreach (var particle in particles.ToList())
+            {
+                particle.ApplyForce(smoke);
+                UpdateParticle(particle, frameTime);
+                var lifeTime = 3f;  //particles life 3 seconds
+                particle.Age += frameTime / lifeTime;
+
+                if (!particle.IsAlive)
+                {
+                    Seed(particle, enemy);
+                }
+            }
+        }
+        private void UpdateParticle(Particle particle, float frameTime)
+        {
+            particle.Velocity += particle.Acceleration * frameTime;
+            particle.Location += particle.Velocity * frameTime;
+            //particle.Location += new Vector2(frameTime * particle.Velocity.X, frameTime * particle.Velocity.Y);
+            //force was spend reset Acceleration
+            particle.Acceleration = Vector2.Zero;
+        }
+
+        private readonly Random rnd = new Random(12);
+        private float Rnd01() => (float)rnd.NextDouble();
+		private float RndM11() => (Rnd01() - 0.5f) * 2.0f;
+        private void Seed(Particle particle, Enemy enemy)
+        {
+            var velocity = new Vector2(RndM11() * .1f, Rnd01()) * 0.1f; //moving mainly upward
+            particle.Seed(enemy.Center + new Vector2(1f, 0.25f), velocity);
+        }
+
+        private void CreateParticles (int count, Enemy enemy)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var particle = new Particle();
+                Seed(particle, enemy);
+                particle.Age = Rnd01();
+                particles.Add(particle);
+            }
+        }
         private void UpdateEnemies(float frameTime)
         {
             if (enemies.Count != 0)
@@ -434,7 +494,9 @@ namespace TowerDefenseNew
             var rnd = new Random();
             int spot = rnd.Next(0, 3);
             float size = 0.35f;
-            enemies.Add(new Enemy(new Vector2(0, row), size, enemyHealth));
+            var enemy = new Enemy(new Vector2(0, row), size, enemyHealth);
+            enemies.Add(enemy);
+            CreateParticles(100, enemy);
             if (enemySpawnRate >= 2200)
             {
                 enemySpawnRate = (int)Math.Pow(enemySpawnRate, 0.9964); // 0.9964);
@@ -464,6 +526,7 @@ namespace TowerDefenseNew
         internal List<Tower> towers;
         internal List<Bullet> bullets;
         internal List<Explosion> explosions;
+        internal List<Particle> particles;
         internal int enemySpawnRate;
         internal int killCount;
         private int bounty;
