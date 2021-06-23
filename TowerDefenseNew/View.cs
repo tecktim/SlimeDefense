@@ -20,7 +20,7 @@ namespace TowerDefenseNew
 
         public View(GameWindow window)
         {
-            GL.ClearColor(Color4.Black);
+            
             Window = window;
             var content = $"{nameof(TowerDefenseNew)}.Content.";
             texParticle = TextureLoader.LoadFromResource(content + "smoke_256a.png");
@@ -39,7 +39,9 @@ namespace TowerDefenseNew
 
         internal void Draw(Model model)
         {
+
             GL.Clear(ClearBufferMask.ColorBufferBit); // clear the screen
+            GL.ClearColor(Color4.Black);
             if (model.gameOver)
             {
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture

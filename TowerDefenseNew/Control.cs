@@ -24,7 +24,7 @@ namespace TowerDefenseNew
             var camera = _view.GameCamera;
             // zoom
             var zoom = camera.Scale * (1 + deltaTime * axisX);
-            zoom = MathHelper.Clamp(zoom, 2f, 17f);
+            zoom = MathHelper.Clamp(zoom, 2f, 20f);
             camera.Scale = zoom;
 
             Console.WriteLine($"X: {Math.Floor(_view.GameCamera.Center.X)} Y: {Math.Floor(_view.GameCamera.Center.Y)}");
