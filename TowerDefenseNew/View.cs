@@ -26,7 +26,7 @@ namespace TowerDefenseNew
             texParticle = TextureLoader.LoadFromResource(content + "smoke_256a.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
-            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12_kippe.png");
+            tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12_offset_1_each_+kippe.png");
         }
 
         internal Camera GameCamera { get; } = new Camera(17f, new Vector2(29f, 15f));

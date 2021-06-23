@@ -31,9 +31,9 @@ namespace Zenseless.OpenTK
 			var bytes = image.GetPixelsUnsafe().ToArray();
 			var texture = new Texture(image.Width, image.Height, internalFormat)
 			{
-				Function = TextureWrapMode.MirroredRepeat,
-				MagFilter = TextureMagFilter.Nearest,
-				MinFilter = TextureMinFilter.Nearest
+				Function = TextureWrapMode.ClampToEdge,
+				MagFilter = TextureMagFilter.Linear,
+				MinFilter = TextureMinFilter.LinearMipmapLinear
 			};
 
 			GL.TextureSubImage2D(texture.Handle, 0, 0, 0, image.Width, image.Height, format, PixelType.UnsignedByte, bytes);

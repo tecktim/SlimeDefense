@@ -86,10 +86,6 @@ namespace TowerDefenseNew
         private Vector2 smoke = new(0f, 1f);
         private void UpdateParticles(float frameTime, Enemy enemy)
         {
-            if(enemy.health <= enemyHealth * 0.2)
-            {
-                return;
-            }
             foreach (var particle in particles.ToList())
             {
                 particle.ApplyForce(smoke);
@@ -103,6 +99,7 @@ namespace TowerDefenseNew
                 }
                 if (!enemy.IsAlive)
                 {
+
                     particles.Remove(particle);
                     continue;
                 }
@@ -123,8 +120,8 @@ namespace TowerDefenseNew
         private void Seed(Particle particle, Enemy enemy)
         {
             var velocity = new Vector2(RndM11() * .1f, Rnd01()) * 0.1f; //moving mainly upward
-            if(enemy.dir == direction.right || enemy.dir == direction.up) particle.Seed(enemy.Center + new Vector2(1f, 0.25f), velocity);
-            if(enemy.dir == direction.left || enemy.dir == direction.down) particle.Seed(enemy.Center + new Vector2(0f, 0.25f), velocity);
+            if(enemy.dir == direction.right || enemy.dir == direction.up) particle.Seed(enemy.Center + new Vector2(1f - 2*0.0294117647058824f, 0.3f), velocity);
+            if(enemy.dir == direction.left || enemy.dir == direction.down) particle.Seed(enemy.Center + new Vector2(0f + 2*0.0294117647058824f, 0.3f), velocity);
         }
 
         private void CreateParticles (int count, Enemy enemy)
