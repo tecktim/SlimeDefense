@@ -77,18 +77,40 @@ namespace TowerDefenseNew
                 _windowAspectRatioY = 1f;
                 Console.WriteLine("1");
             }
-            if (width > height * 16 / 9)
+            else if (width > height * 16 / 9)
             {
                 _windowAspectRatioX = height / (float)width;
                 _windowAspectRatioY = _windowAspectRatioX * 16 / 9;
                 Console.WriteLine("2");
             }
-            /*else if (width < height * 16 / 9)
+            else if (width < height * 9 / 16)
             {
                 _windowAspectRatioX = width / (float)height;
-                _windowAspectRatioY = _windowAspectRatioX * 16 / 9;
+                _windowAspectRatioY = _windowAspectRatioX * 9 / 16;
                 Console.WriteLine("3");
+            }
+            else if (width > height) 
+            {
+                _windowAspectRatioX = height / (float)width * 9 / 16;
+                _windowAspectRatioY = _windowAspectRatioX * 16 / 9;
+                Console.WriteLine("4");
+            }
+            else
+            {
+                _windowAspectRatioX = width / (float)height * 9 / 16;
+                _windowAspectRatioY = _windowAspectRatioX * 9 / 16;
+                Console.WriteLine("5");
+            }
+
+            /*
+             //FALLS WIR KEIN BOCK MEHR HABEN
+            else
+            {
+                _windowAspectRatioY = width / (float)height * 9 / 16 / 2;
+                _windowAspectRatioX = _windowAspectRatioY * 16 / 9 / 2;
+                Console.WriteLine("4");
             }*/
+
 
             Console.WriteLine($"W: {width}, H: {height}, X: {_windowAspectRatioX}, Y: {_windowAspectRatioY}");
 
