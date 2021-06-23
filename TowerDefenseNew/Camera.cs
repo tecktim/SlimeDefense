@@ -16,10 +16,6 @@ namespace TowerDefenseNew
         public Matrix4 CameraMatrix => cameraMatrix;
 
         public Matrix4 InvViewportMatrix { get; private set; }
-
-        int _width;
-        int _height;
-
         public void Draw()
         {
             GL.LoadMatrix(ref cameraMatrix);
@@ -88,6 +84,7 @@ namespace TowerDefenseNew
                 _windowAspectRatioX = width / (float)height;
                 _windowAspectRatioY = _windowAspectRatioX * 9 / 16;
                 Console.WriteLine("3");
+
             }
             else if (width > height) 
             {
@@ -126,7 +123,7 @@ namespace TowerDefenseNew
         }
 
 
-        internal Vector2 Center
+        public Vector2 Center
         {
             get => _center;
             set

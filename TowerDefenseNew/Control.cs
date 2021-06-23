@@ -24,16 +24,37 @@ namespace TowerDefenseNew
             var camera = _view.GameCamera;
             // zoom
             var zoom = camera.Scale * (1 + deltaTime * axisX);
-            zoom = MathHelper.Clamp(zoom, 5f, 20f);
+            zoom = MathHelper.Clamp(zoom, 4f, 17f);
             camera.Scale = zoom;
 
-            // translate
-            float axisLeftRight = keyboard.IsKeyDown(Keys.D) ? -1.0f : keyboard.IsKeyDown(Keys.A) ? 1.0f : 0.0f;
-            float axisUpDown = keyboard.IsKeyDown(Keys.W) ? -1.0f : keyboard.IsKeyDown(Keys.S) ? 1.0f : 0.0f;
-            var movement = deltaTime * new Vector2(axisLeftRight, axisUpDown);
-            // convert movement from camera space into world space
-            camera.Center += movement.TransformDirection(camera.CameraMatrix.Inverted());
-        }
+            Console.WriteLine($"X: {Math.Floor(_view.GameCamera.Center.X)} Y: {Math.Floor(_view.GameCamera.Center.Y)}");
+            if (_view.GameCamera.Center.Y >= -30f || _view.GameCamera.Center.Y <= 0f || _view.GameCamera.Center.X >= -1f || _view.GameCamera.Center.X <= -54f)
+            {
+                // translate
+                float axisLeftRight = keyboard.IsKeyDown(Keys.D) ? -1.0f : keyboard.IsKeyDown(Keys.A) ? 1.0f : 0.0f;
+                float axisUpDown = keyboard.IsKeyDown(Keys.W) ? -1.0f : keyboard.IsKeyDown(Keys.S) ? 1.0f : 0.0f;
+                var movement = deltaTime * new Vector2(axisLeftRight, axisUpDown);
+                // convert movement from camera space into world space
+
+                camera.Center += movement.TransformDirection(camera.CameraMatrix.Inverted());
+                if (Math.Floor(_view.GameCamera.Center.Y) == -31f)
+                {
+                    _view.GameCamera.Center = new Vector2(_view.GameCamera.Center.X, -30f);
+                }
+                if (Math.Floor(_view.GameCamera.Center.Y) == 0f)
+                {
+                    _view.GameCamera.Center = new Vector2(_view.GameCamera.Center.X, 0f);
+                }
+                if (Math.Floor(_view.GameCamera.Center.X) == -1f)
+                {
+                    _view.GameCamera.Center = new Vector2(-1f, _view.GameCamera.Center.Y);
+                }
+                if (Math.Floor(_view.GameCamera.Center.X) == -55f)
+                {
+                    _view.GameCamera.Center = new Vector2(-54f, _view.GameCamera.Center.Y);
+                }
+            }
+        } 
 
         internal void RemovePath(KeyboardState keyboard)
         {
