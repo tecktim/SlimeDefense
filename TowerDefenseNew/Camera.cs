@@ -63,7 +63,7 @@ namespace TowerDefenseNew
             }*/
 
             //wenn oben geht für die fälle muss es damit doch eig gehen...
-
+            /*
             float xyRatio = width / (float)height;
             float yxRatio = height / (float)width;
 
@@ -109,15 +109,12 @@ namespace TowerDefenseNew
             }*/
 
 
-            Console.WriteLine($"W: {width}, H: {height}, X: {_windowAspectRatioX}, Y: {_windowAspectRatioY}");
 
-
+            _windowAspectRatio = height / (float)width;
             GL.Viewport(0, 0, width, height); // tell OpenGL to use the whole window for drawing
-
             var viewport = Transformation2d.Combine(Transformation2d.Translate(Vector2.One), Transformation2d.Scale(width / 2f, height / 2f));
 
             InvViewportMatrix = viewport.Inverted();
-            GL.Ortho(0, width, height, 0, -1, 1);
             UpdateMatrix();
 
         }
@@ -145,8 +142,7 @@ namespace TowerDefenseNew
 
         private Matrix4 cameraMatrix = Matrix4.Identity;
         private float _scale { get; set; } = 17f;
-        private float _windowAspectRatioX = 1f;
-        private float _windowAspectRatioY = 1f;
+        private float _windowAspectRatio = 1f;
 
         private Vector2 _center;
 
@@ -154,8 +150,10 @@ namespace TowerDefenseNew
         {
             var translate = Transformation2d.Translate(Center);
             var scale = Transformation2d.Scale(1f / Scale);
-            var aspect = Transformation2d.Scale(_windowAspectRatioX, _windowAspectRatioY);
-            
+            Matrix4 aspect;
+            if (_windowAspectRatio > 9 / 16) { aspect = Transformation2d.Scale(_windowAspectRatio, 1f); }
+            else { aspect = Transformation2d.Scale(1f, _windowAspectRatio); }
+
             cameraMatrix = Transformation2d.Combine(translate, scale, aspect);
         }
 

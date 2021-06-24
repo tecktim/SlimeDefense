@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <None Remove="Content\Slime.ico" />
-    <None Remove="Content\smoke_256a.png" />
     <None Remove="Content\smokin.png" />
     <None Remove="Content\sonic_asalga.png" />
     <None Remove="Content\TileSet_CG_5x12.png" />
@@ -22,7 +21,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Content\Slime.ico" />
-    <EmbeddedResource Include="Content\smoke_256a.png" />
     <EmbeddedResource Include="Content\smokin.png" />
     <EmbeddedResource Include="Content\sonic_asalga.png" />
     <EmbeddedResource Include="Content\TileSet_CG_5x12.png" />

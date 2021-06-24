@@ -40,6 +40,7 @@ namespace TowerDefenseNew.GameObjects
                             //he dead if false
                             isDead = true;
                             Enemies.Remove(Enemies[i]);
+
                         }
                         Bullets.Remove(this);
                         continue;

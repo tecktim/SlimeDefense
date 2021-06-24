@@ -23,7 +23,7 @@ namespace TowerDefenseNew
             
             Window = window;
             var content = $"{nameof(TowerDefenseNew)}.Content.";
-            texParticle = TextureLoader.LoadFromResource(content + "smoke_256a.png");
+            texParticle = TextureLoader.LoadFromResource(content + "water_splash.png");
             texExplosion = TextureLoader.LoadFromResource(content + "smokin.png");
             texFont = TextureLoader.LoadFromResource(content + "sonic_asalga.png");
             tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12_offset_1_each_+kippe.png");
@@ -101,6 +101,12 @@ namespace TowerDefenseNew
             {
                 samplePortal = false;
             }
+            if(model.towerCount >= 50)
+            {
+                sampleBouncer = false;
+                sampleRifle = false;
+                sampleSniper = false;
+            }
         }
 
         private void DrawBullet(Model model)
@@ -126,7 +132,7 @@ namespace TowerDefenseNew
                 foreach (var particle in particles.ToList())
                 {
                     GL.Color4(1f, 1f, 1f, 1f - particle.Age);
-                    DrawParticle(particle.Location, 0.05f);
+                    DrawParticle(particle.Location, 0.5f);
                 }
             }
             catch (System.InvalidOperationException)

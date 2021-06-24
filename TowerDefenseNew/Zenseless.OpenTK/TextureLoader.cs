@@ -32,7 +32,7 @@ namespace Zenseless.OpenTK
 			var texture = new Texture(image.Width, image.Height, internalFormat)
 			{
 				Function = TextureWrapMode.ClampToEdge,
-				MagFilter = TextureMagFilter.Linear,
+				MagFilter = TextureMagFilter.Nearest,
 				MinFilter = TextureMinFilter.LinearMipmapLinear
 			};
 

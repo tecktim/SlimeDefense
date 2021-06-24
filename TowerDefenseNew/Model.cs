@@ -60,10 +60,7 @@ namespace TowerDefenseNew
             UpdateExplosions(deltaTime);
             UpdateBullets(deltaTime);
             UpdateEnemies(deltaTime);
-            foreach(var e in enemies.ToList())
-            {
-                UpdateParticles(deltaTime, e);
-            }
+            UpdateParticles(deltaTime);
         }
 
         private void UpdateScaling()
@@ -82,25 +79,32 @@ namespace TowerDefenseNew
             {
                 applyScaling = true;
             }
+            if (towerCount >= 50)
+            {
+                
+            }
         }
-        private Vector2 smoke = new(0f, 1f);
-        private void UpdateParticles(float frameTime, Enemy enemy)
+        private float time = 0f;
+        private Vector2 deathParticles = new(.3f, .3f);
+        private void UpdateParticles(float frameTime)
         {
+            time += frameTime;
+            if (time > .3f)
+            {
+                deathParticles = new Vector2(RndM11(), Math.Abs(RndM11()));
+                time = 0f;
+            }
             try
             {
                 foreach (var particle in particles.ToList())
                 {
-                    particle.ApplyForce(smoke);
+                    particle.ApplyForce(deathParticles);
                     UpdateParticle(particle, frameTime);
-                    var lifeTime = 1.2f;  //particles life 1.5 seconds
+                    var lifeTime = 2f;  //particles life 1.2 seconds
                     particle.Age += frameTime / lifeTime;
-
                     if (!particle.IsAlive)
                     {
-                        Seed(particle, enemy);
-                    }
-                    if (!enemy.IsAlive)
-                    {
+                        //Seed(particle.Location, particle);
                         particles.Remove(particle);
                         continue;
                     }
@@ -115,27 +119,26 @@ namespace TowerDefenseNew
         {
             particle.Velocity += particle.Acceleration * frameTime;
             particle.Location += particle.Velocity * frameTime;
-            //particle.Location += new Vector2(frameTime * particle.Velocity.X, frameTime * particle.Velocity.Y);
             //force was spend reset Acceleration
             particle.Acceleration = Vector2.Zero;
         }
 
         private readonly Random rnd = new Random(10);
         private float Rnd01() => (float)rnd.NextDouble();
-		private float RndM11() => (Rnd01() - 0.5f) * 2.0f;
-        private void Seed(Particle particle, Enemy enemy)
+        private float RndM11() => (Rnd01() - 0.5f) * 2.0f;
+
+        private void Seed(Vector2 pos, Particle particle)
         {
             var velocity = new Vector2(RndM11() * .1f, Rnd01()) * 0.1f; //moving mainly upward
-            if(enemy.dir == direction.right || enemy.dir == direction.up) particle.Seed(enemy.Center + new Vector2(1f - 2*0.0294117647058824f, 0.3f), velocity);
-            if(enemy.dir == direction.left || enemy.dir == direction.down) particle.Seed(enemy.Center + new Vector2(0f + 2*0.0294117647058824f, 0.3f), velocity);
+            particle.Seed(pos, velocity);
         }
 
-        private void CreateParticles (int count, Enemy enemy)
+        private void CreateParticles (int count, Vector2 pos)
         {
             for (int i = 0; i < count; i++)
             {
                 var particle = new Particle();
-                Seed(particle, enemy);
+                Seed(pos + new Vector2(.5f, .5f), particle);
                 particle.Age = Rnd01();
                 particles.Add(particle);
             }
@@ -288,6 +291,7 @@ namespace TowerDefenseNew
                         towers.Remove(tower);
                         tower.asTimer(false);
                         Math.Floor(cash);
+                        CreateParticles(25, new Vector2(column, row));
                         return;
                     }
                     break;
@@ -299,6 +303,7 @@ namespace TowerDefenseNew
                         towers.Remove(tower);
                         tower.asTimer(false);
                         Math.Floor(cash);
+                        CreateParticles(25, new Vector2(column, row));
                         return;
                     }
                     break;
@@ -310,6 +315,7 @@ namespace TowerDefenseNew
                         towers.Remove(tower);
                         tower.asTimer(false);
                         Math.Floor(cash);
+                        CreateParticles(25, new Vector2(column, row));
                         return;
                     }
                     break;
@@ -437,10 +443,6 @@ namespace TowerDefenseNew
                 enemySpawnTimer(spawnRow);
             }
 
-            if (waypoints.Count != 0)
-            {
-                Console.WriteLine($"X: {waypoints[waypoints.Count-1].X} Y: {waypoints[waypoints.Count-1].Y}");
-            }
 
             return placed;
         }
@@ -469,6 +471,7 @@ namespace TowerDefenseNew
             }
             _grid[(int)waypoints.Last().X, (int)waypoints.Last().Y] = CellType.Empty;
 
+            CreateParticles(25, new Vector2((int)waypoints.Last().X, (int)waypoints.Last().Y));
             //_grid[(int)waypoints[waypoints.Count - 1].X, (int)waypoints[waypoints.Count - 1].Y] = CellType.Empty;
             waypoints.Remove(waypoints.Last());
             
@@ -498,7 +501,6 @@ namespace TowerDefenseNew
             float size = 0.35f;
             var enemy = new Enemy(new Vector2(0, row), size, enemyHealth);
             enemies.Add(enemy);
-            CreateParticles(25, enemy);
             if (enemySpawnRate >= 2200)
             {
                 enemySpawnRate = (int)Math.Pow(enemySpawnRate, 0.9964); // 0.9964);
