@@ -26,8 +26,6 @@ namespace TowerDefenseNew
             var zoom = camera.Scale * (1 + deltaTime * axisX);
             zoom = MathHelper.Clamp(zoom, 2f, 20f);
             camera.Scale = zoom;
-
-            Console.WriteLine($"X: {Math.Floor(_view.GameCamera.Center.X)} Y: {Math.Floor(_view.GameCamera.Center.Y)}");
             if (_view.GameCamera.Center.Y >= -30f || _view.GameCamera.Center.Y <= 0f || _view.GameCamera.Center.X >= -1f || _view.GameCamera.Center.X <= -54f)
             {
                 // translate
@@ -60,7 +58,6 @@ namespace TowerDefenseNew
         {
             if (keyboard.IsKeyDown(Keys.R) && _model.waypoints.Count > 1 && !_model.placed)
             {
-                Console.WriteLine("RRRR");
                 _model.makeEmpty();
             }
         }
