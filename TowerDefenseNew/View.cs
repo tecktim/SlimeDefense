@@ -479,8 +479,7 @@ namespace TowerDefenseNew
             switch (model.stage)
             {
                 case 0:
-                    // DrawText("To start the game,hold SPACEBAR", 11f, 30f, 1f);
-                    DrawText("> > > > > To start the game,drag the mouse from left to right < < < < <", 8f, -1f, .5f);
+                    DrawText("> > > > > > > > To start the game,drag the mouse from left to right < < < < < < < <", 8f, -1f, .5f);
                     break;
                 case 1:
                     DrawText("ENEMIES ARE INCOMING,Place towers to kill them before they reach the end", 7f, -1f, .5f);
@@ -508,17 +507,25 @@ namespace TowerDefenseNew
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
             if(model.stage == 0)
             {
-                DrawText("Undo last:", 54.15f, 1.25f, .5f);
+                //control station
+                DrawText("Camera", 54.15f, 6.75f, .5f);
+                DrawText("Controls:", 54.15f, 6f, .5f);
+                DrawText("  Q   E", 54.15f, 5f, .5f);
+                DrawText("    W  ", 54.15f, 4f, .5f);
+                DrawText("  A S D", 54.15f, 3f, .5f);
+                DrawRectangle(new Vector2(54.1f, 2.75f), new Vector2(5f, 4.75f), Color4.White);
+
+                //undo station
+                DrawText("Undo last:", 54.15f, 1f, .5f);
                 DrawText("Press R", 54.15f, .25f, .5f);
+                DrawRectangle(new Vector2(54.1f, 0f), new Vector2(5f, 1.75f), Color4.White);
+
             }
             if (model.stage > 0)
             {
                 DrawText("Towers:", 54.2f, 29.2f, 0.7f);
                 DrawText($"{model.towerCount}/50", 54.2f, 28f, 1f);
 
-               // DrawText("Press Button", 54.15f, 29.5f, 0.4f);
-                //DrawText("and Click to", 54.15f, 29f, 0.4f);
-               // DrawText("buy towers", 54.15f, 28.5f, 0.4f);
                 //Rifle station
                 DrawText("Rifle   5$", 54.15f, 27f, .5f);
                 DrawText("|", 56.15f, 26f, .5f);
