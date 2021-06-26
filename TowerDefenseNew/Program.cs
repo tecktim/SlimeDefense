@@ -24,6 +24,7 @@ namespace TowerDefenseNew.Structure
             window.RenderFrame += _ => view.Draw(model); // first draw the model
             window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
             window.MouseMove += args => control.PlacePath(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
+            window.MouseMove += args => control.ShowRemoveIndicator(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
             window.MouseDown += args => control.ShowRange(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, mB);
             window.MouseMove += args => control.ShowTowerSample(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);
             window.MouseDown += args => control.Click(window.MousePosition.X, window.Size.Y - 1 - window.MousePosition.Y, keyboard);

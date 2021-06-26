@@ -22,51 +22,6 @@ namespace TowerDefenseNew
         }
         public void Resize(int width, int height)
         {
-            /*if (width > height * 16 / 9)
-            {
-                _windowAspectRatioX = height / (float)width;
-                _windowAspectRatioY = 1f;
-            }
-            if (width < height * 16 / 9)
-            {
-                _windowAspectRatioX = width / (float)height;
-                _windowAspectRatioY = 1f;
-            }
-            if (height > width * 9 / 16)
-            {
-                _windowAspectRatioX = 1f;
-                _windowAspectRatioY = width / (float)height;
-            }
-            if(height < width * 9 / 16)
-            {
-                _windowAspectRatioX = 1f;
-                _windowAspectRatioY = height / (float)width;
-            }*/
-
-
-            // GEHT FÜR 16:9-0 und 0-9:16
-
-            /*if (width == height * 16 / 9)
-            {
-                _windowAspectRatioX = height / (float)width;
-                _windowAspectRatioY = 1f;
-            }
-            if (width > height * 16 / 9)
-            {
-                _windowAspectRatioX = height / (float)width;
-                _windowAspectRatioY = _windowAspectRatioX * 16 / 9;
-            }
-            if (width < height * 16 / 9)
-            {
-                _windowAspectRatioX = width / (float)height;
-                _windowAspectRatioY = _windowAspectRatioX * 9 / 16;
-            }*/
-
-            //wenn oben geht für die fälle muss es damit doch eig gehen...
-            /*
-            float xyRatio = width / (float)height;
-            float yxRatio = height / (float)width;
-
             if (width == height * 16 / 9)
             {
                 _windowAspectRatioX = height / (float)width;
@@ -99,18 +54,12 @@ namespace TowerDefenseNew
                 Console.WriteLine("5");
             }
 
-            /*
-             //FALLS WIR KEIN BOCK MEHR HABEN
-            else
-            {
-                _windowAspectRatioY = width / (float)height * 9 / 16 / 2;
-                _windowAspectRatioX = _windowAspectRatioY * 16 / 9 / 2;
-                Console.WriteLine("4");
-            }*/
+            float XYratio = _windowAspectRatioX / _windowAspectRatioY;
+            float YXratio = _windowAspectRatioY / _windowAspectRatioX;
 
+            Console.WriteLine($"W: {width}, H: {height}, X: {_windowAspectRatioX}, Y: {_windowAspectRatioY}, XY: {XYratio}, YX: {YXratio}");
 
-
-            _windowAspectRatio = height / (float)width;
+            //_windowAspectRatio = height / (float)width;
             GL.Viewport(0, 0, width, height); // tell OpenGL to use the whole window for drawing
             var viewport = Transformation2d.Combine(Transformation2d.Translate(Vector2.One), Transformation2d.Scale(width / 2f, height / 2f));
 
@@ -142,7 +91,8 @@ namespace TowerDefenseNew
 
         private Matrix4 cameraMatrix = Matrix4.Identity;
         private float _scale { get; set; } = 17f;
-        private float _windowAspectRatio = 1f;
+        private float _windowAspectRatioX = 1f;
+        private float _windowAspectRatioY = 1f;
 
         private Vector2 _center;
 
@@ -150,9 +100,7 @@ namespace TowerDefenseNew
         {
             var translate = Transformation2d.Translate(Center);
             var scale = Transformation2d.Scale(1f / Scale);
-            Matrix4 aspect;
-            if (_windowAspectRatio > 9 / 16) { aspect = Transformation2d.Scale(_windowAspectRatio, 1f); }
-            else { aspect = Transformation2d.Scale(1f, _windowAspectRatio); }
+            var aspect = Transformation2d.Scale(_windowAspectRatioX, _windowAspectRatioY);
 
             cameraMatrix = Transformation2d.Combine(translate, scale, aspect);
         }

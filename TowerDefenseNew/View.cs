@@ -60,7 +60,7 @@ namespace TowerDefenseNew
                 GL.Enable(EnableCap.Blend);
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
                 UpdateSamples(model);
-                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, samplePortal, model.waypoints, sampleColRow.X, sampleColRow.Y);
+                DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, samplePortal, removeIndicator, model.waypoints, sampleColRow.X, sampleColRow.Y);
                 GL.Disable(EnableCap.Blend);
                 try
                 {
@@ -214,7 +214,7 @@ namespace TowerDefenseNew
             }
         }
 
-        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, bool samplePath, bool samplePortal, List<Vector2> waypoints, float column, float row)
+        private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, bool samplePath, bool samplePortal, bool removeIndicator, List<Vector2> waypoints, float column, float row)
         {
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -250,6 +250,10 @@ namespace TowerDefenseNew
                         DrawTile(waypoints.Last().X, waypoints.Last().Y, 0f, 1f, 1);
                     }
                 }
+            }
+            else if (removeIndicator)
+            {
+                DrawQuadRectangle(removeColRow, new Vector2(1f, 1f), new Color4(255, 0, 0, 80));
             }
             else return;
             GL.Disable(EnableCap.Blend);
@@ -443,7 +447,7 @@ namespace TowerDefenseNew
             GL.End();
         }
 
-        private void DrawRectangle(Vector2 min, Vector2 size, Color4 color)
+        internal void DrawRectangle(Vector2 min, Vector2 size, Color4 color)
         {
             var max = min + size;
             GL.Begin(PrimitiveType.LineLoop);
@@ -669,6 +673,8 @@ namespace TowerDefenseNew
         internal bool sampleSniper { get; set; } = false;
         internal bool sampleRifle { get; set; } = false;
         internal Vector2 sampleColRow { get; set; }
+        internal bool removeIndicator { get; set; } = false;
+        internal Vector2 removeColRow { get; set; }
 
     }
 }

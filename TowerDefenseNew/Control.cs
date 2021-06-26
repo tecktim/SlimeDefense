@@ -52,6 +52,7 @@ namespace TowerDefenseNew
                     _view.GameCamera.Center = new Vector2(-54f, _view.GameCamera.Center.Y);
                 }
             }
+
         } 
 
         internal void RemovePath(KeyboardState keyboard)
@@ -83,6 +84,7 @@ namespace TowerDefenseNew
                         {
                             _model.ClearCell(column, row, tower);
                             _model.towerCount--;
+                            _view.removeIndicator = false;
                         }
                         else continue;
                     }
@@ -189,6 +191,30 @@ namespace TowerDefenseNew
                     _view.sampleColRow = new Vector2(column, row);
                 }
             }
+        }
+
+        internal void ShowRemoveIndicator(float x, float y, KeyboardState keyboard)
+        {
+            var cam = _view.GameCamera;
+            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
+            var pixelCoordinates = new Vector2(x, y);
+            var world = pixelCoordinates.Transform(fromViewportToWorld);
+            if (world.X < 0 || _model.Grid.Columns < world.X) return;
+            if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
+            var column = (int)Math.Truncate(world.X);
+            var row = (int)Math.Truncate(world.Y);
+            var cell = _model.CheckCell(column, row);
+
+            if (cell == Grid.CellType.Rifle || cell == Grid.CellType.Sniper || cell == Grid.CellType.Bouncer)
+            {
+                if(keyboard.IsKeyDown(Keys.R))
+                {
+                    _view.removeIndicator = true;
+                    _view.removeColRow = new Vector2(column, row);
+                }
+            }
+            else _view.removeIndicator = false;
+
         }
 
         internal void ShowTowerSample(float x, float y, KeyboardState keyboard)
