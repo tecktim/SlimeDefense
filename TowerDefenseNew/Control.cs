@@ -62,7 +62,7 @@ namespace TowerDefenseNew
             var camera = _view.GameCamera;
             // zoom
             var zoom = camera.Scale * (1 + deltaTime * axisX);
-            zoom = MathHelper.Clamp(zoom, 2f, 10f);
+            zoom = MathHelper.Clamp(zoom, 2f, 11f);
             camera.Scale = zoom;
             return camera;
         }
