@@ -22,7 +22,6 @@ namespace TowerDefenseNew.Structure
             window.VSync = VSyncMode.Off;
             window.RenderFrequency = 60;
             window.UpdateFrequency = 60;
-            window.Size = new Vector2i(1440, 810);
             // set window to halve monitor size
             if (Monitors.TryGetMonitorInfo(0, out var info))
             {

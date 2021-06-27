@@ -29,8 +29,8 @@ namespace TowerDefenseNew
             tileSet = TextureLoader.LoadFromResource(content + "TileSet_CG_5x12_offset_1_each.png");
         }
 
-        internal Camera GameCamera { get; } = new Camera(17f, new Vector2(29f, 15f));
-        internal Camera GuiCamera { get; } = new Camera(17f, new Vector2(29f, 15f));
+        internal Camera GameCamera { get; } = new Camera(10f, new Vector2(29f, 15f));
+        internal Camera GuiCamera { get; } = new Camera(10f, new Vector2(29f, 15f));
         public GameWindow Window { get; }
         internal List<Vector2> circlePoints = CreateCirclePoints(360);
         internal bool sampleBouncer;
@@ -88,6 +88,7 @@ namespace TowerDefenseNew
             DrawQuadRectangle(new Vector2(54f, -2f), new Vector2(100f, 34f), Color4.Black);//balken rechts
             DrawQuadRectangle(new Vector2(-50f, -100f), new Vector2(150f, 100f), Color4.Black);//balken unten
             DrawQuadRectangle(new Vector2(-100f, -2f), new Vector2(100f, 34f), Color4.Black);//balkan links
+            DrawRectangle(new Vector2(18.5f, 11.5f), new Vector2(16f, 9f), Color4.Red);//balkan links
             DrawHelpText(model);
         }
 
