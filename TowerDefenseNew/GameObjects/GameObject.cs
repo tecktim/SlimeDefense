@@ -12,7 +12,7 @@ namespace TowerDefenseNew.GameObjects
             IsAlive = true;
         }
 
-        public bool IsAlive { get; protected set; }
+        internal bool IsAlive { get; set; }
         public Vector2 Center { get; set; }
         public float Radius { get; set; }
 
@@ -39,8 +39,5 @@ namespace TowerDefenseNew.GameObjects
                 return false;
             }
         }
-
-
-
     }
 }

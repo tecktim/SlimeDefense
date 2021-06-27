@@ -20,7 +20,7 @@ namespace TowerDefenseNew.GameObjects
             bounceCount = 0;
         }
 
-        internal bool checkHit()
+        internal bool CheckHit()
         {
             lifeTime++;
             bool isDead = false;
@@ -30,7 +30,7 @@ namespace TowerDefenseNew.GameObjects
                 {
                     if (Intersects(Enemies[i]) && TowerType != 2)
                     {
-                        if (Enemies[i].isShot(Damage))
+                        if (Enemies[i].IsShot(Damage))
                         {
                             //normal hit if true
                             isDead = false;
@@ -48,9 +48,8 @@ namespace TowerDefenseNew.GameObjects
                     if (Intersects(Enemies[i]) && TowerType == 2)
                     {
                         bounceCount++;
-                        bulletVelocity(Enemies[i + 1]);
-                        Console.WriteLine("Hit by bouncer");
-                        if (Enemies[i].isShot(Damage))
+                        BulletVelocity(Enemies[i + 1]);
+                        if (Enemies[i].IsShot(Damage))
                         {
                             //normal hit if true
                             isDead = false;
@@ -80,7 +79,7 @@ namespace TowerDefenseNew.GameObjects
             return isDead;
         }
 
-        internal void bulletVelocity(Enemy enemy)
+        internal void BulletVelocity(Enemy enemy)
         {
             //Distance tower to enemy
             float dx = enemy.Center.X - Center.X;
@@ -97,13 +96,11 @@ namespace TowerDefenseNew.GameObjects
         }
 
 
-        internal float bulletSpeed;
-        internal List<Bullet> Bullets;
-        internal List<Enemy> Enemies;
-
-        public int Damage { get; }
-        public uint TowerType { get; private set; }
-
+        private float bulletSpeed;
+        private List<Bullet> Bullets;
+        private List<Enemy> Enemies;
+        private int Damage { get; }
+        internal uint TowerType { get; set; }
         private int bounceCount;
         private int lifeTime;
         internal float speedX;

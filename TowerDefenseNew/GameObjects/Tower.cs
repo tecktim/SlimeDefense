@@ -19,11 +19,11 @@ namespace TowerDefenseNew.GameObjects
             Radius = attackRadius;
             Bullets = bullets;
             Timer = new Timer(attackSpeed);
-            asTimer(true);
+            AsTimer(true);
             Type = type;
         }
 
-        public void asTimer(bool active)
+        public void AsTimer(bool active)
         {
             // Creating timer with attackSpeed (millis) as interval
             if (active)
@@ -44,10 +44,10 @@ namespace TowerDefenseNew.GameObjects
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            checkRange();
+            CheckRange();
         }
 
-        private void checkRange()
+        private void CheckRange()
         {
             //type 0 sniper
             //type 1 rifle 
@@ -59,7 +59,7 @@ namespace TowerDefenseNew.GameObjects
                     if (Intersects(enemy))
                     {
                         Bullet bullet;
-                        if (this.Type == 0) { bullet = new Bullet(Center + new Vector2(0.5f, 0.5f), Radius / 17.5f, damage, Bullets, Enemies, Type); }
+                        if (Type == 0) { bullet = new Bullet(Center + new Vector2(0.5f, 0.5f), Radius / 17.5f, damage, Bullets, Enemies, Type); }
                         else { bullet = new Bullet(Center + new Vector2(0.5f, 0.5f), Radius / 35, damage, Bullets, Enemies, Type); }
 
                         aimAtEnemy = enemy;
@@ -79,7 +79,7 @@ namespace TowerDefenseNew.GameObjects
                         {
                             bullet.Center += new Vector2(-0.5f, -0.15f);
                         }
-                        bullet.bulletVelocity(enemy);
+                        bullet.BulletVelocity(enemy);
                         return;
                     }
                 }
@@ -94,7 +94,7 @@ namespace TowerDefenseNew.GameObjects
         internal int damage { get; set; }
         private List<Enemy> Enemies { get; set; }
         private List<Bullet> Bullets { get; set; }
-        public Timer Timer { get; }
-        public uint Type { get; private set; }
+        private Timer Timer { get; }
+        private uint Type { get; set; }
     }
 }

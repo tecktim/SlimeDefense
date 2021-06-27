@@ -20,7 +20,7 @@ namespace TowerDefenseNew
 
         public View(GameWindow window)
         {
-            
+
             Window = window;
             var content = $"{nameof(TowerDefenseNew)}.Content.";
             texParticle = TextureLoader.LoadFromResource(content + "water_splash.png");
@@ -42,6 +42,8 @@ namespace TowerDefenseNew
 
             GL.Clear(ClearBufferMask.ColorBufferBit); // clear the screen
             GL.ClearColor(Color4.Black);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GL.Enable(EnableCap.Blend);
             if (model.gameOver)
             {
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
@@ -56,12 +58,12 @@ namespace TowerDefenseNew
             {
                 GameCamera.Draw();
                 DrawGrid(model);
-                GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                GL.Enable(EnableCap.Blend);
+    
+                
                 GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
                 UpdateSamples(model);
                 DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, samplePortal, removeIndicator, model.waypoints, sampleColRow.X, sampleColRow.Y);
-                GL.Disable(EnableCap.Blend);
+    
                 try
                 {
                     DrawEnemy(model);
@@ -80,6 +82,7 @@ namespace TowerDefenseNew
                 GuiCamera.Draw();
                 DrawGui(model);
             }
+            GL.Disable(EnableCap.Blend);
         }
 
         private void DrawGui(Model model)
@@ -88,7 +91,7 @@ namespace TowerDefenseNew
             DrawQuadRectangle(new Vector2(54f, -2f), new Vector2(100f, 34f), Color4.Black);//balken rechts
             DrawQuadRectangle(new Vector2(-50f, -100f), new Vector2(150f, 100f), Color4.Black);//balken unten
             DrawQuadRectangle(new Vector2(-100f, -2f), new Vector2(100f, 34f), Color4.Black);//balkan links
-            DrawRectangle(new Vector2(18.5f, 11.5f), new Vector2(16f, 9f), Color4.Red);//balkan links
+            DrawRectangle(new Vector2(0f,0f), new Vector2(54f, 30f), Color4.Gray);//rahmen
             DrawHelpText(model);
         }
 
@@ -102,7 +105,7 @@ namespace TowerDefenseNew
             {
                 samplePortal = false;
             }
-            if(model.towerCount >= 50)
+            if (model.towerCount >= 50)
             {
                 sampleBouncer = false;
                 sampleRifle = false;
@@ -116,7 +119,7 @@ namespace TowerDefenseNew
             {
                 if (bullet != null)
                 {
-                    DrawBullet(bullet, bullet.TowerType); 
+                    DrawBullet(bullet, bullet.TowerType);
                 }
                 else continue;
             }
@@ -126,8 +129,6 @@ namespace TowerDefenseNew
         {
             GL.BindTexture(TextureTarget.Texture2D, texParticle.Handle);
             GL.Enable(EnableCap.Texture2D);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            GL.Enable(EnableCap.Blend);
             try
             {
                 foreach (var particle in particles.ToList())
@@ -141,7 +142,6 @@ namespace TowerDefenseNew
                 Console.WriteLine("particle draw exception");
             }
             GL.Disable(EnableCap.Texture2D);
-            GL.Disable(EnableCap.Blend);
         }
 
         private void DrawParticle(Vector2 location, float radius)
@@ -163,8 +163,8 @@ namespace TowerDefenseNew
                 if (enemy != null)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-                    GL.Enable(EnableCap.Blend);
-                    if (enemy.dir == direction.right || enemy.dir == direction.up )
+                    
+                    if (enemy.dir == direction.right || enemy.dir == direction.up)
                     {
                         if (enemy.health >= model.enemyHealth * 0.8)
                         {
@@ -210,15 +210,13 @@ namespace TowerDefenseNew
                             DrawTile(enemy.Center.X, enemy.Center.Y, 0f, 1f, 6 * 5);
                         }
                     }
-                    GL.Disable(EnableCap.Blend);
+        
                 }
             }
         }
 
         private void DrawSamples(bool sampleSniper, bool sampleRifle, bool sampleBouncer, bool samplePath, bool samplePortal, bool removeIndicator, List<Vector2> waypoints, float column, float row)
         {
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             if (sampleSniper)
             {
                 DrawCircle(new Vector2(column + .5f, row + .5f), 5f, Color4.White);
@@ -246,7 +244,7 @@ namespace TowerDefenseNew
                 if (column > 0 && column < 53)
                 {
                     DrawTile(column, row, 0f, 1f, 1);
-                    if(waypoints.Count > 0)
+                    if (waypoints.Count > 0)
                     {
                         DrawTile(waypoints.Last().X, waypoints.Last().Y, 0f, 1f, 1);
                     }
@@ -257,7 +255,6 @@ namespace TowerDefenseNew
                 DrawQuadRectangle(removeColRow, new Vector2(1f, 1f), new Color4(255, 0, 0, 80));
             }
             else return;
-            GL.Disable(EnableCap.Blend);
         }
 
         private void DrawText(string text, float x, float y, float size)
@@ -269,15 +266,9 @@ namespace TowerDefenseNew
             var rect = new Rect(x, y, size, size); // rectangle of the first character
             foreach (var spriteId in SpriteSheetTools.StringToSpriteIds(text, firstCharacter))
             {
-                //TODO: Calculate the texture coordinates of the characters letter from the bitmap font texture
-                //TODO: Draw a rectangle at the characters relative position
+                //Calculate the texture coordinates of the characters letter from the bitmap font texture
                 var texCoords = SpriteSheetTools.CalcTexCoords(spriteId, charactersPerRow, charactersPerColumn);
-
-
-                GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                GL.Enable(EnableCap.Blend);
                 DrawRectangleTexture(rect, texCoords);
-                GL.Disable(EnableCap.Blend);
                 rect.MinX += rect.SizeX;
             }
         }
@@ -285,7 +276,7 @@ namespace TowerDefenseNew
         public void DrawTile(float x, float y, float offset, float scale, uint tileNumber)
         {
             GL.Color4(Color4.White);
-            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle); // bind font texture
+            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
             const uint tilesPerColumn = 12;
             const uint tilesPerRow = 5;
             var rect = new Rect(x + offset, y + offset, 1f * scale, 1f * scale);
@@ -401,8 +392,6 @@ namespace TowerDefenseNew
         private void DrawBullet(IReadOnlyCircle bullet, uint type)
         {
             GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            GL.Enable(EnableCap.Blend);
             if (type == 0)
             {
                 DrawTile(bullet.Center.X, bullet.Center.Y, .5f, .66f, ((type + 3) * 5) + 2);
@@ -412,15 +401,16 @@ namespace TowerDefenseNew
                 DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, .5f, ((type + 3) * 5) + 2);
             }
             if (type == 1)
-            { DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, .33f, ((type + 3) * 5) + 2); }
-            GL.Disable(EnableCap.Blend);
+            { 
+                DrawTile(bullet.Center.X, bullet.Center.Y, 0.25f, .33f, ((type + 3) * 5) + 2); 
+            }
         }
 
         private void DrawExplosion(IEnumerable<Explosion> explosions)
         {
             GL.Enable(EnableCap.Texture2D);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            GL.Enable(EnableCap.Blend);
+
+            
             GL.Color4(Color4.White);
             // how many sprites are in each column and row
             const uint spritesPerColumn = 8;
@@ -434,7 +424,7 @@ namespace TowerDefenseNew
                 DrawCircleTexture(explosion, texCoords);
             }
             GL.Disable(EnableCap.Texture2D);
-            GL.Disable(EnableCap.Blend);
+
         }
 
         public void DrawCircle(Vector2 center, float radius, Color4 color)
@@ -459,11 +449,8 @@ namespace TowerDefenseNew
             GL.Vertex2(min.X, max.Y);
             GL.End();
         }
-
         private void DrawQuadRectangle(Vector2 min, Vector2 size, Color4 color)
         {
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             var max = min + size;
             GL.Begin(PrimitiveType.Quads);
             GL.Color4(color);
@@ -472,13 +459,10 @@ namespace TowerDefenseNew
             GL.Vertex2(max);
             GL.Vertex2(min.X, max.Y);
             GL.End();
-            GL.Disable(EnableCap.Blend);
         }
 
         private void DrawHelpText(Model model)
         {
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            GL.Enable(EnableCap.Blend);
             //text to help the player
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
             switch (model.stage)
@@ -498,8 +482,6 @@ namespace TowerDefenseNew
                 default:
                     break;
             }
-
-
             DrawText($":{model.cash}", 15f, 30.5f, 1f);
             DrawText($":{model.killCount}", 25f, 30.5f, 1f);
             DrawText($":{model.stage}", 35f, 30.5f, 1f);
@@ -510,7 +492,7 @@ namespace TowerDefenseNew
             DrawTile(34f, 30.5f, 0f, 1f, 8 * 5 + 1);
 
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-            if(model.stage == 0)
+            if (model.stage == 0)
             {
                 //control station
                 DrawText("Camera", 54.15f, 6.75f, .5f);
@@ -519,18 +501,15 @@ namespace TowerDefenseNew
                 DrawText("    W  ", 54.15f, 4f, .5f);
                 DrawText("  A S D", 54.15f, 3f, .5f);
                 DrawRectangle(new Vector2(54.1f, 2.75f), new Vector2(5f, 4.75f), Color4.White);
-
                 //undo station
                 DrawText("Undo last:", 54.15f, 1f, .5f);
                 DrawText("Press R", 54.15f, .25f, .5f);
                 DrawRectangle(new Vector2(54.1f, 0f), new Vector2(5f, 1.75f), Color4.White);
-
             }
             if (model.stage > 0)
             {
                 DrawText("Towers:", 54.2f, 29.2f, 0.7f);
                 DrawText($"{model.towerCount}/50", 54.2f, 28f, 1f);
-
                 //Rifle station
                 DrawText("Rifle   5$", 54.15f, 27f, .5f);
                 DrawText("|", 56.15f, 26f, .5f);
@@ -552,7 +531,6 @@ namespace TowerDefenseNew
                 //sell station
                 DrawText("+", 57.6f, .25f, .5f);
                 DrawText("Sell:", 54.15f, .25f, .5f);
-
                 GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
                 //rifle station
                 DrawRectangle(new Vector2(54.1f, 24.75f), new Vector2(5f, 3f), Color4.White);
@@ -562,10 +540,7 @@ namespace TowerDefenseNew
                 DrawTile(57.15f, 25.75f, 0f, 1f, 8);
                 DrawTile(56.15f, 24.75f, 0f, 1f, 9 * 5);
                 DrawTile(58.15f, 24.75f, 0f, 1f, 9 * 5 + 3);
-                if(model.cash < 5)
-                {
-                    DrawQuadRectangle(new Vector2(54.0f, 24.75f), new Vector2(5.2f, 3f), new Color4 (80, 80, 80, 160));
-                }
+                if (model.cash < 5) { DrawQuadRectangle(new Vector2(54.0f, 24.75f), new Vector2(5.2f, 3f), new Color4(80, 80, 80, 160)); }
                 //sniper station
                 DrawRectangle(new Vector2(54.1f, 21.75f), new Vector2(5f, 2.75f), Color4.White);
                 DrawRectangle(new Vector2(54.15f, 22.75f), new Vector2(1f, 1f), Color4.White);
@@ -574,10 +549,7 @@ namespace TowerDefenseNew
                 DrawTile(57.15f, 22.75f, 0f, 1f, 8);
                 DrawTile(56.15f, 21.75f, 0f, 1f, 9 * 5 + 1);
                 DrawTile(58.15f, 21.75f, 0f, 1f, 9 * 5 + 3);
-                if (model.cash < 20)
-                {
-                    DrawQuadRectangle(new Vector2(54.0f, 21.75f), new Vector2(5.2f, 3f), new Color4(80, 80, 80, 160));
-                }
+                if (model.cash < 20) { DrawQuadRectangle(new Vector2(54.0f, 21.75f), new Vector2(5.2f, 3f), new Color4(80, 80, 80, 160)); }
                 //bouncer station
                 DrawRectangle(new Vector2(54.1f, 18.5f), new Vector2(5f, 3f), Color4.White);
                 DrawRectangle(new Vector2(54.15f, 19.5f), new Vector2(1f, 1f), Color4.White);
@@ -586,25 +558,18 @@ namespace TowerDefenseNew
                 DrawTile(57.15f, 19.5f, 0f, 1f, 8);
                 DrawTile(56.15f, 18.5f, 0f, 1f, 9 * 5 + 2);
                 DrawTile(58.15f, 18.5f, 0f, 1f, 9 * 5 + 3);
-                if (model.cash < 40)
-                {
-                    DrawQuadRectangle(new Vector2(54.0f, 18.5f), new Vector2(5.2f, 3f), new Color4(80, 80, 80, 160));
-                }
+                if (model.cash < 40) { DrawQuadRectangle(new Vector2(54.0f, 18.5f), new Vector2(5.2f, 3f), new Color4(80, 80, 80, 160)); }
                 //Sell station
                 DrawRectangle(new Vector2(54.1f, 0f), new Vector2(5f, 1f), Color4.White);
                 DrawTile(56.5f, 0f, 0f, 1f, 9 * 5 + 4);
                 DrawTile(58.2f, 0f, 0f, 1f, 9 * 5 + 3);
             }
-
-            GL.Disable(EnableCap.Blend);
         }
+
         private static void DrawCircleTexture(IReadOnlyCircle circle, IReadOnlyRectangle texCoords)
         {
-
             GL.Enable(EnableCap.Texture2D);
-            GL.Enable(EnableCap.Blend);
             GL.Begin(PrimitiveType.Quads);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.TexCoord2(texCoords.MinX, texCoords.MinY);
             GL.Vertex2(circle.Center.X - circle.Radius, circle.Center.Y - circle.Radius);
             GL.TexCoord2(texCoords.MaxX, texCoords.MinY);
@@ -614,15 +579,11 @@ namespace TowerDefenseNew
             GL.TexCoord2(texCoords.MinX, texCoords.MaxY);
             GL.Vertex2(circle.Center.X - circle.Radius, circle.Center.Y + circle.Radius);
             GL.End();
-            GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.Texture2D);
-
         }
 
         private static void DrawRectangleTexture(IReadOnlyRectangle rectangle, IReadOnlyRectangle texCoords)
         {
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.Enable(EnableCap.Texture2D);
             GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(texCoords.MinX, texCoords.MinY);
@@ -635,7 +596,6 @@ namespace TowerDefenseNew
             GL.Vertex2(rectangle.MinX, rectangle.MaxY);
             GL.End();
             GL.Disable(EnableCap.Texture2D);
-            GL.Disable(EnableCap.Blend);
         }
 
         private static void DrawGridLines(int columns, int rows)
@@ -675,7 +635,6 @@ namespace TowerDefenseNew
         {
             GameCamera.Resize(width, height);
             GuiCamera.Resize(width, height);
-
         }
 
         internal bool sampleSniper { get; set; } = false;

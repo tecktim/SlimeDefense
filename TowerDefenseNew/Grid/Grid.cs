@@ -2,10 +2,7 @@
 
 namespace TowerDefenseNew.Grid
 {
-    /// <summary>
-    /// Implementation for serialization only. Only use interface to access data in rest of program.
-    /// </summary>
-    [Serializable]
+    
     public class Grid : IGrid
     {
         private CellType[,] grid = new CellType[54, 30];

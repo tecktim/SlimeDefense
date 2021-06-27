@@ -4,8 +4,8 @@ namespace TowerDefenseNew.GameObjects
 {
     internal class Explosion : GameObject
     {
-        public float NormalizedAnimationTime { get; private set; } = 0f;
-        public float AnimationLength { get; }
+        internal float NormalizedAnimationTime { get; private set; } = 0f;
+        private float AnimationLength { get; }
 
         public Explosion(Vector2 center, float radius, float animationLength) : base(center, radius)
         {
@@ -19,7 +19,6 @@ namespace TowerDefenseNew.GameObjects
             {
                 IsAlive = false;
             }
-            NormalizedAnimationTime %= 1f;
         }
     }
 }

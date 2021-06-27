@@ -2,9 +2,9 @@
 
 namespace TowerDefenseNew.GameObjects
 {
-    internal interface IReadOnlyCircle
+    public interface IReadOnlyCircle
     {
-        Vector2 Center { get; }
-        float Radius { get; }
+        public Vector2 Center { get; }
+        public float Radius { get; }
     }
 }

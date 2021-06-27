@@ -11,6 +11,9 @@ namespace TowerDefenseNew
     {
         private readonly Model _model;
         private readonly View _view;
+        private Grid.CellType cell;
+        private int column;
+        private int row;
 
         public Control(Model model, View view)
         {
@@ -20,12 +23,12 @@ namespace TowerDefenseNew
 
         internal void Update(float deltaTime, KeyboardState keyboard)
         {
-            var axisX = keyboard.IsKeyDown(Keys.E) ? -1f : keyboard.IsKeyDown(Keys.Q) ? 1f : 0f;
-            var camera = _view.GameCamera;
-            // zoom
-            var zoom = camera.Scale * (1 + deltaTime * axisX);
-            zoom = MathHelper.Clamp(zoom, 2f, 20f);
-            camera.Scale = zoom;
+            Camera camera = CheckForZoom(deltaTime, keyboard);
+            CheckForTranslation(deltaTime, keyboard, camera);
+        }
+
+        private void CheckForTranslation(float deltaTime, KeyboardState keyboard, Camera camera)
+        {
             if (_view.GameCamera.Center.Y >= -30f || _view.GameCamera.Center.Y <= 0f || _view.GameCamera.Center.X >= -1f || _view.GameCamera.Center.X <= -54f)
             {
                 // translate
@@ -33,7 +36,6 @@ namespace TowerDefenseNew
                 float axisUpDown = keyboard.IsKeyDown(Keys.W) ? -1.0f : keyboard.IsKeyDown(Keys.S) ? 1.0f : 0.0f;
                 var movement = deltaTime * new Vector2(axisLeftRight, axisUpDown);
                 // convert movement from camera space into world space
-
                 camera.Center += movement.TransformDirection(camera.CameraMatrix.Inverted());
                 if (Math.Floor(_view.GameCamera.Center.Y) == -31f)
                 {
@@ -52,28 +54,30 @@ namespace TowerDefenseNew
                     _view.GameCamera.Center = new Vector2(-54f, _view.GameCamera.Center.Y);
                 }
             }
+        }
 
-        } 
+        private Camera CheckForZoom(float deltaTime, KeyboardState keyboard)
+        {
+            var axisX = keyboard.IsKeyDown(Keys.E) ? -1f : keyboard.IsKeyDown(Keys.Q) ? 1f : 0f;
+            var camera = _view.GameCamera;
+            // zoom
+            var zoom = camera.Scale * (1 + deltaTime * axisX);
+            zoom = MathHelper.Clamp(zoom, 2f, 10f);
+            camera.Scale = zoom;
+            return camera;
+        }
 
         internal void RemovePath(KeyboardState keyboard)
         {
             if (keyboard.IsKeyDown(Keys.R) && _model.waypoints.Count > 1 && !_model.placed)
             {
-                _model.makeEmpty();
+                _model.MakeEmpty();
             }
         }
 
         internal void Click(float x, float y, KeyboardState keyboard)
         {
-            var cam = _view.GameCamera;
-            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
-            var pixelCoordinates = new Vector2(x, y);
-            var world = pixelCoordinates.Transform(fromViewportToWorld);
-            if (world.X < 0 || _model.Grid.Columns < world.X) return;
-            if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
-            var column = (int)Math.Truncate(world.X);
-            var row = (int)Math.Truncate(world.Y);
-            var cell = _model.CheckCell(column, row);
+            GetWorldCoordinates(x, y);
             if (_model.gameOver == false)
             {
                 if ((cell == Grid.CellType.Sniper && keyboard.IsKeyDown(Keys.R)) || (cell == Grid.CellType.Rifle && keyboard.IsKeyDown(Keys.R)) || (cell == Grid.CellType.Bouncer && keyboard.IsKeyDown(Keys.R)))
@@ -121,16 +125,7 @@ namespace TowerDefenseNew
 
         internal void ShowRange(float x, float y, MouseButton mb)
         {
-            var cam = _view.GameCamera;
-            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
-            var pixelCoordinates = new Vector2(x, y);
-            var world = pixelCoordinates.Transform(fromViewportToWorld);
-            if (world.X < 0 || _model.Grid.Columns < world.X) return;
-            if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
-            var column = (int)Math.Truncate(world.X);
-            var row = (int)Math.Truncate(world.Y);
-            var cell = _model.CheckCell(column, row);
-
+            GetWorldCoordinates(x, y);
             if (_view.Window.IsMouseButtonDown(mb))
             {
                 if (cell == Grid.CellType.Sniper && _model.cash >= 20)
@@ -160,21 +155,13 @@ namespace TowerDefenseNew
 
         internal void PlacePath(float x, float y, MouseButton mb)
         {
-            var cam = _view.GameCamera;
-            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
-            var pixelCoordinates = new Vector2(x, y);
-            var world = pixelCoordinates.Transform(fromViewportToWorld);
-            if (world.X < 0 || _model.Grid.Columns < world.X) return;
-            if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
-            var column = (int)Math.Truncate(world.X);
-            var row = (int)Math.Truncate(world.Y);
-            var cell = _model.CheckCell(column, row);
+            GetWorldCoordinates(x, y);
             if (cell == Grid.CellType.Empty)
             {
                 //Path setzen
                 if (_view.Window.IsMouseButtonDown(mb))
                 {
-                    if (cell != Grid.CellType.Empty) {  return; }
+                    if (cell != Grid.CellType.Empty) { return; }
                     else
                     {
                         if (_model.PlacePath(column, row))
@@ -195,39 +182,22 @@ namespace TowerDefenseNew
 
         internal void ShowRemoveIndicator(float x, float y, KeyboardState keyboard)
         {
-            var cam = _view.GameCamera;
-            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
-            var pixelCoordinates = new Vector2(x, y);
-            var world = pixelCoordinates.Transform(fromViewportToWorld);
-            if (world.X < 0 || _model.Grid.Columns < world.X) return;
-            if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
-            var column = (int)Math.Truncate(world.X);
-            var row = (int)Math.Truncate(world.Y);
-            var cell = _model.CheckCell(column, row);
+            GetWorldCoordinates(x, y);
 
             if (cell == Grid.CellType.Rifle || cell == Grid.CellType.Sniper || cell == Grid.CellType.Bouncer)
             {
-                if(keyboard.IsKeyDown(Keys.R))
+                if (keyboard.IsKeyDown(Keys.R))
                 {
                     _view.removeIndicator = true;
                     _view.removeColRow = new Vector2(column, row);
                 }
             }
             else _view.removeIndicator = false;
-
         }
 
         internal void ShowTowerSample(float x, float y, KeyboardState keyboard)
         {
-            var cam = _view.GameCamera;
-            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
-            var pixelCoordinates = new Vector2(x, y);
-            var world = pixelCoordinates.Transform(fromViewportToWorld);
-            if (world.X < 0 || _model.Grid.Columns < world.X) return;
-            if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
-            var column = (int)Math.Truncate(world.X);
-            var row = (int)Math.Truncate(world.Y);
-            var cell = _model.CheckCell(column, row);
+            GetWorldCoordinates(x, y);
 
             if (cell == Grid.CellType.Empty)
             {
@@ -262,7 +232,7 @@ namespace TowerDefenseNew
                 if (keyboard.IsKeyDown(Keys.D3))
                 {
                     if (cell != Grid.CellType.Empty) { return; }
-                    else 
+                    else
                     {
                         if (_model.cash >= 40)
                         {
@@ -274,7 +244,19 @@ namespace TowerDefenseNew
                 }
                 else _view.sampleBouncer = false;
             }
+        }
 
+        internal void GetWorldCoordinates(float x, float y)
+        {
+            var cam = _view.GameCamera;
+            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
+            var pixelCoordinates = new Vector2(x, y);
+            var world = pixelCoordinates.Transform(fromViewportToWorld);
+            if (world.X < 0 || _model.Grid.Columns < world.X) return;
+            if (world.Y < 0 || _model.Grid.Rows < world.Y) return;
+            this.column = (int)Math.Truncate(world.X);
+            this.row = (int)Math.Truncate(world.Y);
+            this.cell = _model.CheckCell(column, row);
         }
     }
 }
