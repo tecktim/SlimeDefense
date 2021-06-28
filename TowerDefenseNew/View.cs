@@ -146,7 +146,7 @@ namespace TowerDefenseNew
 
         private void DrawParticle(Vector2 location, float radius)
         {
-            var transform = Transformation2d.Combine(Transformation2d.Scale(radius), Transformation2d.Translate(location.X, location.Y), GameCamera.CameraMatrix);
+            var transform = Transformation2d.Combine(Transformation2d.Scale(radius), Transformation2d.Translate(location.X, location.Y), GameCamera.cameraMatrix);
             GL.LoadMatrix(ref transform);
             GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0f, 0f); GL.Vertex2(-1f, -1f);
