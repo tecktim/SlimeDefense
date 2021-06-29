@@ -46,7 +46,6 @@ namespace TowerDefenseNew
             GL.Enable(EnableCap.Blend);
             if (model.gameOver)
             {
-                GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
                 DrawText("GAME OVER", 24f, 15f, 1f);
                 DrawText("Press ESC to close the game", 22f, 14f, 0.5f);
                 DrawText($"Total kills:{model.killCount}", 25f, 11f, 0.5f);
@@ -59,8 +58,6 @@ namespace TowerDefenseNew
                 GameCamera.Draw();
                 DrawGrid(model);
     
-                
-                GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
                 UpdateSamples(model);
                 DrawSamples(sampleSniper, sampleRifle, sampleBouncer, samplePath, samplePortal, removeIndicator, model.waypoints, sampleColRow.X, sampleColRow.Y);
     
@@ -161,9 +158,7 @@ namespace TowerDefenseNew
             foreach (Enemy enemy in model.enemies.ToList())
             {
                 if (enemy != null)
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-                    
+                {                    
                     if (enemy.dir == direction.right || enemy.dir == direction.up)
                     {
                         if (enemy.health >= model.enemyHealth * 0.8)
@@ -259,6 +254,7 @@ namespace TowerDefenseNew
 
         private void DrawText(string text, float x, float y, float size)
         {
+            GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
             GL.Color4(Color4.White);
             const uint firstCharacter = 32; // the ASCII code of the first character stored in the bitmap font
             const uint charactersPerColumn = 12; // how many characters are in each column
@@ -391,7 +387,6 @@ namespace TowerDefenseNew
 
         private void DrawBullet(IReadOnlyCircle bullet, uint type)
         {
-            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
             if (type == 0)
             {
                 DrawTile(bullet.Center.X, bullet.Center.Y, .5f, .66f, ((type + 3) * 5) + 2);
@@ -409,8 +404,6 @@ namespace TowerDefenseNew
         private void DrawExplosion(IEnumerable<Explosion> explosions)
         {
             GL.Enable(EnableCap.Texture2D);
-
-            
             GL.Color4(Color4.White);
             // how many sprites are in each column and row
             const uint spritesPerColumn = 8;
@@ -464,7 +457,6 @@ namespace TowerDefenseNew
         private void DrawHelpText(Model model)
         {
             //text to help the player
-            GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
             switch (model.stage)
             {
                 case 0:
@@ -485,13 +477,11 @@ namespace TowerDefenseNew
             DrawText($":{model.cash}", 15f, 30.5f, 1f);
             DrawText($":{model.killCount}", 25f, 30.5f, 1f);
             DrawText($":{model.stage}", 35f, 30.5f, 1f);
-            GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
             //cash skull stage
             DrawTile(14f, 30.5f, 0f, 1f, 8 * 5);
             DrawTile(24f, 30.5f, 0f, 1f, 8 * 5 + 2);
             DrawTile(34f, 30.5f, 0f, 1f, 8 * 5 + 1);
 
-            GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
             if (model.stage == 0)
             {
                 //control station
@@ -531,7 +521,6 @@ namespace TowerDefenseNew
                 //sell station
                 DrawText("+", 57.6f, .25f, .5f);
                 DrawText("Sell:", 54.15f, .25f, .5f);
-                GL.BindTexture(TextureTarget.Texture2D, tileSet.Handle);
                 //rifle station
                 DrawRectangle(new Vector2(54.1f, 24.75f), new Vector2(5f, 3f), Color4.White);
                 DrawRectangle(new Vector2(54.15f, 25.75f), new Vector2(1f, 1f), Color4.White);
