@@ -482,15 +482,17 @@ namespace TowerDefenseNew
             DrawTile(24f, 30.5f, 0f, 1f, 8 * 5 + 2);
             DrawTile(34f, 30.5f, 0f, 1f, 8 * 5 + 1);
 
+            //control station
+            DrawText("Camera", 54.15f, 6.75f, .5f);
+            DrawText("Controls:", 54.15f, 6f, .5f);
+            DrawText("  Q   E", 54.15f, 5f, .5f);
+            DrawText("    W  ", 54.15f, 4f, .5f);
+            DrawText("  A S D", 54.15f, 3f, .5f);
+            DrawRectangle(new Vector2(54.1f, 2.75f), new Vector2(5f, 4.75f), Color4.White);
+
             if (model.stage == 0)
             {
-                //control station
-                DrawText("Camera", 54.15f, 6.75f, .5f);
-                DrawText("Controls:", 54.15f, 6f, .5f);
-                DrawText("  Q   E", 54.15f, 5f, .5f);
-                DrawText("    W  ", 54.15f, 4f, .5f);
-                DrawText("  A S D", 54.15f, 3f, .5f);
-                DrawRectangle(new Vector2(54.1f, 2.75f), new Vector2(5f, 4.75f), Color4.White);
+                
                 //undo station
                 DrawText("Undo last:", 54.15f, 1f, .5f);
                 DrawText("Press R", 54.15f, .25f, .5f);
