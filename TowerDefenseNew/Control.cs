@@ -36,7 +36,7 @@ namespace TowerDefenseNew
                 float axisUpDown = keyboard.IsKeyDown(Keys.W) ? -1.0f : keyboard.IsKeyDown(Keys.S) ? 1.0f : 0.0f;
                 var movement = deltaTime * new Vector2(axisLeftRight, axisUpDown);
                 // convert movement from camera space into world space
-                camera.Center += movement.TransformDirection(camera.CameraMatrix.Inverted());
+                camera.Center += movement.TransformDirection(camera.cameraMatrix.Inverted());
                 if (Math.Floor(_view.GameCamera.Center.Y) == -31f)
                 {
                     _view.GameCamera.Center = new Vector2(_view.GameCamera.Center.X, -30f);
@@ -249,7 +249,7 @@ namespace TowerDefenseNew
         internal void GetWorldCoordinates(float x, float y)
         {
             var cam = _view.GameCamera;
-            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.CameraMatrix.Inverted());
+            var fromViewportToWorld = Transformation2d.Combine(cam.InvViewportMatrix, cam.cameraMatrix.Inverted());
             var pixelCoordinates = new Vector2(x, y);
             var world = pixelCoordinates.Transform(fromViewportToWorld);
             if (world.X < 0 || _model.Grid.Columns < world.X) return;

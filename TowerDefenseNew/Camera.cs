@@ -13,8 +13,6 @@ namespace TowerDefenseNew
             _center -= centerOffset;
         }
 
-        public Matrix4 CameraMatrix => cameraMatrix;
-
         public Matrix4 InvViewportMatrix { get; private set; }
         public void Draw()
         {
@@ -65,12 +63,6 @@ namespace TowerDefenseNew
             }
         }
 
-        private Matrix4 cameraMatrix = Matrix4.Identity;
-        private float _scale { get; set; }
-        private float _windowAspectRatioX = 1f;
-        private float _windowAspectRatioY = 1f;
-
-        private Vector2 _center;
 
         private void UpdateMatrix()
         {
@@ -79,8 +71,13 @@ namespace TowerDefenseNew
             var scale = Transformation2d.Scale(1f / Scale);
 
 
-            cameraMatrix = Transformation2d.Combine(translate, scale * aspect);
+            cameraMatrix = Transformation2d.Combine(translate, scale, aspect);
         }
 
+        internal Matrix4 cameraMatrix = Matrix4.Identity;
+        private float _scale { get; set; }
+        private float _windowAspectRatioX = 1f;
+        private float _windowAspectRatioY = 1f;
+        private Vector2 _center;
     }
 }
