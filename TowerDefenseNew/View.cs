@@ -256,9 +256,9 @@ namespace TowerDefenseNew
         {
             GL.BindTexture(TextureTarget.Texture2D, texFont.Handle); // bind font texture
             GL.Color4(Color4.White);
-            const uint firstCharacter = 32; // the ASCII code of the first character stored in the bitmap font
-            const uint charactersPerColumn = 12; // how many characters are in each column
-            const uint charactersPerRow = 8; // how many characters are in each row
+            const uint firstCharacter = 32; // ASCII code of the first character
+            const uint charactersPerColumn = 12; //characters in each column
+            const uint charactersPerRow = 8; //characters are in each row
             var rect = new Rect(x, y, size, size); // rectangle of the first character
             foreach (var spriteId in SpriteSheetTools.StringToSpriteIds(text, firstCharacter))
             {

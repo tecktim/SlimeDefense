@@ -142,6 +142,7 @@ namespace TowerDefenseNew
                 particles.Add(particle);
             }
         }
+
         private void UpdateEnemies(float frameTime)
         {
             if (enemies.Count != 0)
@@ -165,7 +166,6 @@ namespace TowerDefenseNew
                                 enemy.wayPointIterator++;
                                 continue;
                             }
-
                             else if (enemy.Center.X >= waypoints[enemy.wayPointIterator].X && waypoints[enemy.wayPointIterator + 1].Y <= enemy.Center.Y && enemy.dir == direction.right && enemy.dir != direction.up)
                             {
                                 enemy.ChangeDirection(direction.down);
